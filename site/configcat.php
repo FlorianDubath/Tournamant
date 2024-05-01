@@ -1,0 +1,163 @@
+<?php
+
+ob_start();
+session_name("Tournament");	
+session_start();
+
+if ($_SESSION['_IsAdmin']!=1) {
+	header('Location: ./index.php');
+}
+
+include 'connectionFactory.php';
+$mysqli= ConnectionFactory::GetConnection(); 
+if($_POST && !empty($_POST['id'])) {
+          $stmt = $mysqli->prepare("INSERT INTO TournamentWeighting 
+                                         (AgeCategoryId, WeightCategoryBasedOnAttendence, WeightingBegin, WeightingEnd) 
+                                         VALUES (?,?,?,?) 
+                                         ON DUPLICATE KEY UPDATE
+                                            WeightCategoryBasedOnAttendence = ?,
+                                            WeightingBegin = ?,
+                                            WeightingEnd = ?");
+      	  
+      	  $stmt->bind_param("iississ", $_POST['id'], $_POST['pp'], $_POST['wb'], $_POST['we'], $_POST['pp'], $_POST['wb'], $_POST['we'] );
+      	  
+          if (!($stmt->execute())){
+             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
+          }
+          $stmt->close();
+}
+if (!empty($_GET['id']) && $_GET['del']==1) {
+      if (!($stmt = $mysqli->prepare("DELETE FROM TournamentWeighting WHERE AgeCategoryId=?"))){
+      	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
+      	  } 
+      	  
+      	  $stmt->bind_param("i", $_GET['id'] );
+
+          if (!($stmt->execute())){
+             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
+          }
+          
+	header('Location: ./cat_config.php');
+}
+
+
+include '_commonBlock.php';
+
+writeHead();
+
+echo'
+<body>
+    <div class="f_cont">';
+echo'        
+       <div class="cont_l">
+         <div class="h">'; 
+
+	     if (!($stmt = $mysqli->prepare("SELECT TournamentWeighting.AgeCategoryId,
+	                                            TournamentAgeCategory.Name,
+	                                            TournamentAgeCategory.ShortName,
+	                                            TournamentGender.Name,
+	                                            TournamentAgeCategory.MinAge,
+	                                            TournamentAgeCategory.MaxAge,
+	                                            TournamentAgeCategory.Duration,
+	                                            WeightCategoryBasedOnAttendence,
+	                                            WeightingBegin,
+	                                            WeightingEnd
+	                                            
+	                                     FROM TournamentWeighting 
+	                                     INNER JOIN TournamentAgeCategory on TournamentAgeCategory.Id = AgeCategoryId
+	                                     INNER JOIN TournamentGender on TournamentGender.Id = GenderId
+	                                     WHERE AgeCategoryId=?"))){
+      	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
+      	  }
+      	  
+      	  $stmt->bind_param("i", $_REQUEST['id'] );
+      	  
+      	  
+          if (!($stmt->execute())){
+             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
+          }
+
+          $stmt->bind_result($Id,$catName,$catShortName,$gender,$mina, $maxa, $duration,$adaptWeight, $RegistrationBegin,$RegistrationEnd);
+          $stmt->fetch();
+	      $stmt->close();
+echo '	      
+	      <form action="./configcat.php" method="post">
+	         <span class="ftitle">
+	             Catégorie d\'âge
+	         </span>';
+	       if ($Id && $Id==$_REQUEST['id']) {
+	       echo'
+	        <input type="hidden" name="id" value="'.$Id.'"/>
+	        <span class="fitem">
+               <span class="label">'.$catName.'('.$catShortName.'/'.$gender.')</span>
+	        </span>';
+	       } else {
+	           
+	  
+	                 
+	             $stmt2 = $mysqli->prepare("SELECT TournamentAgeCategory.Id,
+	                                            TournamentAgeCategory.Name,
+	                                            TournamentAgeCategory.ShortName,
+	                                            TournamentGender.Name
+	                                     FROM TournamentAgeCategory  
+	                                     INNER JOIN TournamentGender on TournamentGender.Id = GenderId
+	                                     LEFT OUTER JOIN TournamentWeighting on TournamentAgeCategory.Id = AgeCategoryId
+	                                     WHERE AgeCategoryId IS NULL 
+	                                     ORDER BY MaxAge, GenderId ");
+	             $stmt2->execute();
+	             $stmt2->bind_result($ccId,$cccatName,$cccatShortName,$ccgender);
+	            echo '<span class="fitem">
+	                 <span class="label">Catégories</span>
+	                 <select name="id">';
+                 while($stmt2->fetch()) {
+                     echo  '<option value="'.$ccId.'">'.$cccatName.'('.$cccatShortName.'/'.$ccgender.')</option>';
+                 }
+	             $stmt2->close();
+	        
+	        
+	        echo'</select>
+	        </span>';
+	        
+	        
+	         $stmt3 = $mysqli->prepare("SELECT TournamentStart FROM TournamentVenue order by Id desc limit 1");
+	         $stmt3->execute();
+	         $stmt3->bind_result($td);
+	         $stmt3->fetch();
+	         $stmt3->close();
+	         $RegistrationBegin = $td;
+	         $RegistrationEnd = $td;
+	       
+	       }
+	       echo' <span class="fitem">
+               <span class="label">Catégorie en fonction de la participation:</span>
+               <select name="pp">
+                  <option value="0">Non</option>
+                  <option value="1"';
+                  if ($adaptWeight) echo " selected ";
+                  echo'>Oui</option>
+                </select>
+	       </span>
+	         <input type="hidden" id="timezone" name="timezone" value="-01:00" />  
+	        <span class="fitem">
+               <span class="label">Pesée depuis:</span>
+               <input class="inputDate"  type="datetime-local" name="wb" value="'.$RegistrationBegin.'" /><br/>
+	        </span>
+	        <span class="fitem">
+               <span class="label">Pesée jusqu\'à:</span>
+               <input class="inputDate"  type="datetime-local" name="we" value="'.$RegistrationEnd.'" /><br/>
+	        </span>
+	       <span class="btnBar"> 
+	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
+	               <a class="pgeBtn" href="cat_config.php">Annuler/Fermer</a>
+	       </span>
+	       </form>';
+	
+echo '	
+           </div>     
+        </div>   
+     </div>
+</body>
+</html>';
+
+?>
+
