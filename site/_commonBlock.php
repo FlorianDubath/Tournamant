@@ -31,6 +31,21 @@ function writeHead() {
 }
 
 
+function formatDate($date_txt, $locale='fr_FR') {
+$ts = new DateTime($date_txt);
+$formatter = new IntlDateFormatter($locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+
+$formatter->setPattern('EEEE');
+$result =$formatter->format($ts);
+$formatter->setPattern('d');
+$result =$result.' '.$formatter->format($ts);
+$formatter->setPattern('MMMM');
+$result =$result.' '.$formatter->format($ts);
+$formatter->setPattern('Y');
+$result =$result.' '.$formatter->format($ts);
+return $result;   
+}
+
 
 
 

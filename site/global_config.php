@@ -9,14 +9,15 @@ if ($_SESSION['_IsAdmin']!=1) {
 }
 
 include 'connectionFactory.php';
+$mysqli= ConnectionFactory::GetConnection(); 
 
-if($_POST && !empty($_POST['Id'])) {
+if($_POST && !empty($_POST['id'])) {
 
    if (!($stmt = $mysqli->prepare("UPDATE TournamentVenue SET Name=?,Place=?,Transport=?,Organization=?, Admition=?, System=?,Prize=?, Judge=?,Dressing=?,Contact=?,RegistrationEnd=?,TournamentStart=?,TournamentEnd=? WHERE Id=?"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
       	  } 
       	  
-      	  $stmt->bind_param("sssssssssssssi", $_POST['nme'], $_POST['plc'], $_POST['tsp'], $_POST['org'], $_POST['adm'], $_POST['sys'], $_POST['prz'], $_POST['jdg'], $_POST['drs'], $_POST['ctc'], $_POST['reg'], $_POST['ctc'], $_POST['ctc'] , $_POST['id'] );
+      	  $stmt->bind_param("sssssssssssssi", $_POST['nme'], $_POST['plc'], $_POST['tsp'], $_POST['org'], $_POST['adm'], $_POST['sys'], $_POST['prz'], $_POST['jdg'], $_POST['drs'], $_POST['ctc'], $_POST['reg'], $_POST['ts'], $_POST['te'] , $_POST['id'] );
       	  
       	  
           if (!($stmt->execute())){
@@ -38,7 +39,6 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
 
-         $mysqli= ConnectionFactory::GetConnection(); 
 	     if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, System,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
       	  }
@@ -104,12 +104,12 @@ echo '
 	        	       
 	        <span class="fitem">
                <span class="label">Début du Tournois:</span>
-               <input class="inputDate"  type="date" name="ctc" value="'.$TournamentStart.'" /><br/>
+               <input class="inputDate"  type="date" name="ts" value="'.$TournamentStart.'" /><br/>
 	        </span>
 	        	       
 	        <span class="fitem">
                <span class="label">Fin du Tournois:</span>
-               <input class="inputDate"  type="date" name="ctc" value="'.$TournamentEnd.'" /><br/>
+               <input class="inputDate"  type="date" name="te" value="'.$TournamentEnd.'" /><br/>
 	        </span>
 	       
 	       <span class="btnBar"> 

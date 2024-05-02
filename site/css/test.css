@@ -1,0 +1,62 @@
+.flyer {
+ display:block;
+ width=100%;
+ max-width:800px;
+ margin: 0 auto 0 auto;
+ padding:1em;
+}
+
+.strong {
+ font-weight:bold;
+}
+
+.f_info {
+   display:block;
+   margin-bottom:1em;
+}
+
+.f_title {
+ display:block;
+ border:solid 3px grey;
+ width:calc(100% - 6px);
+ text-align:center;
+ padding:1em 0 1em 0;
+ font-weight:bold;
+ color:red;
+ margin-bottom:2em;
+}
+
+.f_i_ti{
+  display:inline-block;
+  width:20%;
+  min-width:100px;
+ font-weight:bold;
+ vertical-align:top;
+}
+
+.f_i_tx{
+  display:inline-block;
+  width:calc(80% - 1em);
+ vertical-align:top;
+}
+
+.f_g_info {
+  display:inline-block;
+  margin-top:2em;
+  margin-bottom:1em;
+}
+
+.t_prog{
+    display:block;
+    width:100%;
+ border: 1px black solid; 
+ border-collapse: collapse;
+    
+}
+
+.t_prog  td,
+.t_prog  th{
+ width:1%;
+ border: 1px black solid; 
+ padding:0.5em;
+}
