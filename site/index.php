@@ -21,7 +21,7 @@ Configuration<br/>
    <a href="cat_config.php">configurer les catégories/horaires</a> <br/>
    <a href="double_start_conf.php">configurer les doubles départs</a> <br/>
 Attribution des rôle <br/>
-   <a href="user_config.php">Créer les utilisateurs et attribuer des rôles</a> <br/>';
+   <a href="admin.php">Créer les utilisateurs et attribuer des rôles</a> <br/>';
 
 
 } else {
@@ -116,10 +116,23 @@ echo '
 	        
 	    for ($day_counter = $begin_t;   $day_counter<= $end_t ;   $day_counter+=86400) {
 	       $day_date =  date('Y-m-d',  $day_counter);
-	       echo ' <span class="f_g_info strong">Programme : '.formatDate($day_date).'  </span>';  //Todo opening
+	       $stmt = $mysqli->prepare("SELECT min(TournamentWeighting.WeightingBegin)
+	                                       FROM TournamentCategory 
+	                                       INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId 
+	                                       INNER JOIN TournamentWeighting ON TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
+	                                       WHERE DATE(WeightingEnd)=?");
+	       $stmt->bind_param("s",  $day_date);
+           $stmt->execute();
+     
+           $stmt->bind_result( $opening);
+           $stmt->fetch();
+           $stmt->close();
+	       echo ' <span class="f_g_info strong">Programme : '.formatDate($day_date).', ouverture des portes à '.date('H\hi', strtotime($opening)).' </span>';  
 	       echo '<table class="t_prog">
 	                 <tr><th>Catégrie</th><th>Année naiss.</th><th>Catégorie de poids</th><th>Horaire pesée</th></tr>';
 	       
+	       
+	      
 	       
 	       
 	       $stmt = $mysqli->prepare("SELECT IFNULL(-MaxWeight, IFNULL(MinWeight,'OPEN')), 
