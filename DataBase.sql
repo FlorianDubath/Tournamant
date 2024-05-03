@@ -237,7 +237,8 @@ INSERT TournamentGrade (Name,CollectVP) VALUES('Dan',1);
 
 CREATE TABLE TournamentClub(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-  Name VARCHAR( 255 ) NOT NULL 
+  Name VARCHAR( 255 ) NOT NULL ,
+  Contact VARCHAR( 255 ) NULL 
 );
 
 CREATE TABLE TournamentCompetitor(
@@ -261,8 +262,8 @@ CREATE TABLE TournamentRegistration(
   CategoryId INT NOT NULL,
   Payed TINYINT NOT NULL DEFAULT 0,
   WeightChecked TINYINT NOT NULL DEFAULT 0,
-  CONSTRAINT fk_reg_com FOREIGN KEY (CompetitorId) REFERENCES TournamentCategory(Id),
-  CONSTRAINT fk_reg_cat FOREIGN KEY (CategoryId) REFERENCES TournamentCompetitor(Id)
+  CONSTRAINT fk_reg_com FOREIGN KEY (CompetitorId) REFERENCES TournamentCompetitor(Id),
+  CONSTRAINT fk_reg_cat FOREIGN KEY (CategoryId) REFERENCES  TournamentCategory(Id)
 );
 
 INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, System, Prize, Judge, Dressing, Contact, RegistrationEnd, TournamentStart, TournamentEnd) VALUES (

@@ -13,18 +13,26 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
-         
-if ($_SESSION['_IsAdmin']==1) {
-   echo 'ADMIN<br/>
-Configuration<br/>
-   <a href="global_config.php">configurer les dates du tournois</a> <br/>
-   <a href="cat_config.php">configurer les catégories/horaires</a> <br/>
-   <a href="double_start_conf.php">configurer les doubles départs</a> <br/>
-Attribution des rôle <br/>
-   <a href="admin.php">Créer les utilisateurs et attribuer des rôles</a> <br/>';
-
-
-} else {
+if ( ! empty($_SESSION['_UserId'])) {
+      
+    if ($_SESSION['_IsAdmin']==1) {
+       echo '<span>ADMIN<br/>
+    Configuration<br/>
+       <a href="global_config.php">configurer les dates du tournois</a> <br/>
+       <a href="cat_config.php">configurer les catégories/horaires</a> <br/>
+       <a href="double_start_conf.php">configurer les doubles départs</a> <br/>
+    Attribution des rôle <br/>
+       <a href="admin.php">Créer les utilisateurs et attribuer des rôles</a> <br/></span>';
+    }
+    
+    if ($_SESSION['_IsRegistration']==1) {
+       echo '<span>INSCRIPTIONS<br/>
+       
+       <a href="listingclub.php">Liste des clubs</a> <br/>
+       <a href="listingreg.php">Liste des inscrits</a> <br/>
+       </span>';
+    }
+}    else {
 echo ' 
             <span class="h_title">
                CONNECTION
