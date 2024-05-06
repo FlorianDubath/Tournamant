@@ -48,14 +48,26 @@ echo '
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
      $stmt = $mysqli->prepare("SELECT 
-                                        TournamentCompetitor.Id, StrId, Surname, Name, Birth, TournamentGender.Name, TournamentClub.Name, TournamentGrade.Name,LicenceNumber, TournamentAgeCategory.ShortName, Payed
-                               FROM TournamentCompetitor
-                               LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id
+                                      TournamentCompetitor.Id, 
+                                      StrId, 
+                                      Surname, 
+                                      TournamentCompetitor.Name, 
+                                      Birth, 
+                                      TournamentGender.Name, 
+                                      TournamentClub.Name, 
+                                      TournamentGrade.Name,
+                                      LicenceNumber, 
+                                      TournamentAgeCategory.ShortName, 
+                                      Payed
+                                       
+                               FROM TournamentCompetitor 
+                               LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id 
                                LEFT OUTER JOIN TournamentCategory ON TournamentCategory.Id = TournamentRegistration.CategoryId
-                               INNER JOIN TournamentGender ON GenderId=TournamentGender.Id
+                               LEFT OUTER JOIN TournamentAgeCategory ON TournamentCategory.AgeCategoryId = TournamentAgeCategory.Id
+                               INNER JOIN TournamentGender ON TournamentCompetitor.GenderId=TournamentGender.Id
                                INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
                                INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
-                               ORDER BY TournamentClub.Name, Surname, Name, ShortName
+                               ORDER BY TournamentClub.Name, Surname, TournamentCompetitor.Name, ShortName
  ");
      $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence, $cat, $payed);
      $stmt->execute();

@@ -133,7 +133,7 @@ echo '
 echo'
 	       <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
-	               <a class="pgeBtn" href="listingcreg.php">Annuler/Fermer</a>
+	               <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>
 	       </span>
 	       </form>
            </div>     
