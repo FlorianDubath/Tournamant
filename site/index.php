@@ -146,6 +146,7 @@ echo '
 	       $stmt = $mysqli->prepare("SELECT IFNULL(-MaxWeight, IFNULL(MinWeight,'OPEN')), 
 	                                              TournamentAgeCategory.Name,
 	                                              TournamentAgeCategory.ShortName, 
+	                                              TournamentAgeCategory.MinAge, 
 	                                              TournamentAgeCategory.MaxAge, 
 	                                              TournamentGender.Name,
 	                                              TournamentWeighting.WeightCategoryBasedOnAttendence,
@@ -160,7 +161,7 @@ echo '
 	      $stmt->bind_param("s",  $day_date);
           $stmt->execute();
      
-          $stmt->bind_result( $max_w, $ageCatN, $AgeCatAbd, $MaxAge, $gen,$cat_on_att, $w_begin, $w_end);
+          $stmt->bind_result( $max_w, $ageCatN, $AgeCatAbd, $MinAge,$MaxAge, $gen,$cat_on_att, $w_begin, $w_end);
 
 	      
          $current_cat='';
@@ -169,10 +170,14 @@ echo '
          $curr_w_b=0;
          $curr_w_e=0;
          $accumulation='';
-         while ($stmt->fetch()) {
+         while ($stmt->fetch()) {    
+           $age = (date('Y') - $MaxAge).' - '.(date('Y') - $MinAge);
+           if ($MaxAge==99) {
+              $age = '≤'.( date("Y",  strtotime($day_date)) -  $MinAge);
+           }
            if ( $current_cat!=$ageCatN || $curr_gen!=$gen) {
              if ($accumulation!=''){
-                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td></td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
+                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
              }
              $current_cat=$ageCatN;
              $curr_gen=$gen;
@@ -192,7 +197,7 @@ echo '
           
         }
          if ($accumulation!=''){
-                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td></td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
+                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
              }
         $stmt->close();
 	       

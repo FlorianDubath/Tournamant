@@ -81,7 +81,6 @@ echo '
      echo' <tr >
      <td >'. $Club.'</td>
       <td class="rt">'.$Surname.' '.$Name.'</td>
-      <td class="rt">'.$IsRegistration.'</td>
       <td class="rt">'.$date.'</td>
       <td class="rt">'.$Gender.'</td>
       <td class="rt">'.$Grade.'</td>
@@ -91,7 +90,6 @@ echo '
       <td class="rt">
          <a href="./reg.php?id='.$Id.'&del=1" class="gridButton" >Supprimer</a>
          <a href="./reg.php?id='.$Id.'" class="gridButton" >Modifier</a>
-         <a href="./reg.php?id='.$Id.'&pay=1" class="gridButton" >Enregistrer Payement</a>
          <a href="./card.php?id='.$Id.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
