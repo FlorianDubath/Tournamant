@@ -58,7 +58,7 @@ echo '
                                       TournamentGrade.Name,
                                       LicenceNumber, 
                                       TournamentAgeCategory.ShortName, 
-                                      Payed
+                                      IFNULL(Payed,0)
                                        
                                FROM TournamentCompetitor 
                                LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id 
@@ -71,29 +71,82 @@ echo '
  ");
      $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence, $cat, $payed);
      $stmt->execute();
-     while ($stmt->fetch()){
      
+     $cur_id=-1;
+     $cur_club='';
+     $cur_Surname='';
+     $cur_Name='';
+     $cur_birth='';
+     $cur_gend='';
+     $cur_grad='';
+     $cur_lic='';
+     $tot_pay=0;
+     $tot_cat=0;
+     $cat_l='';
+     
+     while ($stmt->fetch()){
      $date='';
      if (isset($Birth)){
        $d1=new DateTime($Birth);
        $date=$d1->format('d/m/Y');
      }
-     echo' <tr >
-     <td >'. $Club.'</td>
-      <td class="rt">'.$Surname.' '.$Name.'</td>
-      <td class="rt">'.$date.'</td>
-      <td class="rt">'.$Gender.'</td>
-      <td class="rt">'.$Grade.'</td>
-      <td class="rt">'.$licence.'</td>
-      <td class="rt">'.$cat.'</td>
-      <td class="rt">'.$payed.'</td>
+     
+      if ($cur_id!=$Id) {
+       if ( $cur_id>0) {
+       echo' <tr >
+     <td >'. $cur_club.'</td>
+      <td class="rt">'.$cur_Surname.' '.$cur_Name.'</td>
+      <td class="rt">'.$cur_birth.'</td>
+      <td class="rt">'.$cur_gend.'</td>
+      <td class="rt">'.$cur_grad.'</td>
+      <td class="rt">'.$cur_lic.'</td>
+      <td class="rt">'.substr($cat_l,3).'</td>
+      <td class="rt">'.$tot_pay.'/'.$tot_cat.'</td>
       <td class="rt">
-         <a href="./reg.php?id='.$Id.'&del=1" class="gridButton" >Supprimer</a>
-         <a href="./reg.php?id='.$Id.'" class="gridButton" >Modifier</a>
-         <a href="./card.php?id='.$Id.'" class="gridButton" >Carte</a>
+         <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
+         <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
+         <a href="./card.php?id='.$cur_id.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
+      }
+      
+         $cur_id=$Id;
+         $cur_club=$Club;
+         $cur_Surname=$Surname;
+         $cur_Name=$Name;
+         $cur_birth=$date;
+         $cur_gend=$Gender;
+         $cur_grad=$Grade;
+         $cur_lic=$licence;
+         $tot_pay=0;
+         $tot_cat=0;
+         $cat_l='';
+      }
+      
+      $tot_pay+=$payed;
+      $tot_cat+=1;
+      $cat_l=$cat_l.' / '.$cat;
+     
+     
+    
      }
+     if ( $cur_id>0) {
+      echo' <tr >
+     <td >'. $cur_club.'</td>
+      <td class="rt">'.$cur_Surname.' '.$cur_Name.'</td>
+      <td class="rt">'.$cur_birth.'</td>
+      <td class="rt">'.$cur_gend.'</td>
+      <td class="rt">'.$cur_grad.'</td>
+      <td class="rt">'.$cur_lic.'</td>
+      <td class="rt">'.substr($cat_l,3).'</td>
+      <td class="rt">'.$tot_pay.'/'.$tot_cat.'</td>
+      <td class="rt">
+         <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
+         <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
+         <a href="./card.php?id='.$cur_id.'" class="gridButton" >Carte</a>
+       </td>
+      </tr>';
+      }
      
      $stmt->close();
      echo '</table>

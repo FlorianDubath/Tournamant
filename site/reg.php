@@ -12,9 +12,6 @@ if ($_SESSION['_IsRegistration']!=1) {
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
 
-//TODO multiple delete en cascade et insert à l'avenant
-//TODO insert/delete catégory
-//TODO Pay
 
 if($_POST && !empty($_POST['id'])) {
      if ($_POST['id']==-1) {
@@ -29,8 +26,40 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->execute();
          $stmt->close();
      }
+     
+     
+     if (!empty($_POST['trid']) && ((int)$_POST['trid'])>0) {
+         $stmt = $mysqli->prepare("INSERT INTO TournamentRegistration  (CompetitorId, CategoryId, Payed) VALUES (?,?,?)");
+         $p =0;
+         if (!empty($_POST['pay'])){
+              $p =(int)$_POST['pay'];
+         }
+         $stmt->bind_param("iii", $_POST['id'], $_POST['trid'], $p);
+         $stmt->execute();
+         $stmt->close();
+     }
+     
 }
+
+if (!empty($_GET['trid']) && $_GET['delt']==1) {
+     $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE Id=?");
+     $stmt->bind_param("i", $_GET['trid'] );
+     $stmt->execute();
+}
+
+if (!empty($_GET['trid']) && $_GET['pay']==1) {
+     $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
+     $stmt->bind_param("i", $_GET['trid'] );
+     $stmt->execute();
+}
+
+
+
 if (!empty($_GET['id']) && $_GET['del']==1) {
+     $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE CompetitorId=?");
+     $stmt->bind_param("i", $_GET['id'] );
+     $stmt->execute();
+
      $stmt = $mysqli->prepare("DELETE FROM TournamentCompetitor WHERE Id=?");
      $stmt->bind_param("i", $_GET['id'] );
      $stmt->execute();
@@ -159,15 +188,28 @@ echo '
                   echo '<tr><td>'.$trshort.' '.$trname.' '.$gender.'</td>
                             <td>'.$wgt.'</td>
                             <td>'.$payed.'</td>
-                            <td><a href="./reg.php?trid='.$trid.'&del=1" class="gridButton" >Supprimer</a>
-                                <a href="./reg.php?trid='.$trid.'&pay=1" class="gridButton" >Encaisser</a>
+                            <td><a href="./reg.php?id='.$Id.'&trid='.$trid.'&delt=1" class="gridButton" >Supprimer</a>';
+                 if ($payed!=1) {
+                       echo'         <a href="./reg.php?id='.$Id.'&trid='.$trid.'&pay=1" class="gridButton" >Encaisser</a>';
+                       }
+                 echo'
                             </td>
                         </tr>';
                }
 	           $stmt->close();    
 	              
-	           //TODO replace date by the tournament date   
-	           $ag = date('Y') - date("Y",  strtotime($bt));        
+	              
+	           $stmt = $mysqli->prepare("SELECT TournamentStart FROM TournamentVenue order by Id desc limit 1");
+               $stmt->execute();
+               $stmt->bind_result( $TournamentStart);
+               $stmt->fetch();
+	           $stmt->close();
+	              
+	              
+	              
+	              
+	               
+	           $ag = date('Y', strtotime($TournamentStart)) - date("Y",  strtotime($bt));        
 	           echo'
 	           </table>
 	           Ajouter:
@@ -175,19 +217,23 @@ echo '
 	            <option value="-1">--</option>';
 	            
 	            
-	             $stmt = $mysqli->prepare("SELECT 
-	                                            TournamentCategory.Id, 
+	            //TODO fix query
+	            
+	             $stmt = $mysqli->prepare("SELECT DISTINCT
+	                                            Cat.Id, 
 	                                            TournamentAgeCategory.Name,
 	                                            TournamentAgeCategory.ShortName,
-	                                            IFNULL(-MaxWeight, IFNULL(MinWeight,'OPEN')),
+	                                            IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN')),
 	                                            TournamentGender.Name
-	                                     FROM TournamentCategory 
-	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
+	                                     FROM TournamentCategory Cat
+	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = Cat.AgeCategoryId
 	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId
-	                                     WHERE IFNULL(MaxAge,1000)>? AND IFNULL(MinAge,0)<? AND TournamentAgeCategory.GenderId=?
-	                                     ORDER BY  IFNULL(MaxAge,1000)");       
+	                                     LEFT OUTER JOIN TournamentCategory cat_h on cat_h.AgeCategoryId=TournamentAgeCategory.Id
+	                                     LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CategoryId = cat_h.Id AND TournamentRegistration.CompetitorId=?
+	                                     WHERE IFNULL(MaxAge,1000)>? AND IFNULL(MinAge,0)<? AND TournamentAgeCategory.GenderId=? AND TournamentRegistration.Id IS NULL
+	                                     ORDER BY IFNULL(MaxAge,1000)");       
 	           
-               $stmt->bind_param("iii", $ag,$ag,$gid);         
+               $stmt->bind_param("iiii", $Id, $ag,$ag,$gid);         
       	       $stmt->execute();
                $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender);
                while ($stmt->fetch()){
@@ -196,7 +242,7 @@ echo '
 	           $stmt->close();    
 	           echo'
                 </select> 
-                Payement reçu <input type="checkbox"  name="pay" />
+                Payement reçu <input type="checkbox"  name="pay" value="1"/>
                 ';
 	        
 	        
