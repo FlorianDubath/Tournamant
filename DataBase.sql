@@ -251,6 +251,7 @@ CREATE TABLE TournamentCompetitor(
   LicenceNumber INT NOT NULL , 
   GradeId  INT NOT NULL , 
   ClubId  INT NOT NULL , 
+  CheckedIn TINYINT NOT NULL DEFAULT 0,
   
   CONSTRAINT fk_comp_gen FOREIGN KEY (GenderId) REFERENCES TournamentGender(Id),
   CONSTRAINT fk_comp_grade FOREIGN KEY (GradeId) REFERENCES TournamentGrade(Id),

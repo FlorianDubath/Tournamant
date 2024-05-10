@@ -105,7 +105,7 @@ echo '
       <td class="rt">
          <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
-         <a href="./card.php?id='.$cur_id.'" class="gridButton" >Carte</a>
+         <a href="./card.php?sid='.$strId.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
       }
@@ -143,7 +143,7 @@ echo '
       <td class="rt">
          <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
-         <a href="./card.php?id='.$cur_id.'" class="gridButton" >Carte</a>
+         <a href="./card.php?sid='.$strId.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
       }
