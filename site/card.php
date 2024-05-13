@@ -84,7 +84,7 @@ if ( ! empty($_SESSION['_UserId'])) {
        echo '<span>ADMIN<br/>';
     }
     
-    if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1) {
+    if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1) {
        echo '<span>ACCUEIL<br/>';
        if (!empty($Id) && $Id>0) {
             
@@ -108,11 +108,16 @@ if ( ! empty($_SESSION['_UserId'])) {
        }   
     }
     
-    if ($_SESSION['_IsWeighting']==1 && $Id>0 && $chin>0) {
+    if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
+         if (!empty($_GET['wgok'])&&$_GET['wgok']==1 && !empty($_GET['wgc']) && !empty($_GET['trid'])) { 
+              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=? WHERE Id=?");
+              $stmt->bind_param("ii", $_GET['wgc'], $_GET['trid']);
+              $stmt->execute();
+	          $stmt->close();
+         } 
+    
+    
        echo '<span>PESEE<br/>Catégorie:';
-       
-          //TODO enregistrement + bloquage à la fin du temps
-       
               $stmt = $mysqli->prepare("SELECT 
 	                                            TournamentRegistration.Id, 
 	                                            TournamentAgeCategory.Name,
@@ -142,28 +147,22 @@ if ( ! empty($_SESSION['_UserId'])) {
                     
                     echo '<form action="./card.php" method="get">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
+                             <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
                              <input type="hidden" name="wgok" value="1"/>
                             <span> Pesée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:<select name="wgc">';
                                
                              echo getWeights($weight_cat, $age_cat_id,$w_to_confirm) ;   
-                            
-                            echo'</select> <input class="pgeBtn" type="submit" value="Poid vérifié"></span>
+                             echo '</select>';
+                             if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
+                                echo' <input class="pgeBtn" type="submit" value="Poid vérifié">';
+                            }
+                            echo '</span>
                           </form>';
                     }
                
                
                }      
       	       $stmt->close();
-       
-       
-       
-       
-       
-       //TODO liste catégorie + dropdown avec la cat de poid selectionnée + bouton de confirmation
-       
-       
-       
-       
     }
 }    else {
 echo ' 

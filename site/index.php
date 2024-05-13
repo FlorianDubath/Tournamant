@@ -32,6 +32,12 @@ if ( ! empty($_SESSION['_UserId'])) {
        <a href="listingreg.php">Liste des inscrits</a> <br/>
        </span>';
     }
+    
+    
+       echo '<span>CATEGORIES<br/>
+       <a href="listingcat.php">Liste des catégories</a> <br/>
+       </span>';
+    
 }    else {
 echo ' 
             <span class="h_title">

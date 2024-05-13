@@ -221,6 +221,8 @@ CREATE TABLE TournamentWeighting(
   CONSTRAINT fk_wgt_age_cat FOREIGN KEY (AgeCategoryId) REFERENCES TournamentAgeCategory(Id)
 );
 
+ALTER TABLE TournamentWeighting ADD COLUMN Started TINYINT NOT NULL DEFAULT 0;
+
 CREATE TABLE TournamentGrade(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   Name VARCHAR( 255 ) NOT NULL ,
@@ -282,4 +284,22 @@ INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, Syst
      '2022-03-27',
      '2022-03-27'   
 );
+
+
+CREATE VIEW V_Category AS 
+select
+     TournamentCategory.Id as CategoryId,
+     CompetitorId as CompetitorId,
+     WeightChecked as WeightChecked,
+     WeightingEnd as WeightingEnd,
+     Started as Started
+     
+FROM TournamentCategory
+INNER JOIN TournamentAgeCategory on TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
+INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
+INNER JOIN TournamentRegistration on TournamentCategory.Id = TournamentRegistration.CategoryId;
+
+
+
+
  -- ajouter inscription et payement
