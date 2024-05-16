@@ -4,7 +4,7 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if ($_SESSION['_IsRegistration']!=1) {
+if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsMainTable']!=1 && $_SESSION['_IsWelcome']!=1) {
 	header('Location: ./index.php');
 }
 
@@ -13,6 +13,8 @@ include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
 
 
+$New_Id=$_REQUEST['id'];
+
 if($_POST && !empty($_POST['id'])) {
      if ($_POST['id']==-1) {
          $StrId = substr(md5($_POST['nm'].$_POST['sm'].date('Y-m-d:h:m:s')),0,12);
@@ -20,6 +22,15 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->bind_param("ssssisii", $StrId, $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid']);
          $stmt->execute();
          $stmt->close();
+         
+         $stmt = $mysqli->prepare("SELECT Id FROM TournamentCompetitor WHERE StrId=?");
+         $stmt->bind_param("s", $StrId);
+         $stmt->execute();        
+         $stmt->bind_result($New_Id);
+         $stmt->fetch();
+	     $stmt->close();
+         
+         
      } else {
          $stmt = $mysqli->prepare("UPDATE TournamentCompetitor  SET Name=?, Surname=?, Birth=?, GenderId=?, LicenceNumber=?, GradeId=?, ClubId=? WHERE Id=?");
          $stmt->bind_param("sssisiii", $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid'], $_POST['id']);
@@ -78,12 +89,12 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
 
-	     $stmt = $mysqli->prepare("SELECT Id, Surname, Name, Birth, GenderId, ClubId, GradeId,LicenceNumber FROM TournamentCompetitor WHERE Id=?");
+	     $stmt = $mysqli->prepare("SELECT Id, StrId, Surname, Name, Birth, GenderId, ClubId, GradeId,LicenceNumber FROM TournamentCompetitor WHERE Id=?");
       	  
-      	  $stmt->bind_param("i", $_REQUEST['id'] );
+      	  $stmt->bind_param("i", $New_Id );
           $stmt->execute();
 
-          $stmt->bind_result($Id,$sn,$nm,$bt,$gid,$cid,$grid,$licence);
+          $stmt->bind_result($Id,$sId,$sn,$nm,$bt,$gid,$cid,$grid,$licence);
           $stmt->fetch();
 	      $stmt->close();
 	      if (empty($Id)) {
@@ -181,7 +192,7 @@ echo '
 	                                     WHERE CompetitorId =?
 	                                     ORDER BY IFNULL(MaxAge,1000)");
 	                            
-               $stmt->bind_param("i", $_REQUEST['id'] );         
+               $stmt->bind_param("i", $New_Id );         
       	       $stmt->execute();
                $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed);
                while ($stmt->fetch()){
@@ -216,9 +227,6 @@ echo '
 	            <select name="trid">
 	            <option value="-1">--</option>';
 	            
-	            
-	            //TODO fix query
-	            
 	             $stmt = $mysqli->prepare("SELECT DISTINCT
 	                                            Cat.Id, 
 	                                            TournamentAgeCategory.Name,
@@ -228,10 +236,9 @@ echo '
 	                                     FROM TournamentCategory Cat
 	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = Cat.AgeCategoryId
 	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId
-	                                     LEFT OUTER JOIN TournamentCategory cat_h on cat_h.AgeCategoryId=TournamentAgeCategory.Id
-	                                     LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CategoryId = cat_h.Id AND TournamentRegistration.CompetitorId=?
-	                                     WHERE IFNULL(MaxAge,1000)>? AND IFNULL(MinAge,0)<? AND TournamentAgeCategory.GenderId=? AND TournamentRegistration.Id IS NULL
-	                                     ORDER BY IFNULL(MaxAge,1000)");       
+	                                     LEFT OUTER JOIN V_Age_Reg on V_Age_Reg.AgeCategoryId=Cat.AgeCategoryId and V_Age_Reg.CompetitorId=?
+	                                     WHERE IFNULL(MaxAge,1000)>? AND IFNULL(MinAge,0)<? AND TournamentAgeCategory.GenderId=? AND V_Age_Reg.AgeCategoryId IS NULL
+	                                     ORDER BY IFNULL(MinAge,IFNULL(MaxAge,1000)),IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN'))");       
 	           
                $stmt->bind_param("iiii", $Id, $ag,$ag,$gid);         
       	       $stmt->execute();
@@ -254,6 +261,7 @@ echo'
 	       <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
 	               <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>
+	               <a href="card.php?sid='.$sId.'">Carte</a> 
 	       </span>
 	       </form>
            </div>     

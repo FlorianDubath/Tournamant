@@ -79,11 +79,6 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
 if ( ! empty($_SESSION['_UserId'])) {
-      
-    if ($_SESSION['_IsAdmin']==1) {
-       echo '<span>ADMIN<br/>';
-    }
-    
     if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1) {
        echo '<span>ACCUEIL<br/>';
        if (!empty($Id) && $Id>0) {
@@ -95,6 +90,9 @@ if ( ! empty($_SESSION['_UserId'])) {
 	          $stmt->close();
               $chin=1;
             } 
+            
+            echo '<a href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
+            
             
             if ( $chin==0) {
                 echo '<a href="card.php?sid='.$strId.'&pr=1">Confirmer la présence et remise de la carte</a> <br/> ';
@@ -164,6 +162,8 @@ if ( ! empty($_SESSION['_UserId'])) {
                }      
       	       $stmt->close();
     }
+    
+    echo '<a href="" onclick="makePDF(\'carte_'.$strId.'.pdf\');">PDF</a>';
 }    else {
 echo ' 
             <span class="h_title">
@@ -265,6 +265,7 @@ echo'
                $stmt->bind_param("i", $Id);         
       	       $stmt->execute();
                $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$checkedin,$weight_checked, $weighting_begin, $weighting_end);
+               $cat_regist = array();
                while ($stmt->fetch()){
                    $pay_cls = "c_p_todo";
                    if ($payed==1) {
@@ -314,6 +315,7 @@ echo'
                          
                   
                   echo '</span>';
+                  array_push($cat_regist, ["name"=>$trshort.' '.$trname.' '.$gender.' '.$wgt,"end_wgt"=>$w_end]);
                }
 	           $stmt->close();    
 	
@@ -322,7 +324,106 @@ echo '
            </div>     
         </div>   
      </div>
+     <div id="print" style="display:none;">
+         <div id="qrcode"></div>
+         <div class="url">https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'<div>
+         <img id="logo" src="css/Logo_ACG_JJJ_light.png"></img>
+    </div>
 </body>
+
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jspdf.min.js"></script>
+
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	width : 250,
+	height : 250
+});
+
+function wrapImgData(img){
+    if (img.substring(0, 4) == "url("){
+        img=img.substring(4,img.length-5);
+        if (img.substring(0, 1) == "\""){
+            img=img.substring(1,img.length-2)
+        }
+
+    }
+    return img;
+}
+
+function getImgData(id) {
+    var c = document.createElement("canvas");
+    var img = document.getElementById(id);
+    c.height = img.naturalHeight;
+    c.width = img.naturalWidth;
+    var ctx = c.getContext("2d");
+
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL();
+}
+
+
+qrcode.makeCode("http://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'");
+
+function makePDF(pdf_name) {
+  var doc = new jsPDF({format: \'a6\',orientation:\'l\'});
+  
+  var imgAddData = wrapImgData(getImgData("logo"));
+  doc.addImage(imgAddData, "PNG", 40, 15, 70, 70);
+   
+  var imgAddData = wrapImgData(document.getElementById("qrcode").getElementsByTagName("img")[0].src);
+  doc.addImage(imgAddData, "PNG", 100, 25, 40, 40);
+  //doc.setFontSize(6).setFont("helvetica", "normal");
+  //doc.textWithLink("https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'", 100, 70, {url: "https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'"});
+
+  doc.setFontSize(16).setFont("helvetica", "bold");
+  ';
+  
+  $stmt = $mysqli->prepare("SELECT Name, TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1");
+  $stmt->execute();
+  $stmt->bind_result( $trName,$TournamentStart,$TournamentEnd);
+  $stmt->fetch();
+  $stmt->close();
+  
+  $date_txt = formatDate($TournamentStart);
+  if ($TournamentStart!=$TournamentEnd) {
+	          $date_txt =  $date_txt.' - '. formatDate($TournamentEnd);
+   }
+  
+  
+  echo'
+  
+  doc.text("'.$trName.'", doc.internal.pageSize.width/2, 12, {align: \'center\'});
+  doc.setFontSize(16).setFont("helvetica", "normal");
+  doc.text("'.$date_txt.'", doc.internal.pageSize.width/2, 20, {align: \'center\'});
+  
+  doc.setFontSize(14).setFont("helvetica", "normal");
+  
+  doc.text("Compétiteur :",10 ,30) ; 
+  doc.setFont("helvetica", "bold");
+  doc.text("'.$Surname.' '.$Name.' ",15 ,40) ; 
+  doc.setFont("helvetica", "normal");
+  doc.text("Club :",10 ,50) ;
+  doc.setFont("helvetica", "bold");
+  doc.text("'.$Club.' ",15 ,60) ;
+  doc.setFont("helvetica", "normal");
+  doc.text("Catégorie(s):",10 ,70);
+  doc.setFont("helvetica", "bold"); ';
+  
+  $position=80;
+  $step=10;
+  foreach ($cat_regist as $ctr){
+             echo 'doc.text("'.$ctr["name"].'",15 ,'.$position.');
+                   doc.text("Pesée => '.$ctr["end_wgt"]->format('H\hi').'",100 ,'.$position.');';
+             $position=$position+$step;
+         }
+  
+  echo'
+  
+  doc.save(pdf_name);
+}
+
+</script>
 </html>';
 
 ?>

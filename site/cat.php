@@ -36,22 +36,32 @@ echo'
          
 $mysqli= ConnectionFactory::GetConnection(); 
  $stmt = $mysqli->prepare("select
-                                 V1.CategoryId, 
+                                 TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
                                  TournamentAgeCategory.ShortName,
                                  TournamentGender.Name,
                                  IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
-                                 V1.Started,
-                                 V1.WeightingEnd, 
+                                 TournamentWeighting.Started,
+                                 TournamentWeighting.WeightingEnd, 
                                  count(V2.CompetitorId), 
-                                 count(V3.CompetitorId) 
-                             from V_Category V1 
-                             INNER JOIN TournamentCategory ON TournamentCategory.Id=V1.CategoryId
+                                 count(DISTINCT V3.CompetitorId) 
+                             from TournamentCategory
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id=TournamentCategory.AgeCategoryId
                              INNER JOIN TournamentGender on TournamentGender.Id=TournamentAgeCategory.GenderId
-                             INNER JOIN V_Category V2 on V1.CategoryId = V2.CategoryId
-                             INNER JOIN V_Category V3 on V1.CategoryId = V3.CategoryId  AND V3.WeightChecked=1 
-                             WHERE V1.CategoryId=?");
+                             INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
+                             INNER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
+                             INNER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
+
+                             WHERE TournamentCategory.Id=?
+                             
+                             GROUP BY TournamentCategory.Id, 
+                                 TournamentAgeCategory.Name,
+                                 TournamentAgeCategory.ShortName,
+                                 TournamentGender.Name,
+                                 IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
+                                 TournamentWeighting.Started,
+                                 TournamentWeighting.WeightingEnd;
+                           ");
                              
      $stmt->bind_param("i", $_GET['cid'] );
      $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_gen,$weight, $Started, $weighting_end, $total, $weighted);
@@ -95,9 +105,11 @@ echo'
       <th>Licence</th>
       <th>Présent</th>
       <th>Pesé</th>
+      <th>Acion</th>
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
       $query="select
+                                 TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
                                  TournamentCompetitor.Birth , 
@@ -119,7 +131,7 @@ echo'
       
       $stmt = $mysqli->prepare($query);
      $stmt->bind_param("i", $_GET['cid'] );
-     $stmt->bind_result( $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin);
+     $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin);
      $stmt->execute();
      
      while ($stmt->fetch()){
@@ -131,6 +143,7 @@ echo'
       <td>'. $licence.'</td>
       <td>'.$chin.'</td>
       <td>'.$chw.'</td>
+      <td><a href="card.php?sid='.$strId.'">Carte</a></td>
       </tr>';
 
      }

@@ -293,11 +293,17 @@ select
      WeightChecked as WeightChecked,
      WeightingEnd as WeightingEnd,
      Started as Started
-     
 FROM TournamentCategory
 INNER JOIN TournamentAgeCategory on TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
 INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
 INNER JOIN TournamentRegistration on TournamentCategory.Id = TournamentRegistration.CategoryId;
+
+CREATE VIEW V_Age_Reg AS
+SELECT DISTINCT  
+    TournamentRegistration.CompetitorId as CompetitorId,
+    TournamentCategory.AgeCategoryId as AgeCategoryId
+FROM TournamentRegistration
+INNER JOIN TournamentCategory on TournamentCategory.Id = TournamentRegistration.CategoryId;
 
 
 

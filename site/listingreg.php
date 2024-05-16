@@ -49,7 +49,7 @@ echo '
       $mysqli= ConnectionFactory::GetConnection(); 
      $stmt = $mysqli->prepare("SELECT 
                                       TournamentCompetitor.Id, 
-                                      StrId, 
+                                      TournamentCompetitor.StrId, 
                                       Surname, 
                                       TournamentCompetitor.Name, 
                                       Birth, 
@@ -73,6 +73,7 @@ echo '
      $stmt->execute();
      
      $cur_id=-1;
+     $cur_strId='';
      $cur_club='';
      $cur_Surname='';
      $cur_Name='';
@@ -105,12 +106,13 @@ echo '
       <td class="rt">
          <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
-         <a href="./card.php?sid='.$strId.'" class="gridButton" >Carte</a>
+         <a href="./card.php?sid='.$cur_strId.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
       }
       
          $cur_id=$Id;
+         $cur_strId = $strId;
          $cur_club=$Club;
          $cur_Surname=$Surname;
          $cur_Name=$Name;
@@ -143,7 +145,7 @@ echo '
       <td class="rt">
          <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
-         <a href="./card.php?sid='.$strId.'" class="gridButton" >Carte</a>
+         <a href="./card.php?sid='.$cur_strId.'" class="gridButton" >Carte</a>
        </td>
       </tr>';
       }
