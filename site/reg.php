@@ -8,6 +8,10 @@ if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsMainTable']!=1 && $_SESSION
 	header('Location: ./index.php');
 }
 
+  if(!empty($_GET['sid'] && strlen($_GET['sid'])!=12) ) {
+      	header('Location: ./index.php');
+  }
+
 
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 

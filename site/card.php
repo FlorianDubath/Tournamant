@@ -4,12 +4,14 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-include '_commonBlock.php';
-writeHead();
 
-  if(empty($_GET['sid']) ) {
+  if(empty($_GET['sid'] || strlen($_GET['sid'])!=12) ) {
       	header('Location: ./index.php');
   }
+  
+  
+include '_commonBlock.php';
+writeHead();
 
  include 'connectionFactory.php';
   $mysqli= ConnectionFactory::GetConnection(); 
@@ -36,6 +38,11 @@ $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $
 $stmt->execute();
 $stmt->fetch();
 $stmt->close();
+
+
+if (empty($Id)){
+      	header('Location: ./reg.php?sid='.$_GET['sid']);
+}
 
 $weight_cat = array();
 
@@ -90,6 +97,7 @@ if ( ! empty($_SESSION['_UserId'])) {
 	          $stmt->close();
               $chin=1;
             } 
+            
             
             echo '<a href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
             
@@ -414,7 +422,7 @@ function makePDF(pdf_name) {
   $step=10;
   foreach ($cat_regist as $ctr){
              echo 'doc.text("'.$ctr["name"].'",15 ,'.$position.');
-                   doc.text("Pesée => '.$ctr["end_wgt"]->format('H\hi').'",100 ,'.$position.');';
+                   doc.text("Pesée => '.formatDate($ctr["end_wgt"]).' '.$ctr["end_wgt"]->format('j/m H\hi').'",94 ,'.$position.');';
              $position=$position+$step;
          }
   
