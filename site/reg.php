@@ -8,20 +8,42 @@ if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsMainTable']!=1 && $_SESSION
 	header('Location: ./index.php');
 }
 
-  if(!empty($_GET['sid'] && strlen($_GET['sid'])!=12) ) {
+include 'connectionFactory.php';
+$mysqli= ConnectionFactory::GetConnection(); 
+
+  if(!empty($_REQUEST['sid'])) {
+  
+    if (strlen($_REQUEST['sid'])!=12) {
       	header('Location: ./index.php');
+    } else {
+        
+        $stmt = $mysqli->prepare("SELECT Id FROM TournamentCompetitor  WHERE StrId=?");
+        $stmt->bind_param("s", $_REQUEST['sid']);
+        $stmt->bind_result($nsId);
+        $stmt->execute();
+        $stmt->fetch();
+        $stmt->close();
+        if (!empty($nsId)){
+            header('Location: ./index.php');
+        }
+     }
   }
 
 
-include 'connectionFactory.php';
-$mysqli= ConnectionFactory::GetConnection(); 
+
 
 
 $New_Id=$_REQUEST['id'];
 
 if($_POST && !empty($_POST['id'])) {
      if ($_POST['id']==-1) {
+         
          $StrId = substr(md5($_POST['nm'].$_POST['sm'].date('Y-m-d:h:m:s')),0,12);
+         
+         if(!empty($_REQUEST['sid'])) {
+               $StrId = $_REQUEST['sid'];
+         }
+         
          $stmt = $mysqli->prepare("INSERT INTO TournamentCompetitor  (StrId, Name, Surname, Birth, GenderId, LicenceNumber, GradeId, ClubId) VALUES (?,?,?,?,?,?,?,?)");
          $stmt->bind_param("ssssisii", $StrId, $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid']);
          $stmt->execute();
@@ -109,7 +131,12 @@ echo '
 	         <span class="ftitle">
 	             COMPETITEUR
 	         </span>
-	           <input type="hidden" name="id" value="'.$Id.'"/>
+	           <input type="hidden" name="id" value="'.$Id.'"/>';
+	           if(!empty($_REQUEST['sid']) and $Id==-1) {
+	               echo'<input type="hidden" name="sid" value="'.$_REQUEST['sid'].'"/>';
+	           }
+	           
+	           echo'
 	        <span class="fitem">
                <span class="label">Nom :</span>
                <input class="inputDate"  type="text" name="sm" value="'.$sn.'" /><br/>
