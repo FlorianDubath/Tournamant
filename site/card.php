@@ -176,39 +176,12 @@ if ( ! empty($_SESSION['_UserId'])) {
     }
     
     echo '<a href="" onclick="makePDF(\'carte_'.$strId.'.pdf\');">PDF</a>';
-}    else {
-echo ' 
-            <span class="h_title">
-               CONNECTION
-               </span>
-               
-               <span class="h_txt">
-               <form action="./identification.php" method="post">
-	             <span class="fitem">
-	               <span class="label">Nom d\'utilisateur:</span>
-	               <input class="inputText"  type="text" name="login" value="" /><br/>
-	             </span>
-	             <span class="fitem">
-	               <span class="label">Mot de passe:</span>
-                   <input class="inputText"  type="password" name="mdp" value="" /><br/>
-                 </span>
-	            ';
-	             
-	             if ($_GET["CR"]) {
-	                echo ' <span class="fitem"><span class="message">Vérifiez vos indentifiants</span><br/>' ;
-	             }
-	             
-	             echo' 
-	             <span class="btnBar"> 
-	               <input class="pgeBtn" type="submit" value="Se connecter">
-	             </span>
-                </form>
-               </span>';
-}
+}  
 
 echo '
+<div class="card">
  <span class="ftitle">
-	         COMPETITEUR
+	        COMPETITEUR
 	         </span>
 	           <input type="hidden" name="id" value="'.$Id.'"/>
 	        <span class="fitem">
@@ -244,14 +217,14 @@ echo '
 	        </span>
 	        
 	        <span class="fitem">
-               <span class="label">Numéro de licence :</span>
+               <span class="label">N° licence :</span>
                <input class="inputDate"  type="text" name="lc" value="'.$licence.'" readonly="readonly" /><br/>
 	        </span>';
  
 
 echo'
    <span class="ftitle">
-	            CATEGORIE(S)
+	         CATEGORIE(S)
 	           </span>';
 	              
 	           $stmt = $mysqli->prepare("SELECT 
@@ -334,12 +307,13 @@ echo'
 	
 echo '
            </div>     
+           </div>  
         </div>   
      </div>
      <div id="print" style="display:none;">
          <div id="qrcode"></div>
          <div class="url">https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'<div>
-         <img id="logo" src="css/Logo_ACG_JJJ_light.png"></img>
+         <img id="logo_l" src="css/Logo_ACG_JJJ_light.png"></img>
     </div>
 </body>
 
@@ -380,7 +354,7 @@ qrcode.makeCode("http://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'");
 function makePDF(pdf_name) {
   var doc = new jsPDF({format: \'a6\',orientation:\'l\'});
   
-  var imgAddData = wrapImgData(getImgData("logo"));
+  var imgAddData = wrapImgData(getImgData("logo_l"));
   doc.addImage(imgAddData, "PNG", 40, 15, 70, 70);
    
   var imgAddData = wrapImgData(document.getElementById("qrcode").getElementsByTagName("img")[0].src);
@@ -426,7 +400,7 @@ function makePDF(pdf_name) {
   $step=10;
   foreach ($cat_regist as $ctr){
              echo 'doc.text("'.$ctr["name"].'",15 ,'.$position.');
-                   doc.text("Pesée => '.formatDate($ctr["end_wgt"]).' '.$ctr["end_wgt"]->format('j/m H\hi').'",94 ,'.$position.');';
+                   doc.text("Pesée => '.$ctr["end_wgt"]->format('j/m H\hi').'",94 ,'.$position.');';
              $position=$position+$step;
          }
   

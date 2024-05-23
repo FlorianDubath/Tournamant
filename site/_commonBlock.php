@@ -36,38 +36,37 @@ function writeBand() {
     echo '<div id="band" class="band ';
     if (!$isLoged) {echo 'b_closed';}
     echo'" >
-             <div class="b_title" onclick="toggleClass(document.getElementById(\'band\'), \'b_closed\')"> Titre';
+             <div class="b_title" onclick="toggleClass(document.getElementById(\'band\'), \'b_closed\')"> 
+                  <img id="logo" src="css/Logo_ACG_JJJ.png" height="30px"></img>
+                  <div class="b_i_title">ASSOCIATION CANTONALE GENEVOISE DE JUDO ET DE JU-JITSU</div>';
              
-    if ($isLoged) {echo '<a href="identification.php">logout</a>';}        
+    if ($isLoged) {echo '<a class="lgout" href="identification.php">logout</a>';}        
              echo' </div>';
     
     if (!$isLoged){
     echo'
        <span class="h_title">
-               CONNECTION
-               </span>
-               
-               <span class="h_txt">
                <form action="./identification.php" method="post">
                <input   type="hidden" name="rtn" value="'.$_SERVER['REQUEST_URI'].'" />
 	             <span class="fitem">
 	               <span class="label">Nom d\'utilisateur:</span>
-	               <input class="inputText"  type="text" name="login" value="" /><br/>
+	               <input class="inputText"  type="text" name="login" value="" />
 	             </span>
 	             <span class="fitem">
 	               <span class="label">Mot de passe:</span>
-                   <input class="inputText"  type="password" name="mdp" value="" /><br/>
+                   <input class="inputText"  type="password" name="mdp" value="" />
                  </span>
+                 <span class="btnBar"> 
+	               <input class="pgeBtn" type="submit" value="Se connecter">
+	             </span>
 	            ';
 	             
 	             if ($_GET["CR"]) {
-	                echo ' <span class="fitem"><span class="message">Vérifiez vos indentifiants</span><br/>' ;
+	                echo ' <br/><span class="fitem"><span class="message">Vérifiez vos indentifiants</span><br/>' ;
 	             }
 	             
 	             echo' 
-	             <span class="btnBar"> 
-	               <input class="pgeBtn" type="submit" value="Se connecter">
-	             </span>
+	             
                 </form>
                </span>';
        

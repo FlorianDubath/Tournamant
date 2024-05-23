@@ -46,14 +46,15 @@ echo '
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id=TournamentCategory.AgeCategoryId
                              INNER JOIN TournamentGender on TournamentGender.Id=TournamentAgeCategory.GenderId
                              INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
-                             INNER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
-                             INNER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
+                             LEFT OUTER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
+                             LEFT OUTER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
                              
                              GROUP BY TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
                                  TournamentAgeCategory.ShortName,
                                  TournamentGender.Name,
-                                 IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
+                                 TournamentCategory.MinWeight,
+                                 TournamentCategory.MaxWeight,
                                  TournamentWeighting.Started,
                                  TournamentWeighting.WeightingEnd
                                  ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC;
@@ -63,11 +64,12 @@ echo '
      
      
      $current_end_time ='';
+     $current_age_cat_n ='';
      while ($stmt->fetch()){
      
         if ( $current_end_time!=$weighting_end){
            if ( $current_end_time!=''){
-               echo '</table></div>';
+               echo '</table></div></div>';
            }
                $w_end = new DateTime($current_end_time);
                $now = new DateTime();
@@ -79,30 +81,35 @@ echo '
                } else {
                     echo date('j/m H\hi', strtotime($weighting_end)). ' ('.$interval_end->h.'h '.$interval_end->m.' min.)';
                }    
-           $current_end_time=$weighting_end;
+               echo'</span>';
+            
+        }
+        
+        if ($current_age_cat_n!=$cat_n ){
+               if ($current_age_cat_n!='' && $current_end_time==$weighting_end){
+                   echo '</table></div>';
+               }
           
-          echo'
-               <table class="wt t4">
+               echo '<div class="wgt_tm_cat" ><span>'.$cat_sn.' '.$cat_n.' '.$cat_gen.'</span>
+             <table class="wt t4">
                <tr class="tblHeader">
-               <th>Nom</th>
+               <th>Poid</th>
                <th>Participants(déjà pesé)</th>
                <th>Combats commencés</th>
                <th >Action</th>
                </tr>';
-        }
+           }
      
-     
-      
-     
-     
-         echo '<tr><td>'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'</td>
+         $current_end_time = $weighting_end; 
+         $current_age_cat_n=$cat_n; 
+         echo '<tr><td>'.$weight.'</td>
                    <td>'.$total.' ('.$weighted.')</td>
                    <td>'.$Started.'</td>
                    <td><a href="cat.php?cid='.$catId.'&m=1">A peser</a><a href="cat.php?cid='.$catId.'">Détails</a></td></tr>';
      }
      
      $stmt->close();
-     echo '</table></div>
+     echo '</table></div></div>
               </span>
               
               <span class="h_txt"> 

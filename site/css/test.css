@@ -84,31 +84,144 @@ font-weight:bold;
   
 }
 
+.lgout {
+  display:inline-block; 
+  text-decoration:none;
+  padding:2px;
+  border:solid 1px black;
+  margin-right:5px;
+  margin-top:3px;
+  color:black;
+  background-color:#CCCCCC;
+  border-radius:5px;
+  float:right;
+  
+}
 
-
-
-.m_b > a:hover , .m_b > a:active{
+.m_b > a:hover , .m_b > a:active, .lgout:hover, .lgout:active{
   background-color:#DDDDDD;
 }
 
 
 .band{
    display:block;
-    padding-bottom:10px;
    
+   padding:0 5px 10px 5px;
    background-color:#DDDDDD;
 }
 
 .b_closed {
-   max-height:25px;
+   max-height:30px;
    overflow:hidden;
    padding-bottom:0px;
  }
 
 .b_title {
     display:block;
-    height:25px;
-    background-color:pink;
+    height:30px;
+    margin-bottom:5px;
+    vertical-align: top;
 }
+
+.b_i_title {
+    font-weight:bold;
+    display:inline-block;
+    margin-top:5px;
+    margin-left:10px;
+    vertical-align: top;
+}
+
+.h_title {
+  display:inline-block;
+  margin-left:auto;
+}
+
+.wgt_tm_grp {
+  display:block;
+  background-color:#DDDDDD;
+  margin-bottom:10px;
+  padding:10px;
+  text-align:right;
+}
+
+.wgt_tm_cat{
+  display:block;
+  
+  margin-bottom:10px;
+  padding:10px;
+  text-align:left;
+}
+
+
+.card {
+   margin:10px;
+}
+
+.ftitle{
+   display:block;
+   font-weight:bold;
+   margin-top:5px;
+}
+.label{
+display:inline-block;
+   min-width:120px;
+}
+
+.cprogress{
+    display:inline-block;    
+    border:solid 1px black;
+    padding:3px;
+}
+
+.c_p_todo{
+  background-color:orange;
+}
+.c_p_done{
+  background-color:green;
+}
+
+.c_p_done:after{
+  content: ' ✓';
+}
+
+.c_p_notavailable{
+  color:grey;
+}
+.c_p_info{
+}
+
+.c_p_missed{
+  background-color:red;
+}
+
+.c_p_missed:after{
+  content: ' ❌';
+}
+
+.c_p_element:not(:last-child):after{
+ // content: ' ✓';
+}
+
+.c_p_title{
+ display:block;
+}
+
+.c_p_element {
+ display:inline-block;
+}
+
+.c_p_title, .c_p_element {
+   
+    height:2em;
+    vertical-align:center;
+    border:solid 1px black;
+    padding:3px;
+    margin-right:4px;
+    line-height: 2em; 
+}
+
+
+
+
 
 
