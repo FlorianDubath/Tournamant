@@ -1,7 +1,21 @@
 <?php
       ob_start();
       session_name("Tournament");	
-      session_start(); 				
+      session_start(); 	
+      
+      $rtn_url='index.php';
+      $rtn_url_err='?CR=1';
+      if (!empty($_POST['rtn']) && $_POST['rtn']!="" && $_POST['rtn']!="/") {
+          $rtn_url=$_POST['rtn'];
+          str_replace($rtn_url,'CR=1&','');
+          str_replace($rtn_url,'&CR=1','');
+          str_replace($rtn_url,'?CR=1','');
+      }
+      
+      if (str_contains($rtn_url,'?')) {
+          $rtn_url_err='&CR=1';
+      }
+      			
       if($_POST && !empty($_POST['login']) && !empty($_POST['mdp'])) {
 	    
          include 'connectionFactory.php';
@@ -22,7 +36,7 @@
 	      $stmt->close();
 
           if (!isset($UserId)){
-	          header('Location: login.php?CR=1');
+	          header('Location: '.$rtn_url.$rtn_url_err);
              exit();	
           }
           $password_md5 = md5($_POST['mdp'].$Salt);
@@ -42,10 +56,10 @@
 	        $stmt->execute();
      	    $stmt->close();
 
-	       	header('Location: ./index.php');
+	       	header('Location: '.$rtn_url);
 	       
 	     } else {
-	       header('Location: login.php?CR=1');	 
+	       header('Location: '.$rtn_url.$rtn_url_err);	 
 	     }
      } else {
         // LogOut
@@ -55,7 +69,7 @@
 	   setcookie(session_name(), '', time() - 42000,$params["path"], $params["domain"],$params["secure"], $params["httponly"]);
 	}
 	session_destroy();
-        header('Location: login.php');
+        header('Location: '.$rtn_url);
      }
      exit();	
 ?>

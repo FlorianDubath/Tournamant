@@ -43,7 +43,7 @@ $mysqli= ConnectionFactory::GetConnection();
                                  IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
                                  TournamentWeighting.Started,
                                  TournamentWeighting.WeightingEnd, 
-                                 count(V2.CompetitorId), 
+                                 count(DISTINCT V2.CompetitorId), 
                                  count(DISTINCT V3.CompetitorId) 
                              from TournamentCategory
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id=TournamentCategory.AgeCategoryId

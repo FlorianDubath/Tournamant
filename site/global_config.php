@@ -35,6 +35,8 @@ writeHead();
 echo'
 <body>
     <div class="f_cont">';
+
+    
 echo'        
        <div class="cont_l">
          <div class="h">'; 

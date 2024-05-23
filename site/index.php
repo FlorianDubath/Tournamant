@@ -7,66 +7,13 @@ session_start();
 include '_commonBlock.php';
 writeHead();
 
+
 echo'
 <body>
     <div class="f_cont">';
-echo'        
-       <div class="cont_l">
-         <div class="h">'; 
-if ( ! empty($_SESSION['_UserId'])) {
-      
-    if ($_SESSION['_IsAdmin']==1) {
-       echo '<span>ADMIN<br/>
-    Configuration<br/>
-       <a href="global_config.php">configurer les dates du tournois</a> <br/>
-       <a href="cat_config.php">configurer les catégories/horaires</a> <br/>
-       <a href="double_start_conf.php">configurer les doubles départs</a> <br/>
-    Attribution des rôle <br/>
-       <a href="admin.php">Créer les utilisateurs et attribuer des rôles</a> <br/></span>';
-    }
     
-    if ($_SESSION['_IsRegistration']==1) {
-       echo '<span>INSCRIPTIONS<br/>
-       
-       <a href="listingclub.php">Liste des clubs</a> <br/>
-       <a href="listingreg.php">Liste des inscrits</a> <br/>
-       </span>';
-    }
-    
-    
-       echo '<span>CATEGORIES<br/>
-       <a href="listingcat.php">Liste des catégories</a> <br/>
-       </span>';
-    
-}    else {
-echo ' 
-            <span class="h_title">
-               CONNECTION
-               </span>
-               
-               <span class="h_txt">
-               <form action="./identification.php" method="post">
-	             <span class="fitem">
-	               <span class="label">Nom d\'utilisateur:</span>
-	               <input class="inputText"  type="text" name="login" value="" /><br/>
-	             </span>
-	             <span class="fitem">
-	               <span class="label">Mot de passe:</span>
-                   <input class="inputText"  type="password" name="mdp" value="" /><br/>
-                 </span>
-	            ';
-	             
-	             if ($_GET["CR"]) {
-	                echo ' <span class="fitem"><span class="message">Vérifiez vos indentifiants</span><br/>' ;
-	             }
-	             
-	             echo' 
-	             <span class="btnBar"> 
-	               <input class="pgeBtn" type="submit" value="Se connecter">
-	             </span>
-                </form>
-               </span>';
-}
+writeBand();
+
 
 
  include 'connectionFactory.php';
@@ -224,7 +171,7 @@ echo '
 	
 	
 echo '
-           </div>     
+        
         </div>   
      </div>
 </body>

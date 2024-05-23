@@ -60,3 +60,55 @@
  border: 1px black solid; 
  padding:0.5em;
 }
+
+.m_b {
+display:block; 
+max-width:400px;
+margin: 10px auto 0 auto;
+}
+.m_b_t {
+display:block; 
+font-weight:bold;
+ margin-top:10px;
+}
+
+.m_b > a {
+  display:block; 
+  text-decoration:none;
+  padding:5px;
+  border:solid 1px black;
+  margin-bottom:5px;
+  color:black;
+  background-color:#CCCCCC;
+  border-radius:5px;
+  
+}
+
+
+
+
+.m_b > a:hover , .m_b > a:active{
+  background-color:#DDDDDD;
+}
+
+
+.band{
+   display:block;
+    padding-bottom:10px;
+   
+   background-color:#DDDDDD;
+}
+
+.b_closed {
+   max-height:25px;
+   overflow:hidden;
+   padding-bottom:0px;
+ }
+
+.b_title {
+    display:block;
+    height:25px;
+    background-color:pink;
+}
+
+

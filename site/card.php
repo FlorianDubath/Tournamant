@@ -82,6 +82,10 @@ function getWeights($dict, $age_cat,$selection) {
 echo'
 <body>
     <div class="f_cont">';
+    
+    
+    
+writeBand();
 echo'        
        <div class="cont_l">
          <div class="h">'; 
