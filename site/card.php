@@ -91,7 +91,7 @@ echo'
          <div class="h">'; 
 if ( ! empty($_SESSION['_UserId'])) {
     if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1) {
-       echo '<span>ACCUEIL<br/>';
+       echo '<span class="item_action"><span class="ftitle">ACCUEIL</span>';
        if (!empty($Id) && $Id>0) {
             
             if (!empty($_GET['pr'])&&$_GET['pr']==1) { 
@@ -103,19 +103,20 @@ if ( ! empty($_SESSION['_UserId'])) {
             } 
             
             
-            echo '<a href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
+            echo '<a class="pgeBtn" href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
             
             
             if ( $chin==0) {
-                echo '<a href="card.php?sid='.$strId.'&pr=1">Confirmer la présence et remise de la carte</a> <br/> ';
+                echo '<a class="pgeBtn" href="card.php?sid='.$strId.'&pr=1">Confirmer la présence et remise de la carte</a> <br/> ';
             } else {
-                echo 'Présence confirmée! <br/> ';
+                echo 'Présence confirmée!  ';
             }
             
             
        } else {
-            echo '<a href="">Inscription avec une carte anonyme</a> <br/> '; //TODO
-       }   
+            echo '<a class="pgeBtn" href="">Inscription avec une carte anonyme</a> <br/> '; //TODO
+       }  
+        echo '</span>'; 
     }
     
     if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
@@ -127,7 +128,7 @@ if ( ! empty($_SESSION['_UserId'])) {
          } 
     
     
-       echo '<span>PESEE<br/>Catégorie:';
+       echo '<span class="item_action"><span class="ftitle">PESEE</span>Catégorie:';
               $stmt = $mysqli->prepare("SELECT 
 	                                            TournamentRegistration.Id, 
 	                                            TournamentAgeCategory.Name,
@@ -152,19 +153,19 @@ if ( ! empty($_SESSION['_UserId'])) {
                $stmt->bind_result($tr_to_w_id, $cat_n,$cat_sn,$cat_gen, $dpw, $w_to_confirm, $age_cat_id, $weighting_begin, $weighting_end,$wck);
                while ($stmt->fetch()){
                     if ($wck==1) {
-                           echo '<span> Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</span>';
+                           echo '<div>&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</div>';
                     } else {
                     
                     echo '<form action="./card.php" method="get">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
                              <input type="hidden" name="wgok" value="1"/>
-                            <span> Pesée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:<select name="wgc">';
+                            <span> &nbsp; &nbsp; Pesée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:<select name="wgc">';
                                
                              echo getWeights($weight_cat, $age_cat_id,$w_to_confirm) ;   
                              echo '</select>';
                              if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
-                                echo' <input class="pgeBtn" type="submit" value="Poid vérifié">';
+                                echo' <input class="pgeBtn" class="pgeBtn" type="submit" value="Poid vérifié">';
                             }
                             echo '</span>
                           </form>';
@@ -173,16 +174,24 @@ if ( ! empty($_SESSION['_UserId'])) {
                
                }      
       	       $stmt->close();
+      	       
+        echo '</span>'; 
     }
     
-    echo '<a href="" onclick="makePDF(\'carte_'.$strId.'.pdf\');">PDF</a>';
+    
 }  
 
 echo '
 <div class="card">
  <span class="ftitle">
-	        COMPETITEUR
-	         </span>
+	        COMPETITEUR ';
+	        
+if ( ! empty($_SESSION['_UserId'])) {	        
+	        echo '<a class="pgeBtn" href="" onclick="makePDF(\'carte_'.$strId.'.pdf\');">PDF</a>';
+}	    
+    
+	        echo'
+	         </span><br/>
 	           <input type="hidden" name="id" value="'.$Id.'"/>
 	        <span class="fitem">
                <span class="label">Identifiant :</span>

@@ -157,6 +157,14 @@ font-weight:bold;
    margin:10px;
 }
 
+.item_action{
+   display:block;
+   margin:10px;
+   border:solid black 1px;
+   background-color:#EEEEFF;
+   padding:10px;
+}
+
 .ftitle{
    display:block;
    font-weight:bold;
@@ -220,6 +228,21 @@ display:inline-block;
     line-height: 2em; 
 }
 
+td > a, .pgeBtn {
+  display:inline-block; 
+  text-decoration:none;
+  padding:2px 5px 2px 5px;
+  border:solid 1px black;
+  margin-left:5px;
+  color:black;
+  background-color:#CCCCCC;
+  border-radius:5px;
+  font-size:12px;
+}
+
+td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active{
+  background-color:#DDDDDD;
+}
 
 
 
