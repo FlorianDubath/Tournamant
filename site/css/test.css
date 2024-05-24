@@ -208,13 +208,13 @@ display:inline-block;
 
 .c_p_element {
  display:inline-block;
+ border:solid 1px black;
 }
 
 .c_p_title, .c_p_element {
    
     height:2em;
     vertical-align:center;
-    border:solid 1px black;
     padding:3px;
     margin-right:4px;
     line-height: 2em; 
