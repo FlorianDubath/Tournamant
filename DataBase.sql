@@ -221,7 +221,6 @@ CREATE TABLE TournamentWeighting(
   CONSTRAINT fk_wgt_age_cat FOREIGN KEY (AgeCategoryId) REFERENCES TournamentAgeCategory(Id)
 );
 
-ALTER TABLE TournamentWeighting ADD COLUMN Started TINYINT NOT NULL DEFAULT 0;
 
 CREATE TABLE TournamentGrade(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -291,8 +290,7 @@ select
      TournamentCategory.Id as CategoryId,
      CompetitorId as CompetitorId,
      WeightChecked as WeightChecked,
-     WeightingEnd as WeightingEnd,
-     Started as Started
+     WeightingEnd as WeightingEnd
 FROM TournamentCategory
 INNER JOIN TournamentAgeCategory on TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
 INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
@@ -308,15 +306,12 @@ INNER JOIN TournamentCategory on TournamentCategory.Id = TournamentRegistration.
 
 
 
-
-
-
-
 CREATE TABLE ActualCategory(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   CategoryId  INT NOT NULL,
   Category2Id  INT NULL,
   Name VARCHAR( 255 ) NOT NULL,
+  IsCompleted TINYINT DEFAULT 0,
   
   CONSTRAINT fk_ackc_cat1 FOREIGN KEY (CategoryId) REFERENCES  TournamentCategory(Id),
   CONSTRAINT fk_ackc_cat2 FOREIGN KEY (Category2Id) REFERENCES  TournamentCategory(Id)
@@ -374,7 +369,13 @@ CREATE TABLE Fight(
 );
 
 
-
+CREATE TABLE ActualCategoryResult(
+     ActualCategoryId INT NOT NULL,
+     Competitor1Id INT NOT NULL,
+     RankId INT NOT NULL,
+     CONSTRAINT fk_acr_cat FOREIGN KEY (ActualCategoryId) REFERENCES  ActualCategory(Id),
+     CONSTRAINT fk_acr_tc FOREIGN KEY (Competitor1Id) REFERENCES  TournamentCompetitor(Id)
+);
 
 
 

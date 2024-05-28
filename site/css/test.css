@@ -246,5 +246,29 @@ td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active{
 
 
 
+.pop_hide{
+   display:none;
+}
 
+ .VIC {
+  background-color:#BBFFBB;
+  color:black;
+  font-weight:bold;
+  
+}
+.LOS{
+background-color:#FFBBBB;
+  color:grey;
+}
 
+.result_1{
+ background-color:#d4af37;
+ }
+ 
+ .result_2{
+ background-color:#c0c0c0;
+ }
+ 
+ .result_3{
+ background-color:#cd7f32;
+ }

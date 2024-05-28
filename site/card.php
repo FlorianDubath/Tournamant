@@ -4,6 +4,14 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
+function wrap_res($rk){
+  if ($rk==1){
+  return $rk.'<sup>re</sup>';
+  } else {
+  return $rk.'<sup>e</sup>';
+  }
+}
+
 
   if(empty($_GET['sid'] || strlen($_GET['sid'])!=12) ) {
       	header('Location: ./index.php');
@@ -246,19 +254,23 @@ echo'
 	                                            TournamentCompetitor.CheckedIn,
 	                                            TournamentRegistration.WeightChecked,
 	                                            TournamentWeighting.WeightingBegin,
-	                                            TournamentWeighting.WeightingEnd
+	                                            TournamentWeighting.WeightingEnd,
+	                                            ActualCategory.Name,
+	                                            ActualCategoryResult.RankId
 	                                     FROM TournamentRegistration 
 	                                     INNER JOIN TournamentCategory ON TournamentRegistration.CategoryId=TournamentCategory.Id
 	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
 	                                     INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id 
 	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId
 	                                     INNER JOIN TournamentCompetitor ON TournamentCompetitor.Id=TournamentRegistration.CompetitorId
+	                                     LEFT OUTER JOIN ActualCategory on ActualCategory.CategoryId=TournamentRegistration.CategoryId or ActualCategory.Category2Id=TournamentRegistration.CategoryId
+	                                     LEFT OUTER JOIN ActualCategoryResult ON ActualCategoryResult.ActualCategoryId=ActualCategory.Id AND ActualCategoryResult.Competitor1Id=TournamentRegistration.CompetitorId
 	                                     WHERE CompetitorId =?
 	                                     ORDER BY TournamentWeighting.WeightingEnd");
 	                            
                $stmt->bind_param("i", $Id);         
       	       $stmt->execute();
-               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$checkedin,$weight_checked, $weighting_begin, $weighting_end);
+               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$checkedin,$weight_checked, $weighting_begin, $weighting_end, $acname, $acrk);
                $cat_regist = array();
                while ($stmt->fetch()){
                    $pay_cls = "c_p_todo";
@@ -270,7 +282,13 @@ echo'
                       $acc_cls  = "c_p_done";
                    }
                     echo'<span class="cprogress">
-                         <span class="c_p_title">'.$trshort.' '.$trname.' '.$gender.' '.$wgt.'</span>
+                         <span class="c_p_title">'.$trshort.' '.$trname.' '.$gender.' '.$wgt;
+                         
+                    if (!empty($acname) && $acname!=$trshort.' '.$trname.' '.$gender.' '.$wgt){
+                        echo'('.$acname.')';
+                    }
+                         
+                    echo'</span>
                          <span class="c_p_element c_p_done"> Inscription </span>
                          <span class="c_p_element '.$pay_cls.'"> Payement </span>
                          <span class="c_p_element '.$acc_cls.'"> Annonce à l\'acceuil </span>';
@@ -301,7 +319,11 @@ echo'
                           }
                       } else {
                           echo '<span class="c_p_element c_p_done"> Pesée </span>';
-                          // TODO category details and table
+                          
+                          if (!empty($acrk)) {
+                               echo '<span class="c_p_element result_'.$acrk.'"> Classement : '.wrap_res($acrk).' </span>';
+                          }
+                          
                       }
                       
                   

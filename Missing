@@ -15,8 +15,12 @@ payement multiple depuis csv
 
 liste des compétiteur pas pesé par catégorie d'age
 
+Liste des résultats par catégories / par club
 
--------------------
-Génération tableaux
--------------------
-TODO
+cas avec >10 participants
+cas avec 1 seul participant 
+cas avec 1 seul participant + grouping
+
+tie dans les pools
+
+

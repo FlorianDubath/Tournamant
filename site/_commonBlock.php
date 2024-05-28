@@ -38,7 +38,7 @@ function writeBand() {
     echo'" >
              <div class="b_title" onclick="toggleClass(document.getElementById(\'band\'), \'b_closed\')"> 
                   <img id="logo" src="css/Logo_ACG_JJJ.png" height="30px"></img>
-                  <div class="b_i_title">ASSOCIATION CANTONALE GENEVOISE DE JUDO ET DE JU-JITSU</div>';
+                  <div class="b_i_title">ACGJJJ</div>';
              
     if ($isLoged) {echo '<a class="lgout" href="identification.php">logout</a>';}        
              echo' </div>';

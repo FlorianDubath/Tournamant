@@ -28,6 +28,9 @@ echo '
             <span class="h_title">
                CATEGORIES
             </span>
+             <span class="btnBar"> 
+                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+               </span>
             <span class="h_txt">
                
    ';
@@ -38,7 +41,8 @@ echo '
                                  TournamentAgeCategory.ShortName,
                                  TournamentGender.Name,
                                  IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
-                                 TournamentWeighting.Started,
+                                 ActualCategory.Id,
+                                 ActualCategory.IsCompleted,
                                  TournamentWeighting.WeightingEnd, 
                                  count(DISTINCT V2.CompetitorId), 
                                  count(DISTINCT V3.CompetitorId) 
@@ -48,18 +52,20 @@ echo '
                              INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
                              LEFT OUTER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
                              LEFT OUTER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
+                             LEFT OUTER JOIN ActualCategory ON TournamentCategory.Id=ActualCategory.CategoryId OR TournamentCategory.Id=ActualCategory.Category2Id
                              
                              GROUP BY TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
                                  TournamentAgeCategory.ShortName,
                                  TournamentGender.Name,
                                  TournamentCategory.MinWeight,
-                                 TournamentCategory.MaxWeight,
-                                 TournamentWeighting.Started,
+                                 TournamentCategory.MaxWeight,                                
+                                 ActualCategory.Id,
+                                 ActualCategory.IsCompleted,
                                  TournamentWeighting.WeightingEnd
                                  ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC;
                            ");
-     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_gen,$weight, $Started, $weighting_end, $total, $weighted);
+     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_gen,$weight, $a_cat_id,$a_cat_comp, $weighting_end, $total, $weighted);
      $stmt->execute();
      
      
@@ -95,7 +101,7 @@ echo '
                <tr class="tblHeader">
                <th>Poid</th>
                <th>Participants(déjà pesé)</th>
-               <th>Combats commencés</th>
+               <th>Status</th>
                <th >Action</th>
                </tr>';
            }
@@ -104,8 +110,25 @@ echo '
          $current_age_cat_n=$cat_n; 
          echo '<tr><td>'.$weight.'</td>
                    <td>'.$total.' ('.$weighted.')</td>
-                   <td>'.$Started.'</td>
-                   <td><a href="cat.php?cid='.$catId.'&m=1">A peser</a><a href="cat.php?cid='.$catId.'">Détails</a></td></tr>';
+                   <td>';
+          
+         if ($a_cat_comp and $a_cat_comp==1){
+             echo 'Terminée';
+         } else if ($a_cat_id and $a_cat_id>0){
+             echo 'En cours';
+         }  else if ($now > $w_end && $_SESSION['_IsMainTable']==1) {
+            echo' <a href="acat.php?cid='.$catId.'">Préparer</a>';
+         } else {
+             echo 'En attente';
+         }       
+                   
+         echo'</td>
+                   <td>';
+         if (empty($a_cat_id)){
+                   echo'<a href="cat.php?cid='.$catId.'&m=1">A peser</a>';
+                   }
+                   echo'
+                   <a href="cat.php?cid='.$catId.'">Détails</a></td></tr>';
      }
      
      $stmt->close();

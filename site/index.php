@@ -140,7 +140,7 @@ writeBand();
              $accumulation='';
           }
           if ($accumulation!=''){
-              $accumulation=$accumulation.'/';
+              $accumulation=$accumulation.' / ';
           }
           if ($max_w<0) {
               $accumulation=$accumulation. $max_w;

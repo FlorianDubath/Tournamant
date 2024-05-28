@@ -194,7 +194,7 @@ function create_steps_6($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
     $half_2=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId)
+    $final=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
@@ -208,13 +208,13 @@ function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
     $half_2=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId)
+    $final=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
-function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8) {
+function create_steps_8($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8) {
     $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7);
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
     
     $half_1=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
@@ -222,13 +222,13 @@ function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
     $half_2=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId)
+    $final=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
-function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9) {
+function create_steps_9($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9) {
     $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9);
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
     
     $half_1=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
@@ -236,13 +236,13 @@ function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
     $half_2=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId)
+    $final=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
-function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9, $user_id_10) {
-    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9);
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, $user_id_10);
+function create_steps_10($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9, $user_id_10) {
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9);
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, $user_id_10);
     
     $half_1=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
@@ -250,7 +250,7 @@ function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
     $half_2=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId)
+    $final=create_step_direct($ActualCategoryId);
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
@@ -284,16 +284,16 @@ function get_step_results($step_id){
         $stmt->close();
         if (!empty($pv1)){
             if ($pv1>0){
-                return {1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id};
+                return array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id);
             } 
             else {
-                return {1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id};
+                return array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id);
             }
         } else {
             return NULL;
         }
     } else {
-        // pool step  //TODO
+        // pool step  
         $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1,TournamentCompetitor2Id,pv2 FROM Fight WHERE step_id=?");
         $stmt->bind_param("i", $step_id);         
         $stmt->bind_result($TournamentCompetitor1Id, $pv1, $TournamentCompetitor2Id, $pv2);     
@@ -319,7 +319,7 @@ function get_step_results($step_id){
         $stmt->close();
         
         // Direct fight in case of equality
-        $counts = array_count_values($results)
+        $counts = array_count_values($results);
         foreach ($counts as $value => $mult) {   
             $tied_keys=get_list_from_val($value,$results);
             $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id, pv1, TournamentCompetitor2Id FROM Fight WHERE step_id=? AND TournamentCompetitor1Id IN (".implode(',',$tied_keys).") AND TournamentCompetitor2Id IN (".implode(',',$tied_keys).")");
@@ -327,8 +327,8 @@ function get_step_results($step_id){
             $stmt->bind_result($TCompetitor1Id,$pv1,$TCompetitor2Id);     
             $stmt->execute();  
             while ($stmt->fetch()) {
-                $results[$TCompetitor1Id] += (int)($pv1>0)
-                $results[$TCompetitor2Id] += (int)($pv1==0)
+                $results[$TCompetitor1Id] += (int)($pv1>0);
+                $results[$TCompetitor2Id] += (int)($pv1==0);
             }
             $stmt->close(); 
         }
@@ -338,7 +338,7 @@ function get_step_results($step_id){
            echo 'ERROR IN the step: tied results';
         }
         
-        ksort($results, SORT_NUMERIC)
+        ksort($results, SORT_NUMERIC);
         
         $res= array();
         $idx=count($results);
@@ -367,9 +367,9 @@ function check_link($ActualCategoryId) {
         $res_1 = get_step_results($in_step_1);
         $res_2 = get_step_results($in_step_2);
         if (!empty($res_1) and !empty($res_2)) {
-            $to_update = {"step_Id"=>$out_step, 
+            $to_update = array("step_Id"=>$out_step, 
                           "f1"=>$res_1[$rank_1], 
-                          "f2"=>$res_2[$rank_2]};
+                          "f2"=>$res_2[$rank_2]);
             $links[]=$to_update;
         }
     }
@@ -381,7 +381,7 @@ function check_link($ActualCategoryId) {
 }
 
 function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
-    if ($pv_1>=0 && pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
+    if ($pv_1>=0 && $pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
         $mysqli= ConnectionFactory::GetConnection(); 
         
         $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=? WHERE Id=?");
@@ -390,19 +390,42 @@ function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
         $stmt->close();
         
         check_link($ActualCategoryId);
-    }
+        if (isCatCompleted($ActualCategoryId)) {
+            close_category($ActualCategoryId);
+        }
+    } else {echo 'Error in data'; exit;}
     
 }
 
+function isCatCompleted($ActualCategoryId){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    
+    // look for linking and more specifically for the step which is only in the output never in the inputs
+    $stmt = $mysqli->prepare("SELECT count(Id) 
+                              FROM Fight 
+                              WHERE ActualCategoryId =? AND pv1 IS NULL");
+    $stmt->bind_param("i", $ActualCategoryId);         
+    $stmt->bind_result($missing_fight);     
+    $stmt->execute();  
+    $stmt->fetch();
+    $stmt->close();
+    return $missing_fight==0;
+}
+
 function get_full_result($ActualCategoryId){
+    if (!isCatCompleted($ActualCategoryId)){
+        return NULL;
+    }
+
+
     $mysqli= ConnectionFactory::GetConnection(); 
     
     // look for linking and more specifically for the step which is only in the output never in the inputs
     $stmt = $mysqli->prepare("SELECT 
-                                ST1.out_step_id
+                              ST1.out_step_id
                               FROM StepLinking AS ST1
-                              LEFT OUTER JOINT StepLinking AS ST2 ON ST1.ActualCategoryId = ST2.ActualCategoryId AND ST1.out_step_id=ST2.in_step_1_id
-                              LEFT OUTER JOINT StepLinking AS ST3 ON ST1.ActualCategoryId = ST3.ActualCategoryId AND ST1.out_step_id=ST3.in_step_2_id
+                              LEFT OUTER JOIN StepLinking AS ST2 ON ST1.ActualCategoryId = ST2.ActualCategoryId AND ST1.out_step_id=ST2.in_step_1_id
+                              LEFT OUTER JOIN StepLinking AS ST3 ON ST1.ActualCategoryId = ST3.ActualCategoryId AND ST1.out_step_id=ST3.in_step_2_id
                               WHERE ST2.ActualCategoryId IS NULL AND ST3.ActualCategoryId IS NULL AND ST1.ActualCategoryId =?");
     $stmt->bind_param("i", $ActualCategoryId);         
     $stmt->bind_result($final_step_id);     
@@ -411,7 +434,7 @@ function get_full_result($ActualCategoryId){
     $stmt->close();
     
     if (empty($final_step_id)){
-        stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
+        $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
         $stmt->bind_param("i", $ActualCategoryId);         
         $stmt->bind_result($step_id);     
         $stmt->execute();  
@@ -453,12 +476,116 @@ function get_full_result($ActualCategoryId){
                 $stmt->close();
             }
             
-            $counter+=1
+            $counter+=1;
             $current_steps=$new_current_steps;
         }
         
         return $result; 
     }  
+}
+
+function open_Category($tc_id_1,$tc_id_2,$name){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $actual_category_id = -1;
+    if ($tc_id_2>0){
+        $stmt = $mysqli->prepare("INSERT INTO ActualCategory (CategoryId,Category2Id,Name) VALUES (?,?,?)");
+        $stmt->bind_param("iis", $tc_id_1, $tc_id_2, $name);         
+        $stmt->execute();
+        $actual_category_id = $mysqli->insert_id;
+        $stmt->close();
+    } else {
+        $stmt = $mysqli->prepare("INSERT INTO ActualCategory (CategoryId,Name) VALUES (?,?)");
+        $stmt->bind_param("is", $tc_id_1, $name);         
+        $stmt->execute();
+        $actual_category_id = $mysqli->insert_id;
+        $stmt->close();
+    }
+    
+    
+    // get competitor list
+    $stmt = $mysqli->prepare("SELECT 
+            TournamentCompetitor.Id,
+            TournamentCompetitor.ClubId
+        FROM TournamentRegistration
+        INNER JOIN TournamentCompetitor ON CompetitorId=TournamentCompetitor.Id
+        WHERE WeightChecked=1 and TournamentRegistration.CategoryId In (?,?)");
+    $stmt->bind_param("ii", $tc_id_1, $tc_id_2);         
+    $stmt->bind_result($cmpid,$clubId);     
+    $stmt->execute();  
+    $user=array();
+    while($stmt->fetch()) {
+      $user[$cmpid]=$clubId;
+    }
+    $stmt->close();
+    
+    // scramble it (scramble the club then user into the club so we avoid people in the same club to be in the same pool)
+    $club_list = array_unique(array_values($user));
+    $club_val=array();
+    
+   foreach($club_list as $club_id){
+       $club_val[$club_id]=rand(1, count($club_list));
+   }
+   
+   $new_usr=array();
+   foreach($user as $uid=>$club_id){
+        $new_usr[$uid]= $club_val[$club_id]*100 +rand(1,99);
+   }
+   
+   ksort($new_usr, SORT_NUMERIC);
+   
+   $usr_ids = array_keys($new_usr);
+   switch (count($usr_ids)) {
+    case 2:
+        create_step_pool_2($actual_category_id, $usr_ids[0], $usr_ids[1]);
+        break;
+    case 3:
+        create_step_pool_3($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2]);
+        break;
+    case 4:
+        create_step_pool_4($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3]);
+        break;
+    case 5:
+        create_step_pool_5($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4]);
+        break;
+    case 6:
+        create_steps_6($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5]);
+        break;
+    case 7:
+        create_steps_7($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5],  $usr_ids[6]);
+        break;
+    case 8:
+        create_steps_8($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5],  $usr_ids[6],  $usr_ids[7]);
+        break;
+    case 9:
+        create_steps_9($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5],  $usr_ids[6],  $usr_ids[7],  $usr_ids[8]);
+        break;
+    case 10:
+        create_steps_10($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5],  $usr_ids[6],  $usr_ids[7],  $usr_ids[8],  $usr_ids[9]);
+        break;
+      // TODO below 2 and above 10  
+    }
+}
+
+
+
+function close_category($ActualCategoryId){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $result = get_full_result($ActualCategoryId);
+    if (! empty($result)){
+        foreach($result as $rank=>$cid){
+            $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId) VALUES (?,?,?)");
+            $stmt->bind_param("iii", $ActualCategoryId, $cid, $rank);         
+            $stmt->execute();
+            $stmt->close();
+        }
+        
+         $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
+         $stmt->bind_param("i", $ActualCategoryId);         
+         $stmt->execute();
+         $stmt->close();
+    } else {
+       echo 'Cannot close a category with is not completed';
+    }
 }
 
 ?>
