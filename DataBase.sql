@@ -308,4 +308,77 @@ INNER JOIN TournamentCategory on TournamentCategory.Id = TournamentRegistration.
 
 
 
- -- ajouter inscription et payement
+
+
+
+
+CREATE TABLE ActualCategory(
+  Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  CategoryId  INT NOT NULL,
+  Category2Id  INT NULL,
+  Name VARCHAR( 255 ) NOT NULL,
+  
+  CONSTRAINT fk_ackc_cat1 FOREIGN KEY (CategoryId) REFERENCES  TournamentCategory(Id),
+  CONSTRAINT fk_ackc_cat2 FOREIGN KEY (Category2Id) REFERENCES  TournamentCategory(Id)
+);
+
+CREATE TABLE CategoryStepsType( 
+  Id INT NOT NULL PRIMARY KEY ,
+  Name VARCHAR( 255 ) NOT NULL
+);
+
+
+
+
+INSERT CategoryStepsType (Id,Name) VALUES (1,'SingleFight');
+INSERT CategoryStepsType (Id,Name) VALUES (3,'Pool_3');
+INSERT CategoryStepsType (Id,Name) VALUES (4,'Pool_4');
+INSERT CategoryStepsType (Id,Name) VALUES (5,'Pool_5');
+
+CREATE TABLE CategoryStep( 
+    Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    ActualCategoryId INT NOT NULL,
+    CategoryStepsTypeId INT NOT NULL,
+    CONSTRAINT fk_cs_cat FOREIGN KEY (ActualCategoryId) REFERENCES  ActualCategory(Id),
+    CONSTRAINT fk_cs_st FOREIGN KEY (CategoryStepsTypeId) REFERENCES  CategoryStepsType(Id)
+);
+
+
+
+
+
+
+CREATE TABLE StepLinking(
+     ActualCategoryId INT NOT NULL,
+     out_step_id INT NOT NULL,
+     in_step_1_id INT NOT NULL,
+     rank_in_step_1 INT NOT NULL,
+     in_step_2_id INT NOT NULL,
+     rank_in_step_2 INT NOT NULL,
+     CONSTRAINT pk_csa PRIMARY KEY (ActualCategoryId, out_step_id,in_step_1_id,rank_in_step_1,in_step_2_id,rank_in_step_2)
+     
+);
+
+
+CREATE TABLE Fight(
+     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+     ActualCategoryId INT NOT NULL,
+     step_id INT NOT NULL,
+     TournamentCompetitor1Id INT NULL,
+     pv1 INT  NULL,
+     TournamentCompetitor2Id INT NULL,
+     pv2 INT  NULL,
+     CONSTRAINT fk_f_cat FOREIGN KEY (ActualCategoryId) REFERENCES  ActualCategory(Id),
+     CONSTRAINT fk_f_tc1 FOREIGN KEY (TournamentCompetitor1Id) REFERENCES  TournamentCompetitor(Id),
+     CONSTRAINT fk_f_tc2 FOREIGN KEY (TournamentCompetitor2Id) REFERENCES  TournamentCompetitor(Id)
+);
+
+
+
+
+
+
+
+
+
+
