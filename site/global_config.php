@@ -10,19 +10,42 @@ if ($_SESSION['_IsAdmin']!=1) {
 
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
-
+$message='';
 if($_POST && !empty($_POST['id'])) {
 
-   if (!($stmt = $mysqli->prepare("UPDATE TournamentVenue SET Name=?,Place=?,Transport=?,Organization=?, Admition=?, System=?,Prize=?, Judge=?,Dressing=?,Contact=?,RegistrationEnd=?,TournamentStart=?,TournamentEnd=? WHERE Id=?"))){
-      	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
-      	  } 
-      	  
+          $stmt = $mysqli->prepare("UPDATE TournamentVenue SET Name=?,Place=?,Transport=?,Organization=?, Admition=?, System=?,Prize=?, Judge=?,Dressing=?,Contact=?,RegistrationEnd=?,TournamentStart=?,TournamentEnd=? WHERE Id=?");
       	  $stmt->bind_param("sssssssssssssi", $_POST['nme'], $_POST['plc'], $_POST['tsp'], $_POST['org'], $_POST['adm'], $_POST['sys'], $_POST['prz'], $_POST['jdg'], $_POST['drs'], $_POST['ctc'], $_POST['reg'], $_POST['ts'], $_POST['te'] , $_POST['id'] );
-      	  
-      	  
-          if (!($stmt->execute())){
-             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
-          }
+          $stmt->execute();
+	      $stmt->close();
+	      
+	      $stmt = $mysqli->prepare("
+	      UPDATE TournamentWeighting TW1 
+	      INNER JOIN TournamentWeighting TW2 ON TW1.AgeCategoryId = TW2.AgeCategoryId
+          SET TW1.WeightingBegin = concat(DATE(?),' ',TIME(TW2.WeightingBegin)), TW1.WeightingEnd = concat(DATE(?),' ',TIME(TW2.WeightingEnd))
+	      ");
+          $stmt->bind_param("ss", $_POST['ts'], $_POST['ts']);
+          $stmt->execute();
+	      $stmt->close();
+	      $message='Modifications enregistrées';
+
+
+}
+if($_POST && !empty($_POST['del'])) {
+    $mysqli->begin_transaction();
+    try {
+        
+        $mysqli->query("DELETE FROM ActualCategoryResult;");
+        $mysqli->query("DELETE FROM Fight;");
+        $mysqli->query("DELETE FROM StepLinking;");
+        $mysqli->query("DELETE FROM CategoryStep;");
+        $mysqli->query("DELETE FROM ActualCategory;");
+        $mysqli->query("DELETE FROM TournamentCompetitor;");
+        $mysqli->commit();
+    } catch (mysqli_sql_exception $exception) {
+        $mysqli->rollback();
+        throw $exception;
+    }
+    $message='Données précédentes éffacées';
 
 
 }
@@ -55,8 +78,9 @@ echo '
 	      <form action="./global_config.php" method="post">
 	         <span class="ftitle">
 	             Informations Globales
-	         </span>
-	        <input type="hidden" name="id" value="'.$Id.'"/>
+	         </span>';       
+	if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
+	      echo'  <input type="hidden" name="id" value="'.$Id.'"/>
 	        <span class="fitem">
                <span class="label">Nom du tournois:</span>
                <input class="inputText"  type="text" name="nme" value="'.$Name.'" /><br/>
@@ -118,7 +142,37 @@ echo '
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
 	               <a class="pgeBtn" href="index.php">Annuler/Fermer</a>
 	       </span>
-	       </form>';
+	       </form>
+	        
+	          <span class="btnBar"> 
+	          
+	          
+	          
+	            <span class="pop_back pop_hide" Id="pop_d"><span class="popcont">
+                    Vous êtes en train d\'effacer les enregistrements (compétiteurs et résultats) de la dernière édition!<br/>
+                    Vous êtes sur ? Cette opération ne peut être annulée!<br/>
+                    Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>?<br/><br/>
+         
+                    <form action="./global_config.php" method="post">         
+                             <input type="hidden" value="1" name="del"/>
+                             <input type="submit" value="Effacer les données précédentes">
+                   </form>
+                   
+                   
+                   <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Annuler</a>
+                  
+                  </span></span>
+                  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Effacer les données précédentes</a></td>
+	          
+	          
+	          
+	          
+	       <span class="btnBar"> 
+	               
+	               <a class="pgeBtn" href="index.php">Annuler/Fermer</a>
+	       </span>
+	       '
+	         ;
 	
 echo '	
            </div>     

@@ -51,8 +51,8 @@ $mysqli= ConnectionFactory::GetConnection();
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id=TournamentCategory.AgeCategoryId
                              INNER JOIN TournamentGender on TournamentGender.Id=TournamentAgeCategory.GenderId
                              INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
-                             INNER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
-                             INNER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
+                             LEFT OUTER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
+                             LEFT OUTER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
 
                              WHERE TournamentCategory.Id=?
                              
@@ -89,7 +89,7 @@ $mysqli= ConnectionFactory::GetConnection();
      if (empty($actual_cat_Id)) {
          
 
-echo ' 
+echo '
             <span class="h_title">
                '.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'
             </span>

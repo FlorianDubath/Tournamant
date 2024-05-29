@@ -72,12 +72,11 @@ echo '
      $current_end_time ='';
      $current_age_cat_n ='';
      while ($stmt->fetch()){
-     
         if ( $current_end_time!=$weighting_end){
            if ( $current_end_time!=''){
                echo '</table></div></div>';
-           }
-               $w_end = new DateTime($current_end_time);
+           } 
+               $w_end = new DateTime($weighting_end);
                $now = new DateTime();
                $interval_end = $now->diff($w_end);
               
@@ -90,8 +89,8 @@ echo '
                echo'</span>';
             
         }
-        
-        if ($current_age_cat_n!=$cat_n ){
+      
+        if ($current_age_cat_n!=$cat_sn.$cat_gen ){
                if ($current_age_cat_n!='' && $current_end_time==$weighting_end){
                    echo '</table></div>';
                }
@@ -107,7 +106,7 @@ echo '
            }
      
          $current_end_time = $weighting_end; 
-         $current_age_cat_n=$cat_n; 
+         $current_age_cat_n=$cat_sn.$cat_gen; 
          echo '<tr><td>'.$weight.'</td>
                    <td>'.$total.' ('.$weighted.')</td>
                    <td>';

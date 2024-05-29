@@ -11,6 +11,7 @@ if ($_SESSION['_IsRegistration']!=1) {
 
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
+ $message='';
 if($_POST && !empty($_POST['id'])) {
      if ($_POST['id']==-1) {
          $stmt = $mysqli->prepare("INSERT INTO TournamentClub  (Name, Contact) VALUES (?,?)");
@@ -24,6 +25,7 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->execute();
          $stmt->close();
      }
+	 $message='Modifications enregistrées';
 }
 if (!empty($_GET['id']) && $_GET['del']==1) {
      $stmt = $mysqli->prepare("DELETE FROM TournamentClub WHERE Id=?");
@@ -63,7 +65,10 @@ echo '
 	      <form action="./club.php" method="post">
 	         <span class="ftitle">
 	             CLUB
-	         </span>
+	         </span>';
+	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
+	         
+	         echo'
 	        <input type="hidden" name="id" value="'.$Id.'"/>
 	       
 	        <span class="fitem">

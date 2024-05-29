@@ -34,7 +34,7 @@ $mysqli= ConnectionFactory::GetConnection();
 
 
 $New_Id=$_REQUEST['id'];
-
+ $message='';
 if($_POST && !empty($_POST['id'])) {
      if ($_POST['id']==-1) {
          
@@ -55,6 +55,8 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->bind_result($New_Id);
          $stmt->fetch();
 	     $stmt->close();
+	     
+	     $message='Enregistrement effectué';
          
          
      } else {
@@ -62,6 +64,8 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->bind_param("sssisiii", $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid'], $_POST['id']);
          $stmt->execute();
          $stmt->close();
+         
+	    $message='Modifications enregistrées';
      }
      
      
@@ -130,7 +134,10 @@ echo '
 	      <form action="./reg.php" method="post">
 	         <span class="ftitle">
 	             COMPETITEUR
-	         </span>
+	         </span>';
+	         
+	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
+	         echo'
 	           <input type="hidden" name="id" value="'.$Id.'"/>';
 	           if(!empty($_REQUEST['sid']) and $Id==-1) {
 	               echo'<input type="hidden" name="sid" value="'.$_REQUEST['sid'].'"/>';
@@ -292,7 +299,7 @@ echo'
 	       <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
 	               <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>
-	               <a href="card.php?sid='.$sId.'">Carte</a> 
+	               <a class="pgeBtn" href="card.php?sid='.$sId.'" target="blanck">Carte</a> 
 	       </span>
 	       </form>
            </div>     

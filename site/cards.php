@@ -23,6 +23,7 @@ echo '
        <span Id="progress"> </span>
        <form action="./cards.php" method="get">
          Génération de <input type="number"  name="empty" min="1" max="16" step="1" value="1"/>  cartes vierges: <input class="pgeBtn" type="submit" value="Générer">
+             <a class="pgeBtn" href="listingreg.php" title="Fermer" >Fermer</a>
        </form>
     </div>
 
@@ -175,9 +176,9 @@ function addCard(doc,h_pos,v_pos,name,club,categories,tournament_name,tournament
   doc.text(name,h_pos*doc.internal.pageSize.width/2+15 , v_pos*doc.internal.pageSize.height/2+40) ; 
   doc.setFont("helvetica", "normal");
   doc.text("Club :",h_pos*doc.internal.pageSize.width/2+10 , v_pos*doc.internal.pageSize.height/2+50) ;
-  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11).setFont("helvetica", "bold");
   doc.text(club,h_pos*doc.internal.pageSize.width/2+15 , v_pos*doc.internal.pageSize.height/2+60) ;
-  doc.setFont("helvetica", "normal");
+  doc.setFontSize(14).setFont("helvetica", "normal");
   doc.text("Catégorie(s):",h_pos*doc.internal.pageSize.width/2+10 , v_pos*doc.internal.pageSize.height/2+70);
   doc.setFont("helvetica", "bold");
   

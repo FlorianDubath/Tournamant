@@ -4,7 +4,7 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if ($_SESSION['_IsRegistration']!=1) {
+if ($_SESSION['_IsRegistration']!=1&& $_SESSION['_IsMainTable']!=1) {
 	header('Location: ./index.php');
 }
 
@@ -12,7 +12,27 @@ include 'connectionFactory.php';
 
 include '_commonBlock.php';
 
+
+$fcid = (int)$_GET['fcid'];
+$fnm = $_GET['fnm'];
+
+$where_clause = '';
+
+if($fcid>0){
+   if($fnm && $fnm!=''){
+      $where_clause = "WHERE ClubId=".$fcid." AND CONCAT(Surname,' ',TournamentCompetitor.Name) LIKE '%".$fnm."%'";
+    } else {
+      $where_clause = "WHERE ClubId=".$fcid;
+    }
+} else {
+   if($fnm && $fnm!=''){
+      $where_clause = "WHERE CONCAT(Surname,' ',TournamentCompetitor.Name) LIKE '%".$fnm."%'";
+    } 
+}
+
+
 writeHead();
+$mysqli= ConnectionFactory::GetConnection(); 
 
 echo'
 <body>
@@ -23,13 +43,38 @@ echo'
          <div class="h">'; 
          
          
-         //TODO enregistrement commun / filtre sur les noms
 echo ' 
             <span class="h_title">
                GESTION DES INSCRIPTIONS
             </span>
+             <span class="btnBar"> 
+                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+               </span>
             <span class="h_txt">
                  <span class="btnBar"> 
+                   <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>
+	             </span>
+	             <form action="./listingreg.php" method="get">
+	                Filtrer les inscrits: <br/>
+	                
+	                Filtre sur "Nom Prénom" : <input type="text" name="fnm" value="'.$fnm.'"/><br/>
+	                Filtre sur le club : <select name="fcid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
+               $stmt = $mysqli->prepare("SELECT Id, Name FROM TournamentClub ORDER BY Name");
+      	        $stmt->execute();
+               $stmt->bind_result($ccId,$ccname);
+               while ($stmt->fetch()){
+                  $sel ='';
+                  if ($ccId==$fcid) { $sel=' selected ';}
+                  echo '<option value="'.$ccId.'" '.$sel.'>'.$ccname.'</option>';
+               }
+	           $stmt->close();
+               
+               echo'
+                </select><br/>
+	                <input class="pgeBtn" type="submit" value="Appliquer">
+	             </form>
+	             
+	             <span class="btnBar"> 
 	               <a class="pgeBtn"  href="reg.php?id=0" title="Nouvel Inscrit">Nouvel Inscrit</a>
 	               
 	             </span>
@@ -46,7 +91,6 @@ echo '
      
       <th >Action</th>
       </tr>';
-      $mysqli= ConnectionFactory::GetConnection(); 
      $stmt = $mysqli->prepare("SELECT 
                                       TournamentCompetitor.Id, 
                                       TournamentCompetitor.StrId, 
@@ -67,6 +111,7 @@ echo '
                                INNER JOIN TournamentGender ON TournamentCompetitor.GenderId=TournamentGender.Id
                                INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
                                INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
+                               ".$where_clause."
                                ORDER BY TournamentClub.Name, Surname, TournamentCompetitor.Name, ShortName
  ");
      $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence, $cat, $payed);

@@ -110,20 +110,53 @@ if ( ! empty($_SESSION['_UserId'])) {
               $chin=1;
             } 
             
+             if (!empty($_GET['py'])&&$_GET['py']==1&&!empty($_GET['trid'])) { 
+              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
+              $stmt->bind_param("i", $_GET['trid'] );
+              $stmt->execute();
+	          $stmt->close();
+              $chin=1;
+            } 
             
-            echo '<a class="pgeBtn" href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
+            
+            echo '<span class="fsubtitle">Informations sur le participant:</span><a class="pgeBtn" href="reg.php?id='.$Id.'">Corriger des données</a> <br/> 
+            
+            <span class="fsubtitle">Présence et carte de combatant:</span>';
             
             
             if ( $chin==0) {
                 echo '<a class="pgeBtn" href="card.php?sid='.$strId.'&pr=1">Confirmer la présence et remise de la carte</a> <br/> ';
             } else {
-                echo 'Présence confirmée!  ';
+                echo 'Présence confirmée / carte remise au participant.  ';
             }
             
+            echo '<span class="fsubtitle">Payement:</span>';
+            $stmt = $mysqli->prepare("SELECT   TournamentRegistration.Id, 
+                                               TournamentAgeCategory.Name,
+	                                           TournamentAgeCategory.ShortName,
+	                                           TournamentGender.Name,
+	                                           TournamentRegistration.Payed
+	                                     FROM TournamentRegistration
+	                                     INNER JOIN TournamentCategory ON TournamentRegistration.CategoryId=TournamentCategory.Id
+	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
+	                                     INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id 
+	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId 
+	                                     WHERE CompetitorId =?
+	                                     ORDER BY TournamentWeighting.WeightingEnd");
+               $stmt->bind_param("i", $Id);         
+      	       $stmt->execute();
+               $stmt->bind_result($trid,$cat_n,$cat_sn,$cat_gen,$payed);
+               while ($stmt->fetch()){
+                    echo ' &nbsp; &nbsp; Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' :';
+                    if ($payed==1) {
+                        echo ' Payement reçu<br/>';
+                    } else {
+                        echo ' A payer! <a class="pgeBtn" href="card.php?sid='.$strId.'&py=1&trid='.$trid.'">Encaisser</a><br/>';
+                    }
+               }
             
-       } else {
-            echo '<a class="pgeBtn" href="">Inscription avec une carte anonyme</a> <br/> '; //TODO
-       }  
+            
+       } 
         echo '</span>'; 
     }
     
@@ -421,9 +454,9 @@ function makePDF(pdf_name) {
   doc.text("'.$Surname.' '.$Name.' ",15 ,40) ; 
   doc.setFont("helvetica", "normal");
   doc.text("Club :",10 ,50) ;
-  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11).setFont("helvetica", "bold");
   doc.text("'.$Club.' ",15 ,60) ;
-  doc.setFont("helvetica", "normal");
+  doc.setFontSize(14).setFont("helvetica", "normal");
   doc.text("Catégorie(s):",10 ,70);
   doc.setFont("helvetica", "bold"); ';
   

@@ -120,6 +120,7 @@ writeBand();
          $current_cat='';
          $current_AgeCatAbd='';
          $curr_gen='';
+         $curr_age='';
          $curr_w_b=0;
          $curr_w_e=0;
          $accumulation='';
@@ -130,13 +131,14 @@ writeBand();
            }
            if ( $current_cat!=$ageCatN || $curr_gen!=$gen) {
              if ($accumulation!=''){
-                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
+                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $curr_age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
              }
              $current_cat=$ageCatN;
              $curr_gen=$gen;
              $curr_AgeCatAbd = $AgeCatAbd;
              $curr_w_b = $w_begin;
              $curr_w_e = $w_end;
+             $curr_age = $age;
              $accumulation='';
           }
           if ($accumulation!=''){
@@ -150,7 +152,7 @@ writeBand();
           
         }
          if ($accumulation!=''){
-                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
+                echo  '<tr><td>'.$curr_AgeCatAbd.' '.$current_cat.' '.$curr_gen.'</td><td>'. $curr_age.'</td><td>'.$accumulation.'</td><td>'.date('H\hi', strtotime($curr_w_b)).' à '.date('H\hi', strtotime($curr_w_e)).'</td></tr>' ;
              }
         $stmt->close();
 	       

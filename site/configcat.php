@@ -10,6 +10,7 @@ if ($_SESSION['_IsAdmin']!=1) {
 
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
+$message='';
 if($_POST && !empty($_POST['id'])) {
           $stmt = $mysqli->prepare("INSERT INTO TournamentWeighting 
                                          (AgeCategoryId, WeightCategoryBasedOnAttendence, WeightingBegin, WeightingEnd) 
@@ -21,10 +22,9 @@ if($_POST && !empty($_POST['id'])) {
       	  
       	  $stmt->bind_param("iississ", $_POST['id'], $_POST['pp'], $_POST['wb'], $_POST['we'], $_POST['pp'], $_POST['wb'], $_POST['we'] );
       	  
-          if (!($stmt->execute())){
-             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
-          }
+          $stmt->execute();
           $stmt->close();
+	      $message='Modifications enregistrées';
 }
 if (!empty($_GET['id']) && $_GET['del']==1) {
       if (!($stmt = $mysqli->prepare("DELETE FROM TournamentWeighting WHERE AgeCategoryId=?"))){
@@ -85,6 +85,7 @@ echo '
 	         <span class="ftitle">
 	             Catégorie d\'âge
 	         </span>';
+	       if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	       if ($Id && $Id==$_REQUEST['id']) {
 	       echo'
 	        <input type="hidden" name="id" value="'.$Id.'"/>

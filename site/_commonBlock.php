@@ -97,6 +97,8 @@ function writeBand() {
     echo ' <div class="m_b">
            <span class="m_b_t">CATEGORIES</span>
            <a href="listingcat.php">Liste des catégories</a> 
+           <a href="listingNotW.php">Liste des Compétiteurs manquants</a> 
+           <a href="listingresult.php">Résultats</a> 
      </div>';
     
     
