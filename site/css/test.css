@@ -228,7 +228,7 @@ display:inline-block;
     line-height: 2em; 
 }
 
-td > a, .pgeBtn {
+td > a, .pgeBtn, .gridButton {
   display:inline-block; 
   text-decoration:none;
   padding:2px 5px 2px 5px;
@@ -240,7 +240,7 @@ td > a, .pgeBtn {
   font-size:12px;
 }
 
-td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active{
+td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active,  .gridButton:hover, .gridButton:active{
   background-color:#DDDDDD;
 }
 

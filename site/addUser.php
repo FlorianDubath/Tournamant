@@ -28,9 +28,9 @@ writeHead();
   $uid    = $_POST["uid"];
   $password_md5 = md5($psw.$salt);
   
-  if (isset($_GET['d']) and isset($_GET['uid'])){
+  if (isset($_POST['del'])){
      $stmt =$mysqli->prepare("DELETE FROM TournamentSiteUser WHERE Id=?");
-     $stmt->bind_param("i",$_GET['uid'] );
+     $stmt->bind_param("i", $uid);
      $stmt->execute();
      $stmt->close();
   } else {

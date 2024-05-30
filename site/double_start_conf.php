@@ -48,7 +48,12 @@ echo'
           
           
          while( $stmt->fetch()){
-         echo'  <tr><td>'.$m_c_name.'('.$m_c_short.' '.$m_c_gen.')</td><td>'.$a_c_name.'('.$a_c_short.' '.$a_c_gen.')</td><td><a class="grdBtn" href="dbstartconf.php?id='.$Id.'&del=1">Supprimer</a></td></tr>';
+         echo'  <tr><td>'.$m_c_name.'('.$m_c_short.' '.$m_c_gen.')</td><td>'.$a_c_name.'('.$a_c_short.' '.$a_c_gen.')</td><td>
+         <form action="./dbstartconf.php" method="post">
+             <input type="hidden" name="id" value="'.$Id.'"/>
+             <input type="hidden" name="del" value="1"/>
+             <input class="pgeBtn" type="submit" value="Supprimer"/> 
+         </form></td></tr>';
          }
          
          echo '</table>

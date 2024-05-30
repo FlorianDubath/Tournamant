@@ -12,6 +12,15 @@ include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
 $message='';
 if($_POST && !empty($_POST['id'])) {
+    if (!empty($_POST['del'])) {
+        if ($_POST['del']==1) {
+             $stmt = $mysqli->prepare("DELETE FROM TournamentWeighting WHERE AgeCategoryId=?");
+             $stmt->bind_param("i", $_POST['id'] );
+             $stmt->execute();
+             $stmt->close();
+	         header('Location: ./cat_config.php');
+        }
+    } else {
           $stmt = $mysqli->prepare("INSERT INTO TournamentWeighting 
                                          (AgeCategoryId, WeightCategoryBasedOnAttendence, WeightingBegin, WeightingEnd) 
                                          VALUES (?,?,?,?) 
@@ -25,21 +34,8 @@ if($_POST && !empty($_POST['id'])) {
           $stmt->execute();
           $stmt->close();
 	      $message='Modifications enregistrées';
+   }
 }
-if (!empty($_GET['id']) && $_GET['del']==1) {
-      if (!($stmt = $mysqli->prepare("DELETE FROM TournamentWeighting WHERE AgeCategoryId=?"))){
-      	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
-      	  } 
-      	  
-      	  $stmt->bind_param("i", $_GET['id'] );
-
-          if (!($stmt->execute())){
-             echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
-          }
-          
-	header('Location: ./cat_config.php');
-}
-
 
 include '_commonBlock.php';
 

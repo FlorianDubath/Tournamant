@@ -13,7 +13,7 @@ function wrap_res($rk){
 }
 
 
-  if(empty($_GET['sid'] || strlen($_GET['sid'])!=12) ) {
+  if(empty($_REQUEST['sid'] || strlen($_REQUEST['sid'])!=12) ) {
       	header('Location: ./index.php');
   }
   
@@ -41,7 +41,7 @@ writeHead();
                               WHERE StrId=?
  ");
  
-$stmt->bind_param("s", $_GET['sid'] );
+$stmt->bind_param("s", $_REQUEST['sid'] );
 $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence,$chin);
 $stmt->execute();
 $stmt->fetch();
@@ -49,7 +49,7 @@ $stmt->close();
 
 
 if (empty($Id)){
-      	header('Location: ./reg.php?sid='.$_GET['sid']);
+      	header('Location: ./reg.php?sid='.$_REQUEST['sid']);
 }
 
 $weight_cat = array();
@@ -102,7 +102,7 @@ if ( ! empty($_SESSION['_UserId'])) {
        echo '<span class="item_action"><span class="ftitle">ACCUEIL</span>';
        if (!empty($Id) && $Id>0) {
             
-            if (!empty($_GET['pr'])&&$_GET['pr']==1) { 
+            if (!empty($_POST['pr'])&&$_POST['pr']==1) { 
               $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET CheckedIn=1 WHERE Id=?");
               $stmt->bind_param("s", $Id );
               $stmt->execute();
@@ -110,25 +110,16 @@ if ( ! empty($_SESSION['_UserId'])) {
               $chin=1;
             } 
             
-             if (!empty($_GET['py'])&&$_GET['py']==1&&!empty($_GET['trid'])) { 
+             if (!empty($_POST['py'])&&$_POST['py']==1&&!empty($_POST['trid'])) { 
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
-              $stmt->bind_param("i", $_GET['trid'] );
+              $stmt->bind_param("i", $_POST['trid'] );
               $stmt->execute();
 	          $stmt->close();
               $chin=1;
             } 
             
             
-            echo '<span class="fsubtitle">Informations sur le participant:</span><a class="pgeBtn" href="reg.php?id='.$Id.'">Corriger des données</a> <br/> 
-            
-            <span class="fsubtitle">Présence et carte de combatant:</span>';
-            
-            
-            if ( $chin==0) {
-                echo '<a class="pgeBtn" href="card.php?sid='.$strId.'&pr=1">Confirmer la présence et remise de la carte</a> <br/> ';
-            } else {
-                echo 'Présence confirmée / carte remise au participant.  ';
-            }
+            echo '<span class="fsubtitle">Informations sur le participant:</span><a class="pgeBtn" href="reg.php?id='.$Id.'">Corriger des données</a> <br/> ';
             
             echo '<span class="fsubtitle">Payement:</span>';
             $stmt = $mysqli->prepare("SELECT   TournamentRegistration.Id, 
@@ -151,9 +142,32 @@ if ( ! empty($_SESSION['_UserId'])) {
                     if ($payed==1) {
                         echo ' Payement reçu<br/>';
                     } else {
-                        echo ' A payer! <a class="pgeBtn" href="card.php?sid='.$strId.'&py=1&trid='.$trid.'">Encaisser</a><br/>';
+                        echo '<form action="./card.php" method="post">
+                             <input type="hidden" name="sid" value="'.$strId.'"/>
+                             <input type="hidden" name="py" value="1"/>
+                             <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/> 
+                             A payer! 
+                             <input class="pgeBtn"  type="submit" value="Encaisser"/> 
+                            </form> <br/>';
                     }
                }
+            
+            echo'
+            
+            <span class="fsubtitle">Présence et carte de combatant:</span>';
+            
+            
+            if ( $chin==0) {
+                echo '<form action="./card.php" method="post">
+                             <input type="hidden" name="sid" value="'.$strId.'"/>
+                             <input type="hidden" name="pr" value="1"/>
+                             <input class="pgeBtn" type="submit" value="Confirmer la présence et remise de la carte"/> 
+                             </form><br/> ';
+            } else {
+                echo 'Présence confirmée / carte remise au participant.  ';
+            }
+            
+
             
             
        } 
@@ -161,9 +175,9 @@ if ( ! empty($_SESSION['_UserId'])) {
     }
     
     if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
-         if (!empty($_GET['wgok'])&&$_GET['wgok']==1 && !empty($_GET['wgc']) && !empty($_GET['trid'])) { 
+         if (!empty($_POST['wgok'])&&$_POST['wgok']==1 && !empty($_POST['wgc']) && !empty($_POST['trid'])) { 
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=? WHERE Id=?");
-              $stmt->bind_param("ii", $_GET['wgc'], $_GET['trid']);
+              $stmt->bind_param("ii", $_POST['wgc'], $_POST['trid']);
               $stmt->execute();
 	          $stmt->close();
          } 
@@ -197,7 +211,7 @@ if ( ! empty($_SESSION['_UserId'])) {
                            echo '<div>&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</div>';
                     } else {
                     
-                    echo '<form action="./card.php" method="get">
+                    echo '<form action="./card.php" method="post">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
                              <input type="hidden" name="wgok" value="1"/>
@@ -206,7 +220,7 @@ if ( ! empty($_SESSION['_UserId'])) {
                              echo getWeights($weight_cat, $age_cat_id,$w_to_confirm) ;   
                              echo '</select>';
                              if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
-                                echo' <input class="pgeBtn" class="pgeBtn" type="submit" value="Poid vérifié">';
+                                echo' <input class="pgeBtn"  type="submit" value="Poid vérifié">';
                             }
                             echo '</span>
                           </form>';

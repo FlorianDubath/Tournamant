@@ -149,7 +149,11 @@ echo '
       <td class="rt">'.substr($cat_l,3).'</td>
       <td class="rt">'.$tot_pay.'/'.$tot_cat.'</td>
       <td class="rt">
-         <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
+         <form action="./reg.php" method="post">
+             <input type="hidden" name="id" value="'.$cur_id.'"/>
+             <input type="hidden" name="del" value="1"/>
+             <input class="gridButton" type="submit" value="Supprimer"/> 
+         </form>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
          <a href="./card.php?sid='.$cur_strId.'" class="gridButton" >Carte</a>
        </td>
@@ -188,7 +192,11 @@ echo '
       <td class="rt">'.substr($cat_l,3).'</td>
       <td class="rt">'.$tot_pay.'/'.$tot_cat.'</td>
       <td class="rt">
-         <a href="./reg.php?id='.$cur_id.'&del=1" class="gridButton" >Supprimer</a>
+         <form action="./reg.php" method="post">
+             <input type="hidden" name="id" value="'.$cur_id.'"/>
+             <input type="hidden" name="del" value="1"/>
+             <input class="gridButton" type="submit" value="Supprimer"/> 
+         </form>
          <a href="./reg.php?id='.$cur_id.'" class="gridButton" >Modifier</a>
          <a href="./card.php?sid='.$cur_strId.'" class="gridButton" >Carte</a>
        </td>

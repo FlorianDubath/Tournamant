@@ -58,7 +58,14 @@ echo '
       <td class="rt">'.$IsMatTable.'</td>
       <td class="rt">';
      if($IsAdmin==0){
-        echo' <a href="./addUser.php?uid='.$Id.'&d=1" class="gridButton" >Supprimer</a>';
+        echo' 
+        
+         <form action="./addUser.php" method="post">
+             <input type="hidden" name="uid" value="'.$Id.'"/>
+             <input type="hidden" name="del" value="1"/>
+             <input class="gridButton" type="submit" value="Supprimer"/> 
+         </form>';
+        
      }
      
      echo'

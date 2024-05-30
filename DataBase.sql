@@ -50,10 +50,10 @@ CREATE TABLE  TournamentAgeCategory (
   CONSTRAINT fk_age_cat_gen FOREIGN KEY (GenderId) REFERENCES TournamentGender(Id)
 );
 
-INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières D','U9',1,8,9,2);
-INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écoliers D','U9',2,8,9,2);
-INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières C','U11',1,9,11,2);
-INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écoliers C','U11',2,9,11,2);
+INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières D','F9',1,8,9,2);
+INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écoliers D','M9',2,8,9,2);
+INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières C','F11',1,9,11,2);
+INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écoliers C','M11',2,9,11,2);
 INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières B','F13',1,11,13,2);
 INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écoliers B','M13',2,11,13,2);
 INSERT TournamentAgeCategory(Name,ShortName,GenderId,MinAge,MaxAge,Duration) values ('Écolières A','F15',1,13,15,3);
@@ -381,5 +381,36 @@ CREATE TABLE ActualCategoryResult(
 
 
 
+// Cleaning
+DELETE FROM ActualCategoryResult;
+DELETE FROM Fight;
+DELETE FROM StepLinking;
+DELETE FROM CategoryStep;
+DELETE FROM ActualCategory;
+DELETE FROM TournamentCompetitor;
+
+
+// Club
+INSERT INTO TournamentClub (Id ,Name) VALUES(1, 'BUDO SCHOOLS ASHITA');
+INSERT INTO TournamentClub (Id ,Name) VALUES(2, 'DOJO LANCY–PALETTES');
+INSERT INTO TournamentClub (Id ,Name) VALUES(3, 'ECOLE DE JUDO DE COLLONGE-BELLERIVE');
+INSERT INTO TournamentClub (Id ,Name) VALUES(4, 'GOSHINJUTSU-KWAI DARDAGNY');
+INSERT INTO TournamentClub (Id ,Name) VALUES(5, 'JU-JITSU JUDO CLUB COMPESIÈRES');
+INSERT INTO TournamentClub (Id ,Name) VALUES(6, 'JUDO CLUB BUDOKAN VERNIER');
+INSERT INTO TournamentClub (Id ,Name) VALUES(7, 'JUDO CLUB CAROUGE');
+INSERT INTO TournamentClub (Id ,Name) VALUES(8, 'JUDO CLUB DES EAUX-VIVES');
+INSERT INTO TournamentClub (Id ,Name) VALUES(9, 'JUDO CLUB GENEVE');
+INSERT INTO TournamentClub (Id ,Name) VALUES(10, 'JUDO CLUB GRAND-SACONNEX');
+INSERT INTO TournamentClub (Id ,Name) VALUES(11, 'JUDO CLUB LE SAMOURAI BERNEX');
+INSERT INTO TournamentClub (Id ,Name) VALUES(12, 'JUDO CLUB LEMANIQUE');
+INSERT INTO TournamentClub (Id ,Name) VALUES(13, 'JUDO CLUB MEYRIN');
+INSERT INTO TournamentClub (Id ,Name) VALUES(14, 'JUDO CLUB SATIGNY');
+INSERT INTO TournamentClub (Id ,Name) VALUES(15, 'JUDO CLUB TROIS-CHÊNES');
+INSERT INTO TournamentClub (Id ,Name) VALUES(16, 'JUDO CLUB VERSOIX');
+INSERT INTO TournamentClub (Id ,Name) VALUES(17, 'JUDO KWAI LANCY');
+INSERT INTO TournamentClub (Id ,Name) VALUES(18, 'JUDO PREGNY-CHAMBESY');
+INSERT INTO TournamentClub (Id ,Name) VALUES(19, 'SHINBUDO JUDO');
+INSERT INTO TournamentClub (Id ,Name) VALUES(20, 'SHINBUDO-ONEX');
+INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHUNG DO KWAN BUDO')
 
 

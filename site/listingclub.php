@@ -44,7 +44,11 @@ echo '
      echo' <tr >
       <td class="rt">'.$name.'</td>
       <td class="rt">'.$contact.'</td>
-      <td class="rt"><a href="./club.php?id='.$Id.'&del=1" class="gridButton" >Supprimer</a><a href="./club.php?id='.$Id.'" class="gridButton" >Modifier</a></td>
+      <td class="rt"> <form action="./club.php" method="post">
+             <input type="hidden" name="id" value="'.$Id.'"/>
+             <input type="hidden" name="del" value="1"/>
+             <input class="gridButton" type="submit" value="Supprimer"/> 
+         </form><a href="./club.php?id='.$Id.'" class="gridButton" >Modifier</a></td>
       </tr>';
      }
      

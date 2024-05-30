@@ -59,53 +59,45 @@ if($_POST && !empty($_POST['id'])) {
 	     $message='Enregistrement effectué';
          
          
+     } else if (!empty($_POST['del']) && ((int)$_POST['del'])==1) {
+             $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE CompetitorId=?");
+             $stmt->bind_param("i", $_POST['id'] );
+             $stmt->execute();
+
+             $stmt = $mysqli->prepare("DELETE FROM TournamentCompetitor WHERE Id=?");
+             $stmt->bind_param("i", $_POST['id'] );
+             $stmt->execute();
+	         header('Location: ./listingreg.php');
      } else {
-         $stmt = $mysqli->prepare("UPDATE TournamentCompetitor  SET Name=?, Surname=?, Birth=?, GenderId=?, LicenceNumber=?, GradeId=?, ClubId=? WHERE Id=?");
-         $stmt->bind_param("sssisiii", $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid'], $_POST['id']);
-         $stmt->execute();
-         $stmt->close();
-         
-	    $message='Modifications enregistrées';
+         if (!empty($_POST['trid']) && ((int)$_POST['trid'])>0) {
+             if (!empty($_POST['delt']) && ((int)$_POST['delt']==1)) {
+                 $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE Id=?");
+                 $stmt->bind_param("i", $_POST['trid'] );
+                 $stmt->execute();
+             } else if (!empty($_POST['fl']) && ((int)$_POST['fl']==1)) {
+                 $stmt = $mysqli->prepare("INSERT INTO TournamentRegistration  (CompetitorId, CategoryId, Payed) VALUES (?,?,?)");
+                 $p =0;
+                 if (!empty($_POST['pay'])){
+                      $p =(int)$_POST['pay'];
+                 }
+                 $stmt->bind_param("iii", $_POST['id'], $_POST['trid'], $p);
+                 $stmt->execute();
+                 $stmt->close();
+             } else if (!empty($_POST['pay']) && ((int)$_POST['pay']==1)) {
+                 $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
+                 $stmt->bind_param("i", $_POST['trid'] );
+                 $stmt->execute();
+             } 
+         } else {
+             $stmt = $mysqli->prepare("UPDATE TournamentCompetitor  SET Name=?, Surname=?, Birth=?, GenderId=?, LicenceNumber=?, GradeId=?, ClubId=? WHERE Id=?");
+             $stmt->bind_param("sssisiii", $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid'], $_POST['id']);
+             $stmt->execute();
+             $stmt->close();
+	         $message='Modifications enregistrées';
+	    }
      }
-     
-     
-     if (!empty($_POST['trid']) && ((int)$_POST['trid'])>0) {
-         $stmt = $mysqli->prepare("INSERT INTO TournamentRegistration  (CompetitorId, CategoryId, Payed) VALUES (?,?,?)");
-         $p =0;
-         if (!empty($_POST['pay'])){
-              $p =(int)$_POST['pay'];
-         }
-         $stmt->bind_param("iii", $_POST['id'], $_POST['trid'], $p);
-         $stmt->execute();
-         $stmt->close();
-     }
-     
 }
 
-if (!empty($_GET['trid']) && $_GET['delt']==1) {
-     $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE Id=?");
-     $stmt->bind_param("i", $_GET['trid'] );
-     $stmt->execute();
-}
-
-if (!empty($_GET['trid']) && $_GET['pay']==1) {
-     $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
-     $stmt->bind_param("i", $_GET['trid'] );
-     $stmt->execute();
-}
-
-
-
-if (!empty($_GET['id']) && $_GET['del']==1) {
-     $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE CompetitorId=?");
-     $stmt->bind_param("i", $_GET['id'] );
-     $stmt->execute();
-
-     $stmt = $mysqli->prepare("DELETE FROM TournamentCompetitor WHERE Id=?");
-     $stmt->bind_param("i", $_GET['id'] );
-     $stmt->execute();
-	 header('Location: ./listingreg.php');
-}
 
 
 include '_commonBlock.php';
@@ -131,35 +123,36 @@ echo'
 	          $Id=-1;
 	      }
 echo '	      
-	      <form action="./reg.php" method="post">
+	      <form action="./reg.php" method="post" Id="F1">
+	       </form>
 	         <span class="ftitle">
 	             COMPETITEUR
 	         </span>';
 	         
 	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	         echo'
-	           <input type="hidden" name="id" value="'.$Id.'"/>';
+	           <input type="hidden" name="id" value="'.$Id.'" form="F1"/><input type="hidden" name="fl" value="1" form="F1"/>';
 	           if(!empty($_REQUEST['sid']) and $Id==-1) {
-	               echo'<input type="hidden" name="sid" value="'.$_REQUEST['sid'].'"/>';
+	               echo'<input type="hidden" name="sid" value="'.$_REQUEST['sid'].'"  form="F1"/>';
 	           }
 	           
 	           echo'
 	        <span class="fitem">
                <span class="label">Nom :</span>
-               <input class="inputDate"  type="text" name="sm" value="'.$sn.'" /><br/>
+               <input class="inputDate"  type="text" name="sm" value="'.$sn.'"  form="F1"/><br/>
 	        </span>
 	        <span class="fitem">
                <span class="label">Prénom :</span>
-               <input class="inputDate"  type="text" name="nm" value="'.$nm.'" /><br/>
+               <input class="inputDate"  type="text" name="nm" value="'.$nm.'" / form="F1"><br/>
 	        </span>
 	        <span class="fitem">
                <span class="label">Date de naissence :</span>
-               <input class="inputDate"  type="date" name="bt" value="'.$bt.'" /><br/>
+               <input class="inputDate"  type="date" name="bt" value="'.$bt.'"  form="F1"/><br/>
 	        </span>
 	        
 	        <span class="fitem">
                <span class="label">Genre :</span>
-               <select name="gid">
+               <select name="gid"  form="F1">
                    <option value="1">Féminin</option>
                    <option value="2"';
                    if ($gid==2) {
@@ -171,7 +164,7 @@ echo '
 	        
 	        <span class="fitem">
                <span class="label">Club :</span>
-               <select name="cid">';
+               <select name="cid"  form="F1">';
                $stmt = $mysqli->prepare("SELECT Id, Name FROM TournamentClub ORDER BY Name");
       	        $stmt->execute();
                $stmt->bind_result($ccId,$ccname);
@@ -188,7 +181,7 @@ echo '
 	        
 	        <span class="fitem">
                <span class="label">Grade :</span>
-                <select name="grid">';
+                <select name="grid"  form="F1">';
                $stmt = $mysqli->prepare("SELECT Id, Name FROM TournamentGrade ORDER BY Id");
       	       $stmt->execute();
                $stmt->bind_result($ccId,$ccname);
@@ -205,7 +198,7 @@ echo '
 	        
 	        <span class="fitem">
                <span class="label">Numéro de licence :</span>
-               <input class="inputDate"  type="text" name="lc" value="'.$licence.'" /><br/>
+               <input class="inputDate"  type="text" name="lc" value="'.$licence.'"  form="F1"/><br/>
 	        </span>';
 	        
 	        if ($Id>0) {
@@ -237,9 +230,20 @@ echo '
                   echo '<tr><td>'.$trshort.' '.$trname.' '.$gender.'</td>
                             <td>'.$wgt.'</td>
                             <td>'.$payed.'</td>
-                            <td><a href="./reg.php?id='.$Id.'&trid='.$trid.'&delt=1" class="gridButton" >Supprimer</a>';
+                            <td>
+                                <form action="./reg.php" method="post">
+                                     <input type="hidden" name="id" value="'.$Id.'"/>
+                                     <input type="hidden" name="trid" value="'.$trid.'"/>
+                                     <input type="hidden" name="delt" value="1"/>
+                                     <input class="gridButton" type="submit" value="Supprimer"/> 
+                                </form>';
                  if ($payed!=1) {
-                       echo'         <a href="./reg.php?id='.$Id.'&trid='.$trid.'&pay=1" class="gridButton" >Encaisser</a>';
+                       echo'    <form action="./reg.php" method="post">
+                                     <input type="hidden" name="id" value="'.$Id.'"/>
+                                     <input type="hidden" name="trid" value="'.$trid.'"/>
+                                     <input type="hidden" name="pay" value="1"/>
+                                     <input class="gridButton" type="submit" value="Encaisser"/> 
+                                </form>';
                        }
                  echo'
                             </td>
@@ -262,7 +266,7 @@ echo '
 	           echo'
 	           </table>
 	           Ajouter:
-	            <select name="trid">
+	            <select name="trid"  form="F1">
 	            <option value="-1">--</option>';
 	            
 	             $stmt = $mysqli->prepare("SELECT DISTINCT
@@ -287,7 +291,7 @@ echo '
 	           $stmt->close();    
 	           echo'
                 </select> 
-                Payement reçu <input type="checkbox"  name="pay" value="1"/>
+                Payement reçu <input type="checkbox"  name="pay" value="1" form="F1"/>
                 ';
 	        
 	        
@@ -297,11 +301,10 @@ echo '
 
 echo'
 	       <span class="btnBar"> 
-	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
+	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications" form="F1">
 	               <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>
 	               <a class="pgeBtn" href="card.php?sid='.$sId.'" target="blanck">Carte</a> 
 	       </span>
-	       </form>
            </div>     
         </div>   
      </div>

@@ -13,7 +13,13 @@ include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
  $message='';
 if($_POST && !empty($_POST['id'])) {
-     if ($_POST['id']==-1) {
+   if (!empty($_POST['del']) &&  $_POST['del']==1){
+       $stmt = $mysqli->prepare("DELETE FROM TournamentClub WHERE Id=?");
+       $stmt->bind_param("i", $_POST['id'] );
+       $stmt->execute();
+	   header('Location: ./listingclub.php');
+   } else {
+     if ((int)$_POST['id']<=0) {
          $stmt = $mysqli->prepare("INSERT INTO TournamentClub  (Name, Contact) VALUES (?,?)");
          $stmt->bind_param("ss", $_POST['nm'], $_POST['ct']);
          $stmt->execute();
@@ -26,14 +32,8 @@ if($_POST && !empty($_POST['id'])) {
          $stmt->close();
      }
 	 $message='Modifications enregistrées';
+   }
 }
-if (!empty($_GET['id']) && $_GET['del']==1) {
-     $stmt = $mysqli->prepare("DELETE FROM TournamentClub WHERE Id=?");
-     $stmt->bind_param("i", $_GET['id'] );
-     $stmt->execute();
-	 header('Location: ./listingclub.php');
-}
-
 
 include '_commonBlock.php';
 

@@ -10,7 +10,7 @@ if ($_SESSION['_IsAdmin']!=1) {
 
 include 'connectionFactory.php';
 $mysqli= ConnectionFactory::GetConnection(); 
-if($_POST && !empty($_POST['mac'])) {
+if($_POST && !empty($_POST['mac']) && !empty($_POST['aac'])) {
           $stmt = $mysqli->prepare("INSERT INTO TournamentDoubleSatrt 
                                          (MainAgeCategoryId, AcceptedAgeCategoryId) 
                                          VALUES (?,?) ");
@@ -26,12 +26,12 @@ if($_POST && !empty($_POST['mac'])) {
           
           
 }
-if (!empty($_GET['id']) && $_GET['del']==1) {
+if ($_POST && !empty($_POST['id']) && $_POST['del']==1) {
       if (!($stmt = $mysqli->prepare("DELETE FROM TournamentDoubleSatrt WHERE Id=?"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
       	  } 
       	  
-      	  $stmt->bind_param("i", $_GET['id'] );
+      	  $stmt->bind_param("i", $_POST['id'] );
 
           if (!($stmt->execute())){
              echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
