@@ -1,10 +1,10 @@
 <?php
 
-function create_step_direct($ActualCategory_id){
+function create_step_direct($ActualCategory_id, $name){
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId) VALUES (?,1)");
-    $stmt->bind_param("i", $ActualCategory_id);         
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,1,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);         
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -50,11 +50,11 @@ function update_step_direct($step_id, $user_id_1, $user_id_2){
 }
 
 
-function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2){
+function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2, $name){
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId) VALUES (?,1)");
-    $stmt->bind_param("i", $ActualCategory_id);         
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,1,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);         
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -68,11 +68,11 @@ function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2){
 }
 
 
-function create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3) {
+function create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId) VALUES (?,3)");
-    $stmt->bind_param("i", $ActualCategory_id);         
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,3,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);           
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -93,11 +93,11 @@ function create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_2, $user_id_
     return $step_id;
 }
 
-function create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4) {
+function create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId) VALUES (?,3)");
-    $stmt->bind_param("i", $ActualCategory_id);         
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,4,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);           
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -131,11 +131,11 @@ function create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_2, $user_id_
     return $step_id;
 }
 
-function create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5) {
+function create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId) VALUES (?,3)");
-    $stmt->bind_param("i", $ActualCategory_id);         
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,5,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);         
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -185,74 +185,231 @@ function create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_2, $user_id_
 }
 
 function create_steps_6($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6) {
-    $pool_1=create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5);
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6);
+    $pool_1=create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, 'Groupe A');
+    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, 'Groupe B');
     
-    $half_1=create_step_direct($ActualCategoryId);
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
-    $half_2=create_step_direct($ActualCategoryId);
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId);
+    $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_7($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7) {
-    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7);
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6);
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, 'Groupe A');
+    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, 'Groupe B');
     
-    $half_1=create_step_direct($ActualCategoryId);
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
-    $half_2=create_step_direct($ActualCategoryId);
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId);
+    $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_8($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8) {
-    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7);
-    $pool_2=create_step_pool_4($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, 'Groupe B');
     
-    $half_1=create_step_direct($ActualCategoryId);
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
-    $half_2=create_step_direct($ActualCategoryId);
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId);
+    $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_9($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9) {
-    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9);
-    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8);
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9, 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, 'Groupe B');
     
-    $half_1=create_step_direct($ActualCategoryId);
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
-    $half_2=create_step_direct($ActualCategoryId);
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId);
+    $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_10($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9, $user_id_10) {
-    $pool_1=create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9);
-    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, $user_id_10);
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9, 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, $user_id_10, 'Groupe B');
     
-    $half_1=create_step_direct($ActualCategoryId);
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
     create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
-    $half_2=create_step_direct($ActualCategoryId);
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
     create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
-    $final=create_step_direct($ActualCategoryId);
+    $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
+
+function create_steps_12($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[3], $user_ids[6], $user_ids[9], 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[4], $user_ids[7], $user_ids[10], 'Groupe B');
+    $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[5], $user_ids[8], 'Groupe C');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $pool_2, 1);
+}
+
+function create_steps_12($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_3($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], 'Groupe A');
+    $pool_2=create_step_pool_3($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], 'Groupe B');
+    $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
+    $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_13($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], 'Groupe A');
+    $pool_2=create_step_pool_3($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], 'Groupe B');
+    $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
+    $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
+    
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_14($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], 'Groupe B');
+    $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
+    $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
+    
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_15($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], 'Groupe B');
+    $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
+    $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe C');
+    
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_16($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], 'Groupe B');
+    $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
+    $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_17($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], $user_ids[16], 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], 'Groupe B');
+    $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
+    $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_18($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], $user_ids[16], 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], $user_ids[17], 'Groupe B');
+    $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
+    $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_19($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], $user_ids[16], 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], $user_ids[17], 'Groupe B');
+    $pool_3=create_step_pool_5($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], $user_ids[18], 'Groupe C');
+    $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
+function create_steps_20($ActualCategoryId, $user_ids) {
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_ids[0], $user_ids[4], $user_ids[8], $user_ids[12], $user_ids[16], 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_ids[1], $user_ids[5], $user_ids[9], $user_ids[13], $user_ids[17], 'Groupe B');
+    $pool_3=create_step_pool_5($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], $user_ids[18], 'Groupe C');
+    $pool_4=create_step_pool_5($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], $user_ids[19], 'Groupe D');
+
+    $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    
+    $final=create_step_direct($ActualCategoryId,'Finale');
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
+}
+
 
 function get_list_from_val($exp_val,$dict){
     $res=array();
@@ -536,7 +693,7 @@ function open_Category($tc_id_1,$tc_id_2,$name){
    $usr_ids = array_keys($new_usr);
    switch (count($usr_ids)) {
     case 2:
-        create_step_pool_2($actual_category_id, $usr_ids[0], $usr_ids[1]);
+        create_step_pool_2($actual_category_id, $usr_ids[0], $usr_ids[1], 'Finale');
         break;
     case 3:
         create_step_pool_3($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2]);
@@ -562,7 +719,38 @@ function open_Category($tc_id_1,$tc_id_2,$name){
     case 10:
         create_steps_10($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5],  $usr_ids[6],  $usr_ids[7],  $usr_ids[8],  $usr_ids[9]);
         break;
-      // TODO below 2 and above 10  
+     //////   
+    case 11:
+        create_steps_11($actual_category_id, $usr_ids);
+        break;
+    case 12:
+        create_steps_12($actual_category_id, $usr_ids);
+        break;
+    case 13:
+        create_steps_13($actual_category_id, $usr_ids);
+        break;
+    case 14:
+        create_steps_14($actual_category_id, $usr_ids);
+        break;
+    case 15:
+        create_steps_15($actual_category_id, $usr_ids);
+        break;
+    case 16:
+        create_steps_16($actual_category_id, $usr_ids);
+        break;
+    case 17:
+        create_steps_17($actual_category_id, $usr_ids);
+        break;
+    case 18:
+        create_steps_18($actual_category_id, $usr_ids);
+        break;
+    case 19:
+        create_steps_19($actual_category_id, $usr_ids);
+        break;
+    case 20:
+        create_steps_20($actual_category_id, $usr_ids);
+        break;
+
     }
 }
 

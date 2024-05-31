@@ -31,6 +31,7 @@ writeHead();
                                       Birth, 
                                       TournamentGender.Name, 
                                       TournamentClub.Name, 
+                                      CollectVP,
                                       TournamentGrade.Name,
                                       LicenceNumber,
                                       TournamentCompetitor.CheckedIn
@@ -42,7 +43,7 @@ writeHead();
  ");
  
 $stmt->bind_param("s", $_REQUEST['sid'] );
-$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence,$chin);
+$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $GradeCollectVP, $Grade, $licence,$chin);
 $stmt->execute();
 $stmt->fetch();
 $stmt->close();
@@ -382,7 +383,122 @@ echo'
                }
 	           $stmt->close();    
 	
-	
+	// Listing combats
+	      
+	       $stmt = $mysqli->prepare(" SELECT 
+	                                      ActualCategory.Name,
+	                                      ActualCategory.IsCompleted,
+	                                      G1.CollectVP + G2.CollectVP,
+	                                      TC1.Id,
+	                                      TC1.Name,
+                                          TC1.Surname,
+                                          G1.Id,
+                                          G1.Name,
+                                          C1.Name,
+                                          pv1,
+	                                      TC2.Id,
+	                                      TC2.Name,
+                                          TC2.Surname,
+                                          G2.Id,
+                                          G2.Name,
+                                          C2.Name,
+                                          pv2
+	                                  FROM Fight
+	                                  INNER JOIN TournamentCompetitor TC1 ON TournamentCompetitor1Id = TC1.Id
+	                                  INNER JOIN TournamentCompetitor TC2 ON TournamentCompetitor2Id = TC2.Id
+	                                  INNER JOIN TournamentGrade G1 ON TC1.GradeId = G1.Id
+	                                  INNER JOIN TournamentGrade G2 ON TC2.GradeId = G2.Id
+	                                  INNER JOIN TournamentClub C1 ON C1.Id=TC1.ClubId
+	                                  INNER JOIN TournamentClub C2 ON C2.Id=TC2.ClubId
+	                                  INNER JOIN ActualCategory C2 ON Fight.ActualCategoryId=ActualCategory.Id
+	                                  
+	                                  WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND pv1 IS NOT NULL
+	                                  ORDER BY ActualCategory.Name, Fight.Id");
+	                            
+           $stmt->bind_param("ii", $Id, $Id);         
+  	       $stmt->execute();
+           $stmt->bind_result($cat_nm,$completed,$ppv,$c1_id,$c1_name,$c1_surname,$c1_grade_id,$c1_grade,$c1_club,$pv1, $c2_id,$c2_name,$c2_surname,$c2_grade_id,$c2_grade,$c2_club,$pv2);
+           
+           $fight_result = '<span class="ftitle">COMBATS</span>';
+           $fight_number=0;
+           $fight_nb_pv=0;
+           $fight_win=0;
+           $fight_win_pv=0;
+           $fight_pv=0;
+           $cur_cat='';
+           while ($stmt->fetch()){
+               if ($cur_cat!=$cat_nm) {
+                  if ($cur_cat!='') {
+                     $fight_result =$fight_result.'</table>';
+                  }
+                  $fight_result =$fight_result. '<span>'.$cat_nm;
+                  if ($completed==0) {
+                     $fight_result =$fight_result. ' En cours...';
+                  }
+                  $fight_result =$fight_result. '</span><table class="wt t4">
+                                                   <tr class="tblHeader">  
+                                                   <th>Résultat</th>
+                                                   <th>Oposant</th>
+                                                   <th>Ceinture</th>
+                                                   <th>PV</th>
+                                                   </tr>';
+                   
+               }
+               $fight_number+=1;
+               if ($ppv==2){
+                   $fight_nb_pv+=1;
+               }
+               $op='';
+               $blt='';
+               $pv_c='-';
+               $vic = '';
+               if ($c1_id==$Id) {
+                  $op=$c2_surname+' '+$c2_name;
+                  $blt=$c2_grade;
+                  if ($pv1>0){
+                     $vic = "Victoire contre";  
+                     $fight_win += 1;
+                     if ($ppv==2) {
+                         $fight_pv += $pv1;
+                         $fight_win_p+=1;
+                         $pv_c = $pv1;
+                     } else {
+                         $pv_c = '('.$pv1.')';
+                     }
+                  } else {
+                     $vic = "Défaite contre"; 
+                  }
+                  
+               } else {
+                  $op=$c1_surname+' '+$c1_name;
+                  $blt=$c1_grade;
+                  if ($pv2>0){
+                     $vic = "Victoire contre"; 
+                     $fight_win+=1; 
+                     if ($ppv==2) {
+                         $fight_pv += $pv2;
+                         $fight_win_p+=1;
+                         $pv_c = $pv2;
+                     } else {
+                         $pv_c = '('.$pv2.')';
+                     }
+                  }
+               }
+               $fight_result =  $fight_result.'<tr><td>'.$vic.'</td><td>'.$op.'</td><td>'.$blt.'</td><td>'. $pv_c.'</td></tr>';
+           }
+           $stmt->close();
+           
+           if ($fight_number>0) {
+               echo $fight_result;
+               if ($GradeCollectVP) {
+                   echo 'Nombre de combats :'.$fight_number.'<br/>';
+                   echo 'Nombre de combats contre des 1Kyu et Dan :'.$fight_nb_pv.'<br/>';
+                   echo 'Nombre de victoire :'.$fight_win.'<br/>';
+                   echo 'Nombre de victoire contre des 1Kyu et Dan :'.$fight_win_pv.'<br/>';
+                   echo 'Nombre de point valeurs collectés :'.$fight_pv.'<br/>';
+               } 
+           }
+           
 echo '
            </div>     
            </div>  

@@ -231,13 +231,35 @@ echo'
      
      $stmt->close();
      echo '</table>';
-             
+     
+     $stmt = $mysqli->prepare("SELECT 
+                                      CS1.Id, 
+                                      CS1.Name, 
+                                      CS1.CategoryStepsTypeId,
+                                      CS2.Name,
+                                      rank_in_step_1 ,
+                                      CS3.Name,
+                                      rank_in_step_2 
+                               FROM CategoryStep CS1 
+                               LEFT OUTER JOIN StepLinking ON CS1.Id=StepLinking.out_step_id
+                               LEFT OUTER JOIN CategoryStep CS2 ON CS2.Id=StepLinking.in_step_1_id
+                               LEFT OUTER JOIN CategoryStep CS3 ON CS3.Id=StepLinking.in_step_2_id
+                               WHERE CS1.ActualCategoryId=? ORDER BY CS1.Id DESC");
+     $stmt->bind_param("i", $actual_cat_Id );
+     $stmt->bind_result( $step_id, $step_name, $step_type, $parent_name_1,$parent_rank_1, $parent_name_2,$parent_rank_2);
+     $stmt->execute();
+     while ($stmt->fetch()){
+         // TODO Category plot listing starts with final if exists
+     }
+     $stmt->close();
+          
      
      
      echo ' <span class="h_txt"> <span class="btnBar"> Combats (Durée :'.$cat_dur.'min)</span></span>
      
           <table class="wt t4">
       <tr class="tblHeader">
+      <th>Type</th>
       <th>PV</th>
       <th>Rouge</th>
       <th></th>
@@ -248,6 +270,7 @@ echo'
      
       $stmt = $mysqli->prepare("select
                                  Fight.Id,
+                                 CategoryStep.Name,
                                  Fight.pv1,
                                  Fight.pv2,
                                  TC1.Surname,
@@ -256,23 +279,26 @@ echo'
                                  TC2.Name
                                  
                              FROM Fight
+                             INNER JOIN CategoryStep ON step_id=CategoryStep.Id
                              LEFT OUTER JOIN TournamentCompetitor as TC1 on TC1.Id = TournamentCompetitor1Id
                              LEFT OUTER JOIN TournamentCompetitor as TC2 on TC2.Id = TournamentCompetitor2Id
                              WHERE  Fight.ActualCategoryId=? order by Fight.Id ASC");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $f_id, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2);
+     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2);
      $stmt->execute();
      
      $pop_counter=1;
      while ($stmt->fetch()){
          if (empty($Surname1) || empty($Surname2)) {
            echo ' <tr >
+                  <td>'. $step_name.'</td>
                   <td></td>
                   <td> colspan="3"A venir...</td>
                   <td></td>
                   </tr>';
          } else if (empty($pv1)){
           echo ' <tr >
+                  <td>'. $step_name.'</td>
                   <td>';
                   if($is_table){
                   echo'
@@ -296,7 +322,7 @@ echo'
                              <input type="hidden" name="cid" value="'.$catId.'" />
                              <input type="submit" value="Waza-ari ">
                    </form>
-                   
+                   <!--
                    <form action="figtRes.php" method="post">
                              <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
                              <input type="hidden" name="fid" value="'.$f_id.'" />
@@ -305,6 +331,7 @@ echo'
                              <input type="hidden" name="cid" value="'.$catId.'" />
                              <input type="submit" value="Décision">
                    </form>
+                   --!>
                    
                    <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
                   
@@ -339,7 +366,7 @@ echo'
                              <input type="hidden" name="cid" value="'.$catId.'" />
                              <input type="submit" value="Waza-ari ">
                    </form>
-                   
+                   <!--
                    <form action="figtRes.php" method="post">
                              <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
                              <input type="hidden" name="fid" value="'.$f_id.'" />
@@ -348,6 +375,7 @@ echo'
                              <input type="hidden" name="cid" value="'.$catId.'" />
                              <input type="submit" value="Décision">
                    </form>
+                   --!>
                    <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
                   
                   </span></span>
@@ -364,6 +392,7 @@ echo'
               $cl_2="VIC";
            }
            echo ' <tr > 
+                  <td>'. $step_name.'</td>
                   <td class="'.$cl_1.'">'.$pv1.'</td>
                   <td class="'.$cl_1.'">'.$Surname1.' '.$Name1.'</td>
                   <td>V.S.</td>
@@ -379,6 +408,8 @@ echo'
      
      $stmt->close();
      echo '</table>';
+     
+ 
      
        
              

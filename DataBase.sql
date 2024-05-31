@@ -332,6 +332,7 @@ INSERT CategoryStepsType (Id,Name) VALUES (5,'Pool_5');
 
 CREATE TABLE CategoryStep( 
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    Name VARCHAR( 255 ) NOT NULL,
     ActualCategoryId INT NOT NULL,
     CategoryStepsTypeId INT NOT NULL,
     CONSTRAINT fk_cs_cat FOREIGN KEY (ActualCategoryId) REFERENCES  ActualCategory(Id),
@@ -364,6 +365,7 @@ CREATE TABLE Fight(
      TournamentCompetitor2Id INT NULL,
      pv2 INT  NULL,
      CONSTRAINT fk_f_cat FOREIGN KEY (ActualCategoryId) REFERENCES  ActualCategory(Id),
+     CONSTRAINT fk_f_stp FOREIGN KEY (step_id) REFERENCES  CategoryStep(Id),
      CONSTRAINT fk_f_tc1 FOREIGN KEY (TournamentCompetitor1Id) REFERENCES  TournamentCompetitor(Id),
      CONSTRAINT fk_f_tc2 FOREIGN KEY (TournamentCompetitor2Id) REFERENCES  TournamentCompetitor(Id)
 );

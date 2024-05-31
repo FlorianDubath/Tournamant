@@ -76,10 +76,10 @@ function writeBand() {
        echo ' 
        <div class="m_b">
            <span class="m_b_t">CONFIGURATION</span>
-           <a href="global_config.php">configurer les dates du tournois</a>
-           <a href="cat_config.php">configurer les catégories/horaires</a> 
+           <a href="global_config.php">Configurer les dates du tournois</a>
+           <a href="cat_config.php">Configurer les catégories/horaires</a> 
            <a href="double_start_conf.php">configurer les doubles départs</a> 
-           <span class="m_b_t">ATTRIBUTION dES ROLES </span>
+           <span class="m_b_t">ATTRIBUTION DES ROLES </span>
            <a href="admin.php">Créer les utilisateurs et attribuer des rôles</a>
        </div>';
     }
