@@ -68,7 +68,7 @@ function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2, $name){
 }
 
 
-function create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $name) {
+function create_step_pool_3($ActualCategory_id, $user_id_1, $user_id_2, $user_id_3, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,3,?)");
@@ -93,7 +93,7 @@ function create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_2, $user_id_
     return $step_id;
 }
 
-function create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $name) {
+function create_step_pool_4($ActualCategory_id, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,4,?)");
@@ -131,7 +131,7 @@ function create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_2, $user_id_
     return $step_id;
 }
 
-function create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $name) {
+function create_step_pool_5($ActualCategory_id, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $name) {
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,5,?)");
@@ -254,7 +254,7 @@ function create_steps_10($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, 
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
-function create_steps_12($ActualCategoryId, $user_ids) {
+function create_steps_11($ActualCategoryId, $user_ids) {
     $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[3], $user_ids[6], $user_ids[9], 'Groupe A');
     $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[4], $user_ids[7], $user_ids[10], 'Groupe B');
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[5], $user_ids[8], 'Groupe C');
@@ -458,7 +458,7 @@ function get_step_results($step_id){
         $results = array();
         // victory and PV
         while ($stmt->fetch()) {
-            if (empty($pv1)){
+            if (empty($pv1) && empty($pv2)){
                 return NULL;
             }
             
@@ -474,6 +474,7 @@ function get_step_results($step_id){
             $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0)+10*$pv2;
         }
         $stmt->close();
+        
         
         // Direct fight in case of equality
         $counts = array_count_values($results);
@@ -492,16 +493,19 @@ function get_step_results($step_id){
         
         // TODO tie
         if(max(array_count_values($results))>1){
-           echo 'ERROR IN the step: tied results';
+            echo 'ERROR IN the step: tied results';
+           
+            echo 'in pool step with id='.$step_id.' tie';
+            exit;
         }
         
-        ksort($results, SORT_NUMERIC);
-        
+        arsort($results, SORT_NUMERIC);
+
         $res= array();
-        $idx=count($results);
+        $idx=1;
         foreach ($results as $cmp => $point) {
             $res[$idx]=$cmp;
-            $idx-=1;
+            $idx+=1;
         }
         
         return $res;
@@ -538,11 +542,15 @@ function check_link($ActualCategoryId) {
 }
 
 function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
+   
+    
     if ($pv_1>=0 && $pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
+    
+ 
         $mysqli= ConnectionFactory::GetConnection(); 
         
         $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=? WHERE Id=?");
-        $stmt->bind_param("iii", $pv_1, $pv_2, $fight_id);         
+        $stmt->bind_param("iii", $pv_1, $pv_2, $fight_id);       
         $stmt->execute();
         $stmt->close();
         
@@ -566,11 +574,12 @@ function isCatCompleted($ActualCategoryId){
     $stmt->execute();  
     $stmt->fetch();
     $stmt->close();
-    return $missing_fight==0;
+    return empty($missing_fight);
 }
 
 function get_full_result($ActualCategoryId){
     if (!isCatCompleted($ActualCategoryId)){
+    
         return NULL;
     }
 
@@ -696,13 +705,13 @@ function open_Category($tc_id_1,$tc_id_2,$name){
         create_step_pool_2($actual_category_id, $usr_ids[0], $usr_ids[1], 'Finale');
         break;
     case 3:
-        create_step_pool_3($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2]);
+        create_step_pool_3($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2],'Groupe A');
         break;
     case 4:
-        create_step_pool_4($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3]);
+        create_step_pool_4($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],'Groupe A');
         break;
     case 5:
-        create_step_pool_5($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4]);
+        create_step_pool_5($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],'Groupe A');
         break;
     case 6:
         create_steps_6($actual_category_id, $usr_ids[0], $usr_ids[1], $usr_ids[2], $usr_ids[3],  $usr_ids[4],  $usr_ids[5]);
@@ -767,12 +776,15 @@ function close_category($ActualCategoryId){
             $stmt->close();
         }
         
+        
          $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
          $stmt->bind_param("i", $ActualCategoryId);         
          $stmt->execute();
          $stmt->close();
+         
     } else {
        echo 'Cannot close a category with is not completed';
+       exit;
     }
 }
 

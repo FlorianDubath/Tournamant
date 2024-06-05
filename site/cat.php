@@ -71,17 +71,20 @@ $mysqli= ConnectionFactory::GetConnection();
      $stmt->close();         
          
      $stmt = $mysqli->prepare("select
-                                 Id,
-                                 Name,
+                                 ActualCategory.Id,
+                                 ActualCategory.Name,
                                  CategoryId,
                                  Category2Id,
-                                 IsCompleted
+                                 IsCompleted,
+                                 max(pv1) IS NOT NULL 
                              from ActualCategory
+                             LEFT OUTER JOIN Fight ON Fight.ActualCategoryId = ActualCategory.Id
                              WHERE CategoryId=? OR Category2Id=?
+                             GROUP BY ActualCategory.Id, ActualCategory.Name, CategoryId, Category2Id, IsCompleted
                            ");
                              
      $stmt->bind_param("ii", $_GET['cid'],$_GET['cid'] );
-     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed);
+     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $started);
      $stmt->execute();
      $stmt->fetch();
      $stmt->close();  
@@ -181,10 +184,17 @@ echo'
         if (! empty($cccid_2)){ //  check if merged with another cat
             echo'La catégorie est mélangée dans : '; 
         }
-        echo $ac_name.'</span>
-             <span class="h_txt"> <span class="btnBar"> Participants</span></span>
-             
-              <table class="wt t4">
+        
+       
+        echo $ac_name.'</span>';
+      
+        
+        echo'
+             <span class="h_txt"> <span class="btnBar"> Participants  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'part_list\'), \'hidden_pannel\')">montrer/cacher</a></span></span>
+       <span id="part_list" class="'; 
+       if ($started==1) {echo'hidden_pannel';}
+       echo'">    
+       <table class="wt t4">
       <tr class="tblHeader">
       <th>Nom Prénom</th>
       <th>Date Nais.</th>
@@ -230,30 +240,7 @@ echo'
      }
      
      $stmt->close();
-     echo '</table>';
-     
-     $stmt = $mysqli->prepare("SELECT 
-                                      CS1.Id, 
-                                      CS1.Name, 
-                                      CS1.CategoryStepsTypeId,
-                                      CS2.Name,
-                                      rank_in_step_1 ,
-                                      CS3.Name,
-                                      rank_in_step_2 
-                               FROM CategoryStep CS1 
-                               LEFT OUTER JOIN StepLinking ON CS1.Id=StepLinking.out_step_id
-                               LEFT OUTER JOIN CategoryStep CS2 ON CS2.Id=StepLinking.in_step_1_id
-                               LEFT OUTER JOIN CategoryStep CS3 ON CS3.Id=StepLinking.in_step_2_id
-                               WHERE CS1.ActualCategoryId=? ORDER BY CS1.Id DESC");
-     $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $step_id, $step_name, $step_type, $parent_name_1,$parent_rank_1, $parent_name_2,$parent_rank_2);
-     $stmt->execute();
-     while ($stmt->fetch()){
-         // TODO Category plot listing starts with final if exists
-     }
-     $stmt->close();
-          
-     
+     echo '</table></span>';
      
      echo ' <span class="h_txt"> <span class="btnBar"> Combats (Durée :'.$cat_dur.'min)</span></span>
      
@@ -296,48 +283,48 @@ echo'
                   <td> colspan="3"A venir...</td>
                   <td></td>
                   </tr>';
-         } else if (empty($pv1)){
-          echo ' <tr >
+         } else if (empty($pv1) && empty($pv2)){
+           echo ' <tr >
                   <td>'. $step_name.'</td>
                   <td>';
                   if($is_table){
-                  echo'
-                  
-                  <span class="pop_back pop_hide" Id="pop_1_'.$pop_counter.'"><span class="popcont">
-                     Victoire de '.$Surname1.' '.$Name1.' (Rouge) par:
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="10" />
-                             <input type="hidden" name="pv2" value="0" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Ippon">
-                   </form>
-                   
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="7" />
-                             <input type="hidden" name="pv2" value="0" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Waza-ari ">
-                   </form>
-                   <!--
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="1" />
-                             <input type="hidden" name="pv2" value="0" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Décision">
-                   </form>
-                   --!>
-                   
-                   <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
-                  
-                  </span></span>
-                  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a>
-                  ';
+                      echo'
+                      
+                      <span class="pop_back pop_hide" Id="pop_1_'.$pop_counter.'"><span class="popcont">
+                         Victoire de '.$Surname1.' '.$Name1.' (Rouge) par:
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="10" />
+                                 <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Ippon">
+                       </form>
+                       
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="7" />
+                                 <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Waza-ari ">
+                       </form>
+                       <!--
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="1" />
+                                 <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Décision">
+                       </form>
+                       --!>
+                       
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
+                      
+                      </span></span>
+                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a>
+                      ';
                   }
                   echo'
                  </td>
@@ -346,40 +333,40 @@ echo'
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
-                  echo'
-                  <span class="pop_back pop_hide" Id="pop_2_'.$pop_counter.'"><span class="popcont">
-                     Victoire de '.$Surname2.' '.$Name2.' (Blanc) par:
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="0" />
-                             <input type="hidden" name="pv2" value="10" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Ippon">
-                   </form>
-                   
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="0" />
-                             <input type="hidden" name="pv2" value="7" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Waza-ari ">
-                   </form>
-                   <!--
-                   <form action="figtRes.php" method="post">
-                             <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
-                             <input type="hidden" name="fid" value="'.$f_id.'" />
-                             <input type="hidden" name="pv1" value="0" />
-                             <input type="hidden" name="pv2" value="1" />
-                             <input type="hidden" name="cid" value="'.$catId.'" />
-                             <input type="submit" value="Décision">
-                   </form>
-                   --!>
-                   <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
-                  
-                  </span></span>
-                  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>';
+                      echo'
+                      <span class="pop_back pop_hide" Id="pop_2_'.$pop_counter.'"><span class="popcont">
+                         Victoire de '.$Surname2.' '.$Name2.' (Blanc) par:
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="0" />
+                                 <input type="hidden" name="pv2" value="10" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Ippon">
+                       </form>
+                       
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="0" />
+                                 <input type="hidden" name="pv2" value="7" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Waza-ari ">
+                       </form>
+                       <!--
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="0" />
+                                 <input type="hidden" name="pv2" value="1" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="submit" value="Décision">
+                       </form>
+                       --!>
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
+                      
+                      </span></span>
+                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>';
                   }
                   echo'</td>
                   </tr>';
@@ -454,10 +441,49 @@ echo'
                
                
             
-      }       
-     
+      }     
+      
+      
+    include '_visualizationHelper.php';   
+      $mysqli= ConnectionFactory::GetConnection(); 
+      
+      $stmt = $mysqli->prepare("select
+                                Id,
+                                Name,
+                                CategoryStepsTypeId
+                             from CategoryStep
+                             WHERE ActualCategoryId=?
+                             order by CategoryStepsTypeId>1 ASC, Id DESC
+                           ");
+                             
+     $stmt->bind_param("i", $actual_cat_Id );
+     $stmt->bind_result( $step_id, $stp_name, $step_id_type);
+     $stmt->execute();
+     $step_1_id = -1;
+     $number = 0;
+     $step_pool_ids = array();
+     while ($stmt->fetch()) {
+         if ($step_1_id<0 && $step_id_type==1) {
+             $step_1_id = $step_id;
+         }
+         
+         if ($step_id_type>1) {
+             $step_pool_ids[$step_id]=$stp_name;
+         }
+         
      }
+     $stmt->close();  
+     
+     foreach($step_pool_ids as $pool_id=>$pool_name) {
+         plot_pool($pool_id, $ac_name, $pool_name);
+     }
+     
+     if ($step_1_id>0) {
+         plot_table($step_1_id, $ac_name);
+     }
+  }
               
+    
     
    
    

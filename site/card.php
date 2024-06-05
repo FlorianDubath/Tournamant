@@ -410,7 +410,7 @@ echo'
 	                                  INNER JOIN TournamentGrade G2 ON TC2.GradeId = G2.Id
 	                                  INNER JOIN TournamentClub C1 ON C1.Id=TC1.ClubId
 	                                  INNER JOIN TournamentClub C2 ON C2.Id=TC2.ClubId
-	                                  INNER JOIN ActualCategory C2 ON Fight.ActualCategoryId=ActualCategory.Id
+	                                  INNER JOIN ActualCategory ON Fight.ActualCategoryId=ActualCategory.Id
 	                                  
 	                                  WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND pv1 IS NOT NULL
 	                                  ORDER BY ActualCategory.Name, Fight.Id");
@@ -453,7 +453,7 @@ echo'
                $pv_c='-';
                $vic = '';
                if ($c1_id==$Id) {
-                  $op=$c2_surname+' '+$c2_name;
+                  $op=$c2_surname.' '.$c2_name;
                   $blt=$c2_grade;
                   if ($pv1>0){
                      $vic = "Victoire contre";  

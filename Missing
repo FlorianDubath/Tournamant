@@ -5,7 +5,10 @@ CSS
 
 Basique
 ----------------
-visualisation catégorie avant liste combat
+
+ordre des combat panacher les pool
+
+visualisation catégorie après liste combat, cacher la liste d'appel après premier combat, (A tester)
 
 Liste des résultats  par club  + PDF  (depuis la page globale au moment de supprimer les données + page dédiée)
 
@@ -21,4 +24,15 @@ cas avec 1 seul participant + grouping
 
 tie dans les pools (Redo)
 
+
+------
+bug:
+encaisser depuis la carte ne fonctionne pas
+
+listing combat dans la carte (+pv counting)
+
+
+testé:
+------
+pool avec 4 participants (question : médaille au 4ème?)
 

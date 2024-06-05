@@ -246,7 +246,7 @@ td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active,  .gridButton:hover,
 
 
 
-.pop_hide{
+.pop_hide, .hidden_pannel{
    display:none;
 }
 
