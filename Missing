@@ -6,7 +6,7 @@ CSS
 Basique
 ----------------
 
-ordre des combat panacher les pool
+ordre des combats: panacher les pool
 
 visualisation catégorie après liste combat, cacher la liste d'appel après premier combat, (A tester)
 
@@ -27,12 +27,22 @@ tie dans les pools (Redo)
 
 ------
 bug:
-encaisser depuis la carte ne fonctionne pas
 
-listing combat dans la carte (+pv counting)
+
+
+
+----------
+delete from ActualCategoryResult where ActualCategoryId>6;
+
+delete from Fight where ActualCategoryId>6;
+delete from CategoryStep where ActualCategoryId>6;
+delete from ActualCategory where Id>6;
+delete from StepLinking where ActualCategoryId>6;
+
 
 
 testé:
 ------
 pool avec 4 participants (question : médaille au 4ème?)
+2 pool + demi et finales pour 6 participants
 

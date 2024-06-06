@@ -1,5 +1,6 @@
 <?php
 
+ 
 function create_step_direct($ActualCategory_id, $name){
     $mysqli= ConnectionFactory::GetConnection(); 
     
@@ -13,7 +14,6 @@ function create_step_direct($ActualCategory_id, $name){
     $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId,step_id) VALUES (?,?)");
     $stmt->bind_param("ii", $ActualCategory_id, $step_id);         
     $stmt->execute();
-    $step_id = $mysqli->insert_id;
     $stmt->close();
 
 
@@ -24,7 +24,7 @@ function create_link($ActualCategory_id, $out_step_id, $step_id_1_id, $rank_1, $
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("INSERT INTO StepLinking (ActualCategoryId, out_step_id, in_step_1_id, rank_in_step_1, in_step_2_id, rank_in_step_2) VALUES (?,?,?,?,?,?)");
-    $stmt->bind_param("iiiii", $ActualCategory_id, $out_step_id, $step_id_1_id, $rank_1, $step_id_2_id, $rank_2);         
+    $stmt->bind_param("iiiiii", $ActualCategory_id, $out_step_id, $step_id_1_id, $rank_1, $step_id_2_id, $rank_2);         
     $stmt->execute();
     $step_id = $mysqli->insert_id;
     $stmt->close();
@@ -439,13 +439,10 @@ function get_step_results($step_id){
         $stmt->execute();  
         $stmt->fetch();
         $stmt->close();
-        if (!empty($pv1)){
-            if ($pv1>0){
+        if ($pv1>0){
                 return array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id);
-            } 
-            else {
+        } else if ($pv2>0){
                 return array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id);
-            }
         } else {
             return NULL;
         }
@@ -612,10 +609,12 @@ function get_full_result($ActualCategoryId){
         $counter=0;
         $current_steps=array($final_step_id);
         $alredy_in=array();
+              
         while (count($current_steps)){
             $new_current_steps=array();
-            foreach($current_steps as $stp_id) {
+            foreach($current_steps as $index=>$stp_id) {
                 $step_result = get_step_results($stp_id);
+               
                 foreach($step_result as $rank=>$comp_id){
                     if (!in_array($comp_id,$alredy_in)) {
                         array_push($alredy_in, $comp_id);
@@ -697,7 +696,7 @@ function open_Category($tc_id_1,$tc_id_2,$name){
         $new_usr[$uid]= $club_val[$club_id]*100 +rand(1,99);
    }
    
-   ksort($new_usr, SORT_NUMERIC);
+   asort($new_usr, SORT_NUMERIC);
    
    $usr_ids = array_keys($new_usr);
    switch (count($usr_ids)) {
@@ -770,12 +769,16 @@ function close_category($ActualCategoryId){
     $result = get_full_result($ActualCategoryId);
     if (! empty($result)){
         foreach($result as $rank=>$cid){
-            $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId) VALUES (?,?,?)");
-            $stmt->bind_param("iii", $ActualCategoryId, $cid, $rank);         
-            $stmt->execute();
-            $stmt->close();
+            if (!is_array($cid)) {
+                $cid=array($cid);    
+            }
+            foreach($cid as $compid){
+                $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId) VALUES (?,?,?)");
+                $stmt->bind_param("iii", $ActualCategoryId, $compid, $rank);         
+                $stmt->execute();
+                $stmt->close();
+            }
         }
-        
         
          $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
          $stmt->bind_param("i", $ActualCategoryId);         

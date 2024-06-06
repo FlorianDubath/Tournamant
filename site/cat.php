@@ -146,7 +146,7 @@ echo'
       if ($missing!=0) {
           $query=$query." AND TournamentRegistration.WeightChecked=".((-$missing+1)/2)." ";
       }                     
-      $query=$query." ORDER BY TournamentCompetitor.CheckedIn desc, TournamentRegistration.WeightChecked DESC,TournamentCompetitor.Surname, TournamentCompetitor.Name";
+      $query=$query." ORDER BY TournamentCompetitor.CheckedIn desc, TournamentRegistration.WeightChecked DESC,ClubId, TournamentCompetitor.Surname, TournamentCompetitor.Name";
       
       
       $stmt = $mysqli->prepare($query);
@@ -217,7 +217,8 @@ echo'
                              INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
                              INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
                              INNER JOIN ActualCategory ON ActualCategory.CategoryId = TournamentRegistration.CategoryId OR ActualCategory.Category2Id = TournamentRegistration.CategoryId
-                             WHERE  ActualCategory.Id=?");
+                             WHERE  ActualCategory.Id=?
+                             ORDER BY ClubId, TournamentCompetitor.Surname, TournamentCompetitor.Name");
      $stmt->bind_param("i", $actual_cat_Id );
      $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence);
      $stmt->execute();
@@ -280,7 +281,7 @@ echo'
            echo ' <tr >
                   <td>'. $step_name.'</td>
                   <td></td>
-                  <td> colspan="3"A venir...</td>
+                  <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
          } else if (empty($pv1) && empty($pv2)){

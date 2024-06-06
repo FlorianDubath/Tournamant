@@ -84,7 +84,7 @@ function getImgData(id) {
 
 function add_title(doc){
   var imgAddData = wrapImgData(getImgData("logo"));
-  doc.addImage(imgAddData, "PNG", doc.internal.pageSize.width/2-40,doc.internal.pageSize.height/2-40, 80, 80);
+  doc.addImage(imgAddData, "PNG", doc.internal.pageSize.width/2-60,doc.internal.pageSize.height/2-60, 120, 120);
   
   doc.setFontSize(16).setFont("helvetica", "bold");
   doc.text(\''.$trName.'\', doc.internal.pageSize.width/2, 12, {align: \'center\'});
@@ -119,7 +119,7 @@ function makePDF(pdf_name) {
      
     
      $current_cat ='';
-     $position= 40;
+     $position= 55;
      $step= 12;
      while ($stmt->fetch()){
          
@@ -130,13 +130,15 @@ function makePDF(pdf_name) {
               
                echo ' add_title(doc);
                       doc.setFontSize(18).setFont("helvetica", "bold");
-                      doc.text('.$agcat_name.', doc.internal.pageSize.width/2, 30, {align: \'center\'});
+                      doc.text(\''.$agcat_name.'\', doc.internal.pageSize.width/2, 35, {align: \'center\'});
                       doc.setFontSize(16).setFont("helvetica", "bold");'; 
-              $position= 40;
-    
+              $position= 55;
+              $current_cat=$agcat_name;
         }
         
         echo "doc.text('".$rank." : ".$surname." ".$name." ". $club."', 30, ".$position.");";
+       
+        $position=$position + $step;
      }
      $stmt->close();
               

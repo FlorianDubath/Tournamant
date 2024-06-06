@@ -185,7 +185,7 @@ function plot_table($top_step_id, $catName){
                                       CSF1.CategoryStepsTypeId,
                                       
                                       TC2.name,
-                                      TC.Surname,
+                                      TC2.Surname,
                                       f.pv2,
                                       CSF2.Name,
                                       fl.rank_in_step_2,
@@ -196,8 +196,8 @@ function plot_table($top_step_id, $catName){
                                LEFT OUTER JOIN TournamentCompetitor TC1 on TC1.Id = f.TournamentCompetitor1Id
                                LEFT OUTER JOIN TournamentCompetitor TC2 on TC2.Id = f.TournamentCompetitor2Id
                                LEFT OUTER JOIN StepLinking fl ON fl.out_step_id = f.step_id
-                               LEFT OUTER JOIN CategoryStep CSF1 on CSF1.Id = f.in_step_1_id 
-                               LEFT OUTER JOIN CategoryStep CSF2 on CSF1.Id = f.in_step_2_id
+                               LEFT OUTER JOIN CategoryStep CSF1 on CSF1.Id = fl.in_step_1_id 
+                               LEFT OUTER JOIN CategoryStep CSF2 on CSF2.Id = fl.in_step_2_id
                                
                                LEFT OUTER JOIN Fight as h1 ON h1.step_id = CSF1.Id
                                LEFT OUTER JOIN TournamentCompetitor TCH11 on TCH11.Id = h1.TournamentCompetitor1Id
@@ -224,7 +224,7 @@ function plot_table($top_step_id, $catName){
      // 2 or 3 fights 
      $multiple = $h2_type==1 || $h1_type==1;
 
-
+ 
     // background and grid
     if ($multiple) {
          echo '<svg height="400" width="900">';
@@ -238,19 +238,19 @@ function plot_table($top_step_id, $catName){
             <line x1="420" y1="100" x2="440" y2="100" style="stroke:black;stroke-width:4" />
             
             <text x="100" y="40" fill="black" font-size="20" text-anchor="middle">'.$h1_1_grp.'</text>
-	        <text x="100" y="60" fill="black" font-size="20" text-anchor="middle">'.$h1_1_rank.'</text>
+	        <text x="100" y="70" fill="black" font-size="20" text-anchor="middle">'.$h1_1_rank.'</text>
             <text x="100" y="140" fill="black" font-size="20" text-anchor="middle">'.$h1_2_grp.'</text>
-            <text x="100" y="160" fill="black" font-size="20" text-anchor="middle">'.$h1_2_rank.'</text>   
+            <text x="100" y="170" fill="black" font-size="20" text-anchor="middle">'.$h1_2_rank.'</text>   
             
             <text x="300" y="40" fill="black" font-size="20" text-anchor="middle">'.$h1_1_surname.'</text>
-            <text x="300" y="60" fill="black" font-size="20" text-anchor="middle">'.$h1_1_name.'</text>
+            <text x="300" y="70" fill="black" font-size="20" text-anchor="middle">'.$h1_1_name.'</text>
             <text x="300" y="140" fill="black" font-size="20"  text-anchor="middle" >'.$h1_2_surname.'</text>
-            <text x="300" y="160" fill="black" font-size="20"  text-anchor="middle">'.$h1_2_name.'</text> 
+            <text x="300" y="170" fill="black" font-size="20"  text-anchor="middle">'.$h1_2_name.'</text> 
             ';
          } else {
             echo ' 
             <text x="340" y="100" fill="black" font-size="20" text-anchor="middle">'.$f_1_grp.'</text>
-	        <text x="340" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_1_rank.'</text>
+	        <text x="340" y="130" fill="black" font-size="20" text-anchor="middle">'.$f_1_rank.'</text>
              ';
          }
          
@@ -264,18 +264,18 @@ function plot_table($top_step_id, $catName){
             <line x1="420" y1="300" x2="440" y2="300" style="stroke:black;stroke-width:4" />
             
 	        <text x="100" y="240" fill="black" font-size="20" text-anchor="middle">'.$h2_1_grp.'</text>
-	        <text x="100" y="260" fill="black" font-size="20" text-anchor="middle">'.$h2_1_rank.'</text>
+	        <text x="100" y="270" fill="black" font-size="20" text-anchor="middle">'.$h2_1_rank.'</text>
             <text x="100" y="340" fill="black" font-size="20" text-anchor="middle">'.$h2_2_grp.'</text>
-            <text x="100" y="360" fill="black" font-size="20" text-anchor="middle">'.$h2_2_rank.'</text>
+            <text x="100" y="370" fill="black" font-size="20" text-anchor="middle">'.$h2_2_rank.'</text>
             
             <text x="300" y="240" fill="black" font-size="20" text-anchor="middle">'.$h2_1_surname.'</text>
-            <text x="300" y="260" fill="black" font-size="20" text-anchor="middle">'.$h2_1_name.'</text>
+            <text x="300" y="270" fill="black" font-size="20" text-anchor="middle">'.$h2_1_name.'</text>
             <text x="300" y="340" fill="black" font-size="20"  text-anchor="middle" >'.$h2_2_surname.'</text>
-            <text x="300" y="360" fill="black" font-size="20"  text-anchor="middle">'.$h2_2_name.'</text>';
+            <text x="300" y="370" fill="black" font-size="20"  text-anchor="middle">'.$h2_2_name.'</text>';
          }  else {
             echo ' 
             <text x="340" y="300" fill="black" font-size="20" text-anchor="middle">'.$f_2_grp.'</text>
-	        <text x="340" y="320" fill="black" font-size="20" text-anchor="middle">'.$f_2_rank.'</text>
+	        <text x="340" y="330" fill="black" font-size="20" text-anchor="middle">'.$f_2_rank.'</text>
              ';
          }
          
@@ -291,21 +291,21 @@ function plot_table($top_step_id, $catName){
          <text x="540" y="210" fill="black" font-size="20"  text-anchor="middle">'.$catName.'</text>
          
          
-        <text x="540" y="100" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
+        <text x="540" y="90" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
         <text x="540" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_1_name.'</text>
-        <text x="540" y="300" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
+        <text x="540" y="290" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
         <text x="540" y="320" fill="black" font-size="20" text-anchor="middle">'.$f_2_name.'</text>
         ';
         
         if ($f_1_pv>0) {
             echo'
-            <text x="780" y="240" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
-            <text x="780" y="260" fill="black" font-size="20" text-anchor="middle">'.$f_1_name.'</text>
+            <text x="780" y="190" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
+            <text x="780" y="220" fill="black" font-size="20" text-anchor="middle">'.$f_1_name.'</text>
             ';
         } else if ($f_2_pv>0) {
             echo'
-            <text x="780" y="240" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
-            <text x="780" y="260" fill="black" font-size="20" text-anchor="middle">'.$f_2_name.'</text>
+            <text x="780" y="190" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
+            <text x="780" y="220" fill="black" font-size="20" text-anchor="middle">'.$f_2_name.'</text>
             ';       
         }
       
@@ -323,9 +323,9 @@ function plot_table($top_step_id, $catName){
         // Parent steps   
         echo ' 
             <text x="100" y="40" fill="black" font-size="20" text-anchor="middle">'.$f_1_grp.'</text>
-            <text x="100" y="60" fill="black" font-size="20" text-anchor="middle">'.$f_1_rank.'</text>
+            <text x="100" y="70" fill="black" font-size="20" text-anchor="middle">'.$f_1_rank.'</text>
             <text x="100" y="140" fill="black" font-size="20" text-anchor="middle">'.$f_2_grp.'</text>
-            <text x="100" y="160" fill="black" font-size="20" text-anchor="middle">'.$f_2_rank.'</text>';
+            <text x="100" y="170" fill="black" font-size="20" text-anchor="middle">'.$f_2_rank.'</text>';
         
         // Competitors   
         echo '        

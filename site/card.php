@@ -146,7 +146,7 @@ if ( ! empty($_SESSION['_UserId'])) {
                         echo '<form action="./card.php" method="post">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="py" value="1"/>
-                             <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/> 
+                             <input type="hidden" name="trid" value="'.$trid.'"/> 
                              A payer! 
                              <input class="pgeBtn"  type="submit" value="Encaisser"/> 
                             </form> <br/>';
@@ -442,6 +442,7 @@ echo'
                                                    <th>Ceinture</th>
                                                    <th>PV</th>
                                                    </tr>';
+                 $cur_cat=$cat_nm;
                    
                }
                $fight_number+=1;
@@ -460,7 +461,7 @@ echo'
                      $fight_win += 1;
                      if ($ppv==2) {
                          $fight_pv += $pv1;
-                         $fight_win_p+=1;
+                         $fight_win_pv+=1;
                          $pv_c = $pv1;
                      } else {
                          $pv_c = '('.$pv1.')';
@@ -470,32 +471,35 @@ echo'
                   }
                   
                } else {
-                  $op=$c1_surname+' '+$c1_name;
+                  $op=$c1_surname.' '.$c1_name;
                   $blt=$c1_grade;
                   if ($pv2>0){
                      $vic = "Victoire contre"; 
                      $fight_win+=1; 
                      if ($ppv==2) {
                          $fight_pv += $pv2;
-                         $fight_win_p+=1;
+                         $fight_win_pv+=1;
                          $pv_c = $pv2;
                      } else {
                          $pv_c = '('.$pv2.')';
                      }
+                  } else {
+                     $vic = "Défaite contre"; 
                   }
                }
                $fight_result =  $fight_result.'<tr><td>'.$vic.'</td><td>'.$op.'</td><td>'.$blt.'</td><td>'. $pv_c.'</td></tr>';
            }
            $stmt->close();
+            $fight_result =  $fight_result.'</table>';
            
            if ($fight_number>0) {
                echo $fight_result;
                if ($GradeCollectVP) {
-                   echo 'Nombre de combats :'.$fight_number.'<br/>';
-                   echo 'Nombre de combats contre des 1Kyu et Dan :'.$fight_nb_pv.'<br/>';
-                   echo 'Nombre de victoire :'.$fight_win.'<br/>';
-                   echo 'Nombre de victoire contre des 1Kyu et Dan :'.$fight_win_pv.'<br/>';
-                   echo 'Nombre de point valeurs collectés :'.$fight_pv.'<br/>';
+                   echo 'Nombre de combat(s) :'.$fight_number.'<br/>';
+                   echo 'Nombre de combat(s) contre des 1Kyu et Dan :'.$fight_nb_pv.'<br/>';
+                   echo 'Nombre de victoire(s) :'.$fight_win.'<br/>';
+                   echo 'Nombre de victoire(s) contre des 1Kyu et Dan :'.$fight_win_pv.'<br/>';
+                   echo 'Nombre de points valeurs collectés :'.$fight_pv.'<br/>';
                } 
            }
            
