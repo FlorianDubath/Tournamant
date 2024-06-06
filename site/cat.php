@@ -271,6 +271,7 @@ echo'
                              LEFT OUTER JOIN TournamentCompetitor as TC1 on TC1.Id = TournamentCompetitor1Id
                              LEFT OUTER JOIN TournamentCompetitor as TC2 on TC2.Id = TournamentCompetitor2Id
                              WHERE  Fight.ActualCategoryId=? order by Fight.Id ASC");
+	    // IF(CategoryStep.CategoryStepsTypeId==1,100*Fight.Id, ROW_NUMBER() OVER(PARTITION BY CategoryStep.Id)) ASC
      $stmt->bind_param("i", $actual_cat_Id );
      $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2);
      $stmt->execute();
