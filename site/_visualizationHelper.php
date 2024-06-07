@@ -49,7 +49,7 @@ function plot_pool($step_id, $catName, $stepName){
          if (!empty($pv1) || !empty($pv2)){
              $fgt[$a_key] =  array("pv1"=>$pv1,"pv2"=>$pv2 );
          } else if (array_key_exists($a_key, $fgt)){
-             unset($fgt[$a_key])
+             unset($fgt[$a_key]);
          }
      }
      $stmt->close(); 

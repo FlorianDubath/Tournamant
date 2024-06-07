@@ -519,11 +519,11 @@ function check_for_tie($ActualCategoryId) {
     $linked=array();  
     while ($stmt->fetch()){
          if (!array_key_exists($in_step_1, $linked)) {
-             $linked[$in_step_1]=array()
+             $linked[$in_step_1]=array();
          } 
          $linked[$in_step_1][count($linked[$in_step_1])]=$rank_1;
          if (!array_key_exists($in_step_2, $linked)) {
-             $linked[$in_step_2]=array()
+             $linked[$in_step_2]=array();
          } 
          $linked[$in_step_2][count($linked[$in_step_2])]=$rank_2;
     }
