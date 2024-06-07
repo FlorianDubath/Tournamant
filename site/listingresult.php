@@ -31,7 +31,8 @@ echo '
             </span>
              <span class="btnBar"> 
                    <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
-                   <a class="pgeBtn" href="results.php" title="PDF" >PDF</a>
+                   <a class="pgeBtn" href="results.php" title="PDF Catégories" >PDF Catégories</a>
+                   <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>
                </span>
            
      ';

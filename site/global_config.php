@@ -151,7 +151,9 @@ echo '
 	            <span class="pop_back pop_hide" Id="pop_d"><span class="popcont">
                     Vous êtes en train d\'effacer les enregistrements (compétiteurs et résultats) de la dernière édition!<br/>
                     Vous êtes sur ? Cette opération ne peut être annulée!<br/>
-                    Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>?<br/><br/>
+                    Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
+                    
+                    
          
                     <form action="./global_config.php" method="post">         
                              <input type="hidden" value="1" name="del"/>

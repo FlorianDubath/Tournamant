@@ -24,6 +24,7 @@ $is_table =  $_SESSION['_IsMainTable'] ==1 ||  $_SESSION['_IsMatTable'] ==1;
 include 'connectionFactory.php';
 
 include '_commonBlock.php';
+include '_categoryHelper.php';
 
 writeHead();
 
@@ -264,33 +265,37 @@ echo'
                                  TC1.Surname,
                                  TC1.Name, 
                                  TC2.Surname,
-                                 TC2.Name
+                                 TC2.Name,
+                                 if (CategoryStep.CategoryStepsTypeId=1,0,CategoryStep.Id)
                                  
                              FROM Fight
                              INNER JOIN CategoryStep ON step_id=CategoryStep.Id
                              LEFT OUTER JOIN TournamentCompetitor as TC1 on TC1.Id = TournamentCompetitor1Id
                              LEFT OUTER JOIN TournamentCompetitor as TC2 on TC2.Id = TournamentCompetitor2Id
-                             WHERE  Fight.ActualCategoryId=? order by Fight.Id ASC");
-	    // IF(CategoryStep.CategoryStepsTypeId==1,100*Fight.Id, ROW_NUMBER() OVER(PARTITION BY CategoryStep.Id)) ASC
+                             WHERE  Fight.ActualCategoryId=? order by CategoryStep.Id, Fight.Id");
+                             
+                             
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2);
+     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2,$order);
      $stmt->execute();
      
      $pop_counter=1;
+     $rows = array();
      while ($stmt->fetch()){
+         $row_value='';
          if (empty($Surname1) || empty($Surname2)) {
-           echo ' <tr >
+           $row_value =' <tr >
                   <td>'. $step_name.'</td>
                   <td></td>
                   <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
          } else if (empty($pv1) && empty($pv2)){
-           echo ' <tr >
+           $row_value = ' <tr >
                   <td>'. $step_name.'</td>
                   <td>';
                   if($is_table){
-                      echo'
+                       $row_value = row_value.'
                       
                       <span class="pop_back pop_hide" Id="pop_1_'.$pop_counter.'"><span class="popcont">
                          Victoire de '.$Surname1.' '.$Name1.' (Rouge) par:
@@ -328,14 +333,14 @@ echo'
                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a>
                       ';
                   }
-                  echo'
+                  $row_value = $row_value.'
                  </td>
                   <td>'.$Surname1.' '.$Name1.'</td>
                   <td>V.S.</td>
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
-                      echo'
+                      $row_value = $row_value.'
                       <span class="pop_back pop_hide" Id="pop_2_'.$pop_counter.'"><span class="popcont">
                          Victoire de '.$Surname2.' '.$Name2.' (Blanc) par:
                        <form action="figtRes.php" method="post">
@@ -370,7 +375,7 @@ echo'
                       </span></span>
                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>';
                   }
-                  echo'</td>
+                  $row_value = $row_value.'</td>
                   </tr>';
                   $pop_counter+=1;
          } else { 
@@ -380,7 +385,7 @@ echo'
               $cl_1="LOS";
               $cl_2="VIC";
            }
-           echo ' <tr > 
+           $row_value = ' <tr > 
                   <td>'. $step_name.'</td>
                   <td class="'.$cl_1.'">'.$pv1.'</td>
                   <td class="'.$cl_1.'">'.$Surname1.' '.$Name1.'</td>
@@ -389,6 +394,9 @@ echo'
                   <td class="'.$cl_2.'">'.$pv2.'</td>
                   </tr>';
          }
+         
+         
+         $rows[$order.'-'.$f_id] = $row_value;
             
     
          
@@ -396,6 +404,13 @@ echo'
      }
      
      $stmt->close();
+     
+     $k_order = order_fight(array_keys($rows));
+     
+     
+     foreach($k_order as $key){
+         echo  $rows[$key];
+     }
      echo '</table>';
      
  

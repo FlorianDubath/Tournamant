@@ -791,4 +791,47 @@ function close_category($ActualCategoryId){
     }
 }
 
+function order_fight($f_keys){
+    $steps=array();
+    foreach($f_keys as $k) {
+        $sk = explode('-',$k)[0];
+        if (!array_key_exists($sk, $steps)){
+           $steps[$sk]=array(); 
+        }
+        $steps[$sk][count($steps[$sk])]=$k;
+    }
+    
+    if (count($steps)==1) {
+        return $f_keys;
+    } else {
+        $max =0;
+        foreach ($steps as $s_id=>$s_fgt){
+            if ($s_id>0) {
+               $max=max($max, count($s_fgt));
+            }
+        }
+        
+        $new_list=array();
+        
+        for($idx=0;$idx<$max;$idx++){
+            foreach ($steps as $s_id=>$s_fgt){
+                if ($s_id>0) {
+                    if ($idx<count($s_fgt)){
+                         array_push($new_list,$s_fgt[$idx]);
+                    }
+                }
+            }
+        }
+        
+        foreach ($steps[0] as $fgt){
+             array_push($new_list,$fgt);
+        } 
+        
+       return  $new_list;  
+        
+   } 
+}
+        
+  
+
 ?>

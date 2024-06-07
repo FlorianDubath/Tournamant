@@ -12,14 +12,35 @@ if (empty($_SESSION['_UserId'])) {
 include '_commonBlock.php';
 writeHead();
 
+include 'connectionFactory.php';
+$mysqli= ConnectionFactory::GetConnection(); 
+
+
+$cid = (int)$_GET['cid'];
 
 echo '
 <body>
     <div class="f_cont">
     
     <div>
-       Génération des résultats: 
-       <a href="" OnClick=""></a>
+       Génération des résultats par club: 
+        <form action="./resultsclub.php" method="get">
+        <span class="label">Club :</span>
+              <select name="cid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
+               $stmt = $mysqli->prepare("SELECT Id, Name FROM TournamentClub ORDER BY Name");
+      	        $stmt->execute();
+               $stmt->bind_result($ccId,$ccname);
+               while ($stmt->fetch()){
+                  $sel ='';
+                  if ($ccId==$cid) { $sel=' selected ';}
+                  echo '<option value="'.$ccId.'" '.$sel.'>'.$ccname.'</option>';
+               }
+	           $stmt->close();
+               
+               echo'
+                </select>
+        <input class="pgeBtn" type="submit" value="Générer">
+       </form>
        <span Id="progress"> </span>
        <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>
     </div>
@@ -31,10 +52,7 @@ echo '
     </div>
 ';
 
- include 'connectionFactory.php';
-
-$mysqli= ConnectionFactory::GetConnection(); 
-
+if (!empty($cid)) {
   
 $stmt = $mysqli->prepare("SELECT Name, TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1");
 $stmt->execute();
@@ -48,8 +66,8 @@ if ($TournamentStart!=$TournamentEnd) {
 }
 
 $where_clause='';
-if(!empty($_GET['acid']) ) {	
-     $where_clause=" WHERE ActualCategoryResult.ActualCategoryId=".(int)$_GET['acid']." ";
+if($cid>0 ) {	
+     $where_clause=" WHERE TournamentCompetitor.ClubId=".$cid." ";
 }
 
 echo'
@@ -112,7 +130,7 @@ function makePDF(pdf_name) {
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
                              INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id
                              ".$where_clause."
-                             ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC, ActualCategoryResult.RankId ASC;
+                             ORDER bY TournamentClub.Name, ActualCategoryResult.RankId ASC, TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC;
                            ");
      $stmt->bind_result( $acat_id, $agcat_name,$rank,$name,$surname,$club);
      $stmt->execute();
@@ -120,35 +138,35 @@ function makePDF(pdf_name) {
      
      
     
-     $current_cat ='';
+     $current_club ='';
      $position= 55;
      $step= 12;
      
      
      while ($stmt->fetch()){
          
-         if ( $current_cat!=$agcat_name){
-               if ( $current_cat!=''){
+         if ( $current_club!=$club){
+               if ( $current_club!=''){
                    echo ' doc.addPage();';
                } 
               
                echo ' add_title(doc);
                       doc.setFontSize(18).setFont("helvetica", "bold");
-                      doc.text(\''.$agcat_name.'\', doc.internal.pageSize.width/2, 35, {align: \'center\'});
+                      doc.text(\'Répicatulatif pour '.$club.'\', doc.internal.pageSize.width/2, 35, {align: \'center\'});
                       doc.setFontSize(16).setFont("helvetica", "bold");'; 
               $position= 55;
-              $current_cat=$agcat_name;
+              $current_club=$club;
         }
         
-        echo "doc.text('".$rank." : ".$surname." ".$name." ". $club."', 30, ".$position.");";
+        echo "doc.text('".$agcat_name." - ".$rank."e : ".$surname." ".$name."', 30, ".$position.");";
        
         $position=$position + $step;
      }
      $stmt->close();
               
-    $pdf_name="Résultats_Globaux.pdf";
+    $pdf_name="Résultats_Clubs.pdf";
     if ($where_clause!='') {
-        $pdf_name="Résultats_".$current_cat.".pdf";
+        $pdf_name="Résultats_Club_".$current_club.".pdf";
     }
 
   
@@ -159,7 +177,10 @@ function makePDF(pdf_name) {
 
  makePDF(\''.$pdf_name.'\');
 
-</script>
+</script>';
+
+}
+echo '
 </html>';
 
 ?>
