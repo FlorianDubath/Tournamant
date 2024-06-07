@@ -301,7 +301,7 @@ echo'
                   <td>'. $step_name.' '.$tb_s.'</td>
                   <td>';
                   if($is_table){
-                       $row_value = row_value.'
+                       $row_value = $row_value.'
                       
                       <span class="pop_back pop_hide" Id="pop_1_'.$pop_counter.'"><span class="popcont">
                          Victoire de '.$Surname1.' '.$Name1.' (Rouge) par:
