@@ -266,6 +266,7 @@ echo'
                                  TC1.Name, 
                                  TC2.Surname,
                                  TC2.Name,
+                                 Fight.TieBreakFight,
                                  if (CategoryStep.CategoryStepsTypeId=1,0,CategoryStep.Id)
                                  
                              FROM Fight
@@ -276,23 +277,28 @@ echo'
                              
                              
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2,$order);
+     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
      $stmt->execute();
      
      $pop_counter=1;
      $rows = array();
      while ($stmt->fetch()){
+         $tb_s='';
+         if ($tbf>0){
+             $tb_s='(Tie Break)';
+         }
+     
          $row_value='';
          if (empty($Surname1) || empty($Surname2)) {
            $row_value =' <tr >
-                  <td>'. $step_name.'</td>
+                  <td>'. $step_name.' '.$tb_s.'</td>
                   <td></td>
                   <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
          } else if (empty($pv1) && empty($pv2)){
            $row_value = ' <tr >
-                  <td>'. $step_name.'</td>
+                  <td>'. $step_name.' '.$tb_s.'</td>
                   <td>';
                   if($is_table){
                        $row_value = row_value.'
@@ -386,7 +392,7 @@ echo'
               $cl_2="VIC";
            }
            $row_value = ' <tr > 
-                  <td>'. $step_name.'</td>
+                  <td>'. $step_name.' '.$tb_s.'</td>
                   <td class="'.$cl_1.'">'.$pv1.'</td>
                   <td class="'.$cl_1.'">'.$Surname1.' '.$Name1.'</td>
                   <td>V.S.</td>

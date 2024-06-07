@@ -440,25 +440,24 @@ function get_step_results($step_id){
         $stmt->fetch();
         $stmt->close();
         if ($pv1>0){
-                return array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id);
+                return array("ordered"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id),"full"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id));
         } else if ($pv2>0){
-                return array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id);
+                return array("ordered"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id),"full"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id));
         } else {
-            return NULL;
+                return array("ordered"=>NULL,"full"=>NULL);
         }
     } else {
         // pool step  
-        $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1,TournamentCompetitor2Id,pv2 FROM Fight WHERE step_id=?");
+        $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1,TournamentCompetitor2Id,pv2, TieBreakFight FROM Fight WHERE step_id=?");
         $stmt->bind_param("i", $step_id);         
-        $stmt->bind_result($TournamentCompetitor1Id, $pv1, $TournamentCompetitor2Id, $pv2);     
+        $stmt->bind_result($TournamentCompetitor1Id, $pv1, $TournamentCompetitor2Id, $pv2, $tb);     
         $stmt->execute();  
         $results = array();
         // victory and PV
         while ($stmt->fetch()) {
             if (empty($pv1) && empty($pv2)){
-                return NULL;
+                return array("ordered"=>NULL,"full"=>NULL);
             }
-            
             if (!array_key_exists($TournamentCompetitor1Id, $results)){
                 $results[$TournamentCompetitor1Id]=0;
             }
@@ -467,8 +466,13 @@ function get_step_results($step_id){
                 $results[$TournamentCompetitor2Id]=0;
             }
             
-            $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0)+10*$pv1;
-            $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0)+10*$pv2;
+            if ($tb==0) {
+                $results[$TournamentCompetitor1Id] += 1000000000*(int)($pv1>0)+1000000*$pv1;
+                $results[$TournamentCompetitor2Id] += 1000000000*(int)($pv2>0)+1000000*$pv2;
+            } else {
+                $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0)+10*$pv1;
+                $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0)+10*$pv2;
+            }
         }
         $stmt->close();
         
@@ -488,13 +492,7 @@ function get_step_results($step_id){
             $stmt->close(); 
         }
         
-        // TODO tie
-        if(max(array_count_values($results))>1){
-            echo 'ERROR IN the step: tied results';
-           
-            echo 'in pool step with id='.$step_id.' tie';
-            exit;
-        }
+        $tie= max(array_count_values($results));
         
         arsort($results, SORT_NUMERIC);
 
@@ -505,15 +503,47 @@ function get_step_results($step_id){
             $idx+=1;
         }
         
-        return $res;
+        return array("ordered"=>$res,"full"=>$results,"tie"=>$tie);
     }
 }
 
 
+function check_for_tie($ActualCategoryId) {
 
+    $mysqli= ConnectionFactory::GetConnection(); 
+    
+    $stmt = $mysqli->prepare("SELECT out_step_id, in_step_1_id, rank_in_step_1, in_step_2_id, rank_in_step_2 FROM StepLinking WHERE ActualCategoryId=?");
+    $stmt->bind_param("i", $ActualCategoryId);         
+    $stmt->bind_result($out_step,$in_step_1,$rank_1,$in_step_2,$rank_2);     
+    $stmt->execute();
+    $linked=array();  
+    while ($stmt->fetch()){
+         if (!array_key_exists($in_step_1, $linked)) {
+             $linked[$in_step_1]=array()
+         } 
+         $linked[$in_step_1][count($linked[$in_step_1])]=$rank_1;
+         if (!array_key_exists($in_step_2, $linked)) {
+             $linked[$in_step_2]=array()
+         } 
+         $linked[$in_step_2][count($linked[$in_step_2])]=$rank_2;
+    }
+    
+    foreach ( $linked as $step_id=>$rank_list){
+        $step_res = get_step_results($step_id);
+        
+        if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {
+            // TODO check if output is impacted (ie ie competitor at rank in rank_list, do not have the same number of point in "full" than other competitor)
+            // TODO find the competitors 
+            // TODO Add tiebreak fights  
+            // TODO update plots ok a tester / listing cat (a tester)
+            
+        }
+    }
+}
 
 
 function check_link($ActualCategoryId) {
+    check_for_tie($ActualCategoryId);
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("SELECT out_step_id, in_step_1_id, rank_in_step_1, in_step_2_id, rank_in_step_2 FROM StepLinking WHERE ActualCategoryId=?");
@@ -522,8 +552,8 @@ function check_link($ActualCategoryId) {
     $stmt->execute();  
     $links=array();
     while ($stmt->fetch()){
-        $res_1 = get_step_results($in_step_1);
-        $res_2 = get_step_results($in_step_2);
+        $res_1 = get_step_results($in_step_1)["ordered"];
+        $res_2 = get_step_results($in_step_2)["ordered"];
         if (!empty($res_1) and !empty($res_2)) {
             $to_update = array("step_Id"=>$out_step, 
                           "f1"=>$res_1[$rank_1], 
@@ -538,6 +568,9 @@ function check_link($ActualCategoryId) {
     }
 }
 
+
+
+
 function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
    
     
@@ -550,6 +583,8 @@ function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
         $stmt->bind_param("iiii", $pv_1, $pv_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
+        
+        check_for_tie($ActualCategoryId); 
         
         check_link($ActualCategoryId);
         if (isCatCompleted($ActualCategoryId)) {
@@ -603,7 +638,7 @@ function get_full_result($ActualCategoryId){
         $stmt->execute();  
         $stmt->fetch();
         $stmt->close();
-        return get_step_results($step_id);
+        return get_step_results($step_id)["ordered"];
     } else {
         $result=array();
         $counter=0;
@@ -613,7 +648,7 @@ function get_full_result($ActualCategoryId){
         while (count($current_steps)){
             $new_current_steps=array();
             foreach($current_steps as $index=>$stp_id) {
-                $step_result = get_step_results($stp_id);
+                $step_result = get_step_results($stp_id)["ordered"];
                
                 foreach($step_result as $rank=>$comp_id){
                     if (!in_array($comp_id,$alredy_in)) {

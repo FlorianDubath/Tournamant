@@ -36,7 +36,7 @@ function plot_pool($step_id, $catName, $stepName){
                                FROM Fight 
                                INNER JOIN TournamentCompetitor TC1 on TC1.Id = TournamentCompetitor1Id
                                INNER JOIN TournamentCompetitor TC2 on TC2.Id = TournamentCompetitor2Id
-                               WHERE Fight.step_id=?");
+                               WHERE Fight.step_id=? order by TieBreakFight ASC");
      $stmt->bind_param("i", $step_id );
      $stmt->bind_result( $tc1_id, $tc1_name, $tc1_surname,$pv1, $tc2_id, $tc2_name, $tc2_surname,$pv2);
      $stmt->execute();
@@ -45,11 +45,19 @@ function plot_pool($step_id, $catName, $stepName){
      while ($stmt->fetch()){
          $comp[$tc1_id] = array("name"=>$tc1_name,"surname"=>$tc1_surname );
          $comp[$tc2_id] = array("name"=>$tc2_name,"surname"=>$tc2_surname );
+         $a_key = $tc1_id.'-'.$tc2_id;
          if (!empty($pv1) || !empty($pv2)){
-             $fgt[$tc1_id.'-'.$tc2_id] =  array("pv1"=>$pv1,"pv2"=>$pv2 );
+             $fgt[$a_key] =  array("pv1"=>$pv1,"pv2"=>$pv2 );
+         } else if (array_key_exists($a_key, $fgt)){
+             unset($fgt[$a_key])
          }
      }
      $stmt->close(); 
+     
+     
+     
+     
+     
     // background and grid
      
     echo '

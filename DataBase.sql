@@ -428,3 +428,7 @@ INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHUNG DO KWAN BUDO')
 Alter table TournamentCompetitor add column CheckedInBy INT NULL;
 Alter table TournamentRegistration add column WeightCheckedBy INT NULL;
 Alter table Fight add column ResultSavedBy INT NULL;
+
+
+
+Alter Table Fight ADD column TieBreakFight TINYINT NOT NULL DEFAULT 0;
