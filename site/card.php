@@ -104,8 +104,8 @@ if ( ! empty($_SESSION['_UserId'])) {
        if (!empty($Id) && $Id>0) {
             
             if (!empty($_POST['pr'])&&$_POST['pr']==1) { 
-              $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET CheckedIn=1 WHERE Id=?");
-              $stmt->bind_param("s", $Id );
+              $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET CheckedIn=1, CheckedInBy=? WHERE Id=?");
+              $stmt->bind_param("ii",$_SESSION['_UserId'] , $Id );
               $stmt->execute();
 	          $stmt->close();
               $chin=1;
@@ -177,8 +177,8 @@ if ( ! empty($_SESSION['_UserId'])) {
     
     if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
          if (!empty($_POST['wgok'])&&$_POST['wgok']==1 && !empty($_POST['wgc']) && !empty($_POST['trid'])) { 
-              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=? WHERE Id=?");
-              $stmt->bind_param("ii", $_POST['wgc'], $_POST['trid']);
+              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=?, WeightCheckedBy=? WHERE Id=?");
+              $stmt->bind_param("iii", $_POST['wgc'], $_SESSION['_UserId'], $_POST['trid']);
               $stmt->execute();
 	          $stmt->close();
          } 

@@ -546,8 +546,8 @@ function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
  
         $mysqli= ConnectionFactory::GetConnection(); 
         
-        $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=? WHERE Id=?");
-        $stmt->bind_param("iii", $pv_1, $pv_2, $fight_id);       
+        $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=?, ResultSavedBy=? WHERE Id=?");
+        $stmt->bind_param("iiii", $pv_1, $pv_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
         

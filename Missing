@@ -6,11 +6,6 @@ Basique
 ----------------
 
 
-Limite catégories based on double start
-
-changer mot de passes (self et pour l'admin ceux des autres)
-
-
 Inscriptions multiples depuis csv
 payement multiple depuis csv
 
@@ -21,6 +16,10 @@ cas avec 1 seul participant + grouping
 tie dans les pools (Redo) (ajouter un step et modifier les liens)
 
 CSS
+
+
+1-time access toke pour set/reset le mot de passe
+changer mot de passes (self et pour l'admin ceux des autres)
 
 bug:
 ------

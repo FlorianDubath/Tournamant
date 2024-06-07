@@ -271,18 +271,21 @@ echo '
 	            
 	             $stmt = $mysqli->prepare("SELECT DISTINCT
 	                                            Cat.Id, 
-	                                            TournamentAgeCategory.Name,
-	                                            TournamentAgeCategory.ShortName,
+	                                            TAC_1.Name,
+	                                            TAC_1.ShortName,
 	                                            IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN')),
 	                                            TournamentGender.Name
 	                                     FROM TournamentCategory Cat
-	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = Cat.AgeCategoryId
-	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId
+	                                     INNER JOIN TournamentAgeCategory TAC_1 ON TAC_1.Id = Cat.AgeCategoryId
+	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TAC_1.GenderId
 	                                     LEFT OUTER JOIN V_Age_Reg on V_Age_Reg.AgeCategoryId=Cat.AgeCategoryId and V_Age_Reg.CompetitorId=?
-	                                     WHERE IFNULL(MaxAge,1000)>? AND IFNULL(MinAge,0)<? AND TournamentAgeCategory.GenderId=? AND V_Age_Reg.AgeCategoryId IS NULL
-	                                     ORDER BY IFNULL(MinAge,IFNULL(MaxAge,1000)),IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN'))");       
+	                                     left outer join TournamentDoubleSatrt on AcceptedAgeCategoryId=TAC_1.Id
+	                                     LEFT OUTER JOIN TournamentAgeCategory TAC_2 ON MainAgeCategoryId = TAC_2.Id 
+	                                     
+	                                     WHERE ((IFNULL(TAC_1.MaxAge,1000)>? AND IFNULL(TAC_1.MinAge,0)<?) OR (TAC_2.Id IS NOT NULL AND IFNULL(TAC_2.MaxAge,1000)>? AND IFNULL(TAC_2.MinAge,0)<?)) AND TAC_1.GenderId=? AND V_Age_Reg.AgeCategoryId IS NULL
+	                                     ORDER BY IFNULL(TAC_1.MinAge,IFNULL(TAC_1.MaxAge,1000)),IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN'))");       
 	           
-               $stmt->bind_param("iiii", $Id, $ag,$ag,$gid);         
+               $stmt->bind_param("iiiiii", $Id, $ag,$ag, $ag,$ag,$gid);         
       	       $stmt->execute();
                $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender);
                while ($stmt->fetch()){

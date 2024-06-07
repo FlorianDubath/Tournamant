@@ -258,6 +258,8 @@ CREATE TABLE TournamentCompetitor(
   CONSTRAINT fk_comp_grade FOREIGN KEY (GradeId) REFERENCES TournamentGrade(Id),
   CONSTRAINT fk_comp_club FOREIGN KEY (ClubId) REFERENCES TournamentClub(Id)
 );  
+
+
 CREATE TABLE TournamentRegistration(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   CompetitorId INT NOT NULL, 
@@ -267,6 +269,9 @@ CREATE TABLE TournamentRegistration(
   CONSTRAINT fk_reg_com FOREIGN KEY (CompetitorId) REFERENCES TournamentCompetitor(Id),
   CONSTRAINT fk_reg_cat FOREIGN KEY (CategoryId) REFERENCES  TournamentCategory(Id)
 );
+
+
+
 
 INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, System, Prize, Judge, Dressing, Contact, RegistrationEnd, TournamentStart, TournamentEnd) VALUES (
      '49e Championnats Genevois Individuels de Judo',
@@ -371,6 +376,9 @@ CREATE TABLE Fight(
 );
 
 
+
+
+
 CREATE TABLE ActualCategoryResult(
      ActualCategoryId INT NOT NULL,
      Competitor1Id INT NOT NULL,
@@ -416,3 +424,7 @@ INSERT INTO TournamentClub (Id ,Name) VALUES(20, 'SHINBUDO-ONEX');
 INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHUNG DO KWAN BUDO')
 
 
+// Audit
+Alter table TournamentCompetitor add column CheckedInBy INT NULL;
+Alter table TournamentRegistration add column WeightCheckedBy INT NULL;
+Alter table Fight add column ResultSavedBy INT NULL;
