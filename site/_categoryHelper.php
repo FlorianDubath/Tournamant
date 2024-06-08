@@ -530,13 +530,50 @@ function check_for_tie($ActualCategoryId) {
     
     foreach ( $linked as $step_id=>$rank_list){
         $step_res = get_step_results($step_id);
-        
-        if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {
-            // TODO check if output is impacted (ie ie competitor at rank in rank_list, do not have the same number of point in "full" than other competitor)
-            // TODO find the competitors 
-            // TODO Add tiebreak fights  
-            // TODO update plots ok a tester / listing cat (a tester)
+        $ranks = array_values($rank_list);
+        if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {  
+         /// WE assume that 
+         ///                due to pool structure ties are between 3 fighters 
+         ///                if 2nd or 3rd is requested so is lower ranks (1rst (2nd))
+         ///                no tiebreak needed in isolated pool
+            $comp_list=array();
+            // 1rst
+            if (in_array(1,$ranks) &&  $step_res["full"][$step_res["ordered"][1]] == $step_res["full"][$step_res["ordered"][2]]){
+                   array_push($comp_list, $step_res["ordered"][1]);
+                   array_push($comp_list, $step_res["ordered"][2]);
+                   array_push($comp_list, $step_res["ordered"][3]);
+            }
+            // not 1rst but second
+            else if (in_array(2,$ranks) &&  $step_res["full"][$step_res["ordered"][2]] == $step_res["full"][$step_res["ordered"][3]]){
+                   array_push($comp_list, $step_res["ordered"][2]);
+                   array_push($comp_list, $step_res["ordered"][3]);
+                   array_push($comp_list, $step_res["ordered"][4]);
+            }
             
+             // 3rd and bellow
+            else if (in_array(3,$ranks) &&  $step_res["full"][$step_res["ordered"][3]] == $step_res["full"][$step_res["ordered"][4]]){
+            
+                   array_push($comp_list, $step_res["ordered"][3]);
+                   array_push($comp_list, $step_res["ordered"][4]);
+                   array_push($comp_list, $step_res["ordered"][5]);
+            }
+
+            
+            if (count($comp_list)>0){
+            // Add tiebreak fights
+                   $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[1]);         
+		   $stmt->execute();
+		   $stmt->close();
+	           $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[2]);         
+		   $stmt->execute();
+		   $stmt->close();
+		   $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[1],  $comp_list[2]);         
+		   $stmt->execute();
+		   $stmt->close();
+            }
         }
     }
 }
