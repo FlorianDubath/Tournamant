@@ -391,13 +391,13 @@ CREATE TABLE ActualCategoryResult(
 
 
 
-// Cleaning
+/* Cleaning
 DELETE FROM ActualCategoryResult;
 DELETE FROM Fight;
 DELETE FROM StepLinking;
 DELETE FROM CategoryStep;
 DELETE FROM ActualCategory;
-DELETE FROM TournamentCompetitor;
+DELETE FROM TournamentCompetitor;*/
 
 
 // Club
@@ -432,3 +432,12 @@ Alter table Fight add column ResultSavedBy INT NULL;
 
 
 Alter Table Fight ADD column TieBreakFight TINYINT NOT NULL DEFAULT 0;
+
+CREATE TABLE OTA(
+     StrId  VARCHAR( 12 ) PRIMARY KEY,
+     UserId INT NOT NULL,
+     CreatedOn Date NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     Used TINYINT NOT NULL DEFAULT 0,
+     SId  VARCHAR( 12 ) NULL,
+     CONSTRAINT fk_ota_us FOREIGN KEY (userId) REFERENCES  TournamentSiteUser(Id)
+);

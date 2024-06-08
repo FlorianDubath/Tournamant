@@ -64,7 +64,7 @@ echo '
 	                                     FROM TournamentAgeCategory  
 	                                     INNER JOIN TournamentGender on TournamentGender.Id = GenderId
 	                                     LEFT OUTER JOIN TournamentWeighting on TournamentAgeCategory.Id = AgeCategoryId
-	                                     WHERE AgeCategoryId IS NULL 
+	                                     WHERE AgeCategoryId IS NOT NULL 
 	                                     ORDER BY MaxAge, GenderId ");
 	             $stmt2->execute();
 	             $stmt2->bind_result($ccId,$cccatName,$cccatShortName,$ccgender);

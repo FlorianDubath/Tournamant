@@ -22,7 +22,6 @@ changer mot de passes (self et pour l'admin ceux des autres)
 
 bug:
 ------
-config double départ: liste
 
 
 
@@ -39,6 +38,8 @@ delete from StepLinking where ActualCategoryId>6;
 
 test Global:
 ------
+pool avec 3 participants (tie mais pas de combat en plus)
 pool avec 4 participants (question : médaille au 4ème?)
-2 pool + demi et finales pour 6 participants
+2 pool + demi et finales pour 6 participants (+ avec tie dans les 2 pools)
+2 pool + demi et finales pour 7 participants avec tie dans la pool de 4 entre 234
 

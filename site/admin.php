@@ -70,7 +70,7 @@ echo '
      
      echo'
      <a href="./changeUser.php?uid='.$Id.'" class="gridButton" >Modifier</a>
-      </tr>';
+      </tr>';  // TODO QR pour le changement de mot de passe
      }
      
      $stmt->close();
