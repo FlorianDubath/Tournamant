@@ -45,7 +45,7 @@ echo'
 
 }
 
-function getForm(){
+function getForm($otaid, $new_sid, $username){
      
 writeHead();
    
@@ -65,10 +65,10 @@ echo'
                 </span>
                 <span class="fitem">
                     <span class="label">Nouveau mot de passe* :</span>
-                     <input type="password" name="psw" id="psw"/><br/>
+                     <input type="password" name="psw" Id="psw"/><br/>
                 </span><br/>
                 <span class="label">Vérifier le mot de passe* :</span>
-                     <input type="password" name="psw2" id="psw2 /><br/>
+                     <input type="password" name="psw2" Id="psw2" /><br/>
                 </span><br/>
                 <span id="msg"></span>
                  <span class="btnBar "> 
@@ -133,7 +133,7 @@ if ($used==1 && $timevalid==1 && !empty($_POST['sid']) && !empty($_POST['psw']) 
          $done=true;
          errorMessage("Les deux mots de passes ne sont pas identiques. Redemandé un code d'accès.");
     } else {
-	$password_md5 = md5($_POST['mdp'].$Salt);
+	$password_md5 = md5($_POST['psw'].$salt);
 	$stmt = $mysqli->prepare("UPDATE TournamentSiteUser SET Password=? WHERE Id=?");
 	$stmt->bind_param("si", $password_md5, $userid);         
 	$stmt->execute();
@@ -141,9 +141,10 @@ if ($used==1 && $timevalid==1 && !empty($_POST['sid']) && !empty($_POST['psw']) 
 	
         $done=true;
 	successMessage();
+	
     } 
 } else if ($used==0 && $timevalid==1){
-      $new_sid = substr(md5($Salt. $otaid.date('Y-m-d:h:m:s')),0,12);
+      $new_sid = substr(md5($salt.$otaid.date('Y-m-d:h:m:s')),0,12);
       $stmt = $mysqli->prepare("UPDATE OTA SET OTA.sid=? WHERE OTA.StrId=?");
       $stmt->bind_param("ss", $new_sid, $otaid);         
       $stmt->execute();
@@ -156,7 +157,7 @@ if (! $done){
 	} else if ($used>1){
 	       errorMessage("Ce code d'accès a déjà été utilisé! Redemandé un code d'accès.");
 	} else if (!empty($new_sid)){
-	   getForm();
+	   getForm($otaid, $new_sid, $username);
 	}
 }
 

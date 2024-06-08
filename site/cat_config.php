@@ -46,8 +46,15 @@ echo'
 
           $stmt->bind_result( $Id,$catName,$catShortName,$gender,$mina, $maxa, $duration,$adaptWeight, $RegistrationBegin,$RegistrationEnd);
           
-          echo ' <span class="btnBar"> 
+          echo '            <span class="h_title">
+               GESTION DES CATEGORIES / HEURES DE PESEE
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                 
+                       <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a> 
 	               <a class="pgeBtn" href="configcat.php?id=-1">Ajouter</a>
+	          </span>
 	               <table>
           <tr><th>Nom</th><th>Genre</th><th>Ages</th><th>Durée</th><th>Catégories adaptées</th><th>Début Pesée</th><th>Fin Pesée</th><th>Action</th></tr>';
           

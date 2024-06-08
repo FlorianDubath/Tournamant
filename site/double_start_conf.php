@@ -41,8 +41,16 @@ echo'
 
           $stmt->bind_result( $Id,$m_c_id,$m_c_name,$m_c_short,$m_c_gen, $a_c_id,$a_c_name,$a_c_short,$a_c_gen);
           
-          echo ' <span class="btnBar"> 
+          echo '  <span class="h_title">
+               CONFIGURATION DES DOUBLE DEPARTS
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                 
+                       <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+	           
 	               <a class="pgeBtn" href="dbstartconf.php?id=-1">Ajouter</a>
+	         </span>
 	               <table>
           <tr><th>Catégorie orginale</th><th>Catégorie acceptée</th><th>Action</th></tr>';
           

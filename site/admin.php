@@ -27,6 +27,8 @@ echo '
             </span>
             <span class="h_txt">
                  <span class="btnBar"> 
+                 
+                       <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
 	               <a class="pgeBtn"  href="changeUser.php?id=0" title="Nouvel Utilisateur">Nouvel Utilisateur</a>
 	             </span>
       <table class="wt t4"><tr class="tblHeader"><td >Identifiant</td><td>Derni&egrave;re connection</td>

@@ -1,4 +1,4 @@
-.flyer {
+.flyer, .cont_l {
  display:block;
  width=100%;
  max-width:800px;
@@ -132,8 +132,19 @@ font-weight:bold;
 }
 
 .h_title {
-  display:inline-block;
-  margin-left:auto;
+  display:block;
+  font-weight:bold;
+  width:100%;
+  text-align:center;
+  margin-top:20px;
+  margin-bottom:10px;
+}
+
+.btnBar{
+ display:block;
+ width:100%;
+ text-align:right;
+  margin-bottom:10px;
 }
 
 .wgt_tm_grp {

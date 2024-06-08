@@ -27,6 +27,7 @@ echo '
             </span>
             <span class="h_txt">
                  <span class="btnBar"> 
+                       <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
 	               <a class="pgeBtn"  href="club.php?id=0" title="Nouveau club">Nouveau club</a>
 	             </span>
       <table class="wt t4">

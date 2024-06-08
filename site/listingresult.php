@@ -92,11 +92,9 @@ echo '
      echo '
               </span>
               
-              <span class="h_txt"> 
-                 <span class="btnBar"> 
+              <span class="btnBar"> 
                    <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
-                 </span>
-               </span>    
+              </span>
            </div>     
         </div>   
      </div>

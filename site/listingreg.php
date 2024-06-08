@@ -49,11 +49,10 @@ echo '
             </span>
              <span class="btnBar"> 
                    <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>
                </span>
             <span class="h_txt">
-                 <span class="btnBar"> 
-                   <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>
-	             </span>
+           
 	             <form action="./listingreg.php" method="get">
 	                Filtrer les inscrits: <br/>
 	                
