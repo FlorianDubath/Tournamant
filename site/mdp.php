@@ -3,6 +3,98 @@
 ob_start();
 
 
+function errorMessage($message){
+    writeHead();
+   
+echo'
+<body>
+    <div class="f_cont">       
+       <div class="cont_l">
+         <div class="h">
+            <span class="h_title">Echeque du changement du mot de passe</span>
+           
+            <span class="h_txt">
+            '.$message.'
+            <br/>
+           <a class="pgeBtn" href="index.php">Page d\'acceuil</a> 
+           </span>
+           </div>     
+        </div>   
+     </div>
+</body>
+</html>';
+}
+function successMessage(){
+   writeHead();
+   
+echo'
+<body>
+    <div class="f_cont">       
+       <div class="cont_l">
+         <div class="h">
+            <span class="h_title">Mot de passe changé</span>
+           
+            <span class="h_txt">
+            Naviguer sur la page d\'acceuil pour vous y identifier <a class="pgeBtn" href="index.php">Naviguer</a> 
+           </span>
+           </div>     
+        </div>   
+     </div>
+</body>
+</html>';
+
+}
+
+function getForm(){
+     
+writeHead();
+   
+echo'
+<body>
+    <div class="f_cont">       
+       <div class="cont_l">
+         <div class="h">
+            <span class="h_title">Changement de Mot de passe</span>
+           
+            <span class="h_txt">
+            <form action="./mdp.php" method="post" id="frm"> 
+            <input type="hidden" name="ota" value="'.$otaid.'"/>
+            <input type="hidden" name="sid" value="'.$new_sid.'"/>
+                <span class="fitem">
+                    <span class="label">Bonjour '.$username.' :</span>
+                </span>
+                <span class="fitem">
+                    <span class="label">Nouveau mot de passe* :</span>
+                     <input type="password" name="psw" id="psw"/><br/>
+                </span><br/>
+                <span class="label">Vérifier le mot de passe* :</span>
+                     <input type="password" name="psw2" id="psw2 /><br/>
+                </span><br/>
+                <span id="msg"></span>
+                 <span class="btnBar "> 
+                    <a class="pgeBtn" onclick="
+                    
+                    if (document.getElementById(\'psw2\').value==document.getElementById(\'psw\').value) {
+                       document.getElementById(\'frm\').submit();
+                    } else {
+                       document.getElementById(\'psw2\').value=\'\';
+                       document.getElementById(\'msg\').innerHTML=\'Les deux mots de passes ne correspondent pas<br/>\';
+                       
+                    } " >Enregistrer le mot de passe</a>
+               </span>
+               
+            </form>     
+           </div>     
+        </div>   
+     </div>
+</body>
+</html>';
+                    
+
+}
+
+
+
 include 'connectionFactory.php';
 
 include '_commonBlock.php';
@@ -68,94 +160,6 @@ if (! $done){
 	}
 }
 
-function errorMessage($message){
- //TODO 
-}
-function successMessage(){
- //TODO 
-}
-function getForm(){
-     //TODO form
-writeHead();
-}
 
 
-
-
-
-
-
-	
-    
-
-
-echo'
-<body>
-    <div class="f_cont">';
-echo'        
-       <div class="cont_l">
-         <div class="h">'; 
-echo ' 
-            <span class="h_title">Changement de Mot de passe</span>
-           
-            <span class="h_txt">
-            <form action="./addUser.php" method="post"> 
-            <input type="hidden" name="uid" value="'.$Id.'"/>
-                <span class="fitem">
-                    <span class="label">Identifiant* :</span>
-                    <input type="text" name="mail" value="'.$EMail.'" '.$readonly.'/><br/>
-                </span>
-                <span class="fitem">
-                    <span class="label">Nom publique* :</span>
-                    <input type="text" name="disp" value="'.$disp.'" /><br/>
-                </span>';
-if ($isReadonly==0){
-   echo' 
-                <span class="fitem">
-                     <span class="label">Mot de passe* :</span>
-                     <input type="text" name="psw" /><br/>
-                </span>';
-}
-echo'  
-               <span class="fitem">
-                    <span class="label">Droits Admin :</span>
-                    <input type="checkbox" name="da" value="1" '; if ($IsAdmin==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-               <span class="fitem">
-                    <span class="label">Droits Inscription :</span>
-                    <input type="checkbox" name="dr" value="1" '; if ($IsRegistration==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-               <span class="fitem">
-                    <span class="label">Droits Acceuil :</span>
-                    <input type="checkbox" name="dwc" value="1" '; if ($IsWelcome==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-                <span class="fitem">
-                    <span class="label">Droits Pesée :</span>
-                    <input type="checkbox" name="dwg" value="1" '; if ($IsWeighting==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-               <span class="fitem">
-                    <span class="label">Droits Table Centrale :</span>
-                    <input type="checkbox" name="dmt" value="1" '; if ($IsMainTable==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-               <span class="fitem">
-                    <span class="label">Droits Table Tatami :</span>
-                    <input type="checkbox" name="dtt" value="1" '; if ($IsMatTable==1) {echo 'checked="cheched"';} echo'/><br/>
-               </span>
-             
-               <span class="btnBar "> 
-                    <input class="pgeBtn" type="submit" value="'.$button.'" title="'.$button.'" /> 
-               </span>
-               
-           </form>
-            </span>
-           <span class="h_txt"> 
-                <span class="btnBar"> 
-                   <a class="pgeBtn" href="admin.php" title="Fermer" >Fermer</a>
-               </span>
-           </span>    
-           </div>     
-        </div>   
-     </div>
-</body>
-</html>';
 ?>  

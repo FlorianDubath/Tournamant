@@ -17,8 +17,7 @@ cas avec 1 seul participant + grouping
 CSS
 
 
-1-time access toke pour set/reset le mot de passe
-changer mot de passes (self et pour l'admin ceux des autres)
+1-time access token génération pour set/reset le mot de passe + tester OTA page
 
 bug:
 ------
