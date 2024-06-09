@@ -20,6 +20,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         
+writeBand();
 
          $mysqli= ConnectionFactory::GetConnection(); 
 	     $stmt = $mysqli->prepare("SELECT TournamentDoubleSatrt.Id,
@@ -51,8 +53,8 @@ echo'
 	           
 	               <a class="pgeBtn" href="dbstartconf.php?id=-1">Ajouter</a>
 	         </span>
-	               <table>
-          <tr><th>Catégorie orginale</th><th>Catégorie acceptée</th><th>Action</th></tr>';
+	 <table class="wt t4">
+          <tr class="tblHeader"><th>Catégorie orginale</th><th>Catégorie acceptée</th><th>Action</th></tr>';
           
           
          while( $stmt->fetch()){

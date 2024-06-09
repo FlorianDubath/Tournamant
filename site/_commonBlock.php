@@ -34,7 +34,7 @@ function writeBand() {
     $isLoged =  !empty($_SESSION['_UserId']);
     
     echo '<div id="band" class="band ';
-    if (!$isLoged) {echo 'b_closed';}
+    echo 'b_closed';
     echo'" >
              <div class="b_title" onclick="toggleClass(document.getElementById(\'band\'), \'b_closed\')"> 
                   <img id="logo" src="css/Logo_ACG_JJJ.png" height="30px"></img>

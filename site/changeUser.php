@@ -39,8 +39,10 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         
+writeBand();
 echo ' 
-            <span class="h_title">Utilisateur</span>
+            <span class="h_title">UTILISATEUR</span>
            
             <span class="h_txt">
             <form action="./addUser.php" method="post"> 

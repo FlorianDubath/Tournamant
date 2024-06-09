@@ -20,10 +20,20 @@ $cid = (int)$_GET['cid'];
 
 echo '
 <body>
-    <div class="f_cont">
+    <div class="f_cont">';
+echo'        
+       <div class="cont_l">
+         <div class="h">'; 
+    
+    
+writeBand();
+    echo'
     
     <div>
-       Génération des résultats par club: 
+        <span class="h_title">
+               GENERER LES RESULTATS PAR CLUBS
+            </span>
+      
         <form action="./resultsclub.php" method="get">
         <span class="label">Club :</span>
               <select name="cid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
@@ -42,13 +52,17 @@ echo '
         <input class="pgeBtn" type="submit" value="Générer">
        </form>
        <span Id="progress"> </span>
+        <span class="btnBar"> 
        <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>
+       </span>
     </div>
 
     <div id="print" style="display:none;">
          <img id="logo" src="css/Logo_ACG_JJJ_light.png"></img>
     </div>
     
+    </div>
+    </div>
     </div>
 ';
 

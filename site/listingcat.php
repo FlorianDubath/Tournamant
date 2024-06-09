@@ -21,7 +21,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
-         
+  
+writeBand();       
          
 
 echo ' 

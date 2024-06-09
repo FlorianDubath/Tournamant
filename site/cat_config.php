@@ -20,6 +20,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+    
+writeBand();
 
          $mysqli= ConnectionFactory::GetConnection(); 
 	     if (!($stmt = $mysqli->prepare("SELECT TournamentWeighting.AgeCategoryId,
@@ -55,8 +57,8 @@ echo'
                        <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a> 
 	               <a class="pgeBtn" href="configcat.php?id=-1">Ajouter</a>
 	          </span>
-	               <table>
-          <tr><th>Nom</th><th>Genre</th><th>Ages</th><th>Durée</th><th>Catégories adaptées</th><th>Début Pesée</th><th>Fin Pesée</th><th>Action</th></tr>';
+	               <table class="wt t4">
+          <tr class="tblHeader"><th>Nom</th><th>Genre</th><th>Ages</th><th>Durée</th><th>Catégories adaptées</th><th>Début Pesée</th><th>Fin Pesée</th><th>Action</th></tr>';
           
           
          while( $stmt->fetch()){

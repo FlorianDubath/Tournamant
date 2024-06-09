@@ -47,6 +47,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         
+writeBand();
 
 	     if (!($stmt = $mysqli->prepare("SELECT TournamentWeighting.AgeCategoryId,
 	                                            TournamentAgeCategory.Name,
@@ -77,16 +79,22 @@ echo'
           $stmt->fetch();
 	      $stmt->close();
 echo '	      
-	      <form action="./configcat.php" method="post">
-	         <span class="ftitle">
-	             Catégorie d\'âge
-	         </span>';
+           <span class="h_title">
+               HEURE DE PESEE POUR LA CATEGORIE D\'AGE
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                       <a class="pgeBtn" href="cat_config.php" title="Annuler/Fermer" >Annuler/Fermer</a>
+                 </span>
+
+	      <form action="./configcat.php" method="post">';
 	       if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	       if ($Id && $Id==$_REQUEST['id']) {
 	       echo'
-	        <input type="hidden" name="id" value="'.$Id.'"/>
-	        <span class="fitem">
-               <span class="label">'.$catName.'('.$catShortName.'/'.$gender.')</span>
+	       <input type="hidden" name="id" value="'.$Id.'"/>
+	       <span class="fitem">
+	           <span class="label">Catégories :</span>
+                   <span class="label" style="font-weight:bold;"">'.$catName.'('.$catShortName.'/'.$gender.')</span><br/>
 	        </span>';
 	       } else {
 	           
@@ -112,7 +120,7 @@ echo '
 	             $stmt2->close();
 	        
 	        
-	        echo'</select>
+	        echo'</select><br/>
 	        </span>';
 	        
 	        
@@ -126,21 +134,21 @@ echo '
 	       
 	       }
 	       echo' <span class="fitem">
-               <span class="label">Catégorie en fonction de la participation:</span>
+               <span class="label">Catégorie en fonction de la participation :</span>
                <select name="pp">
                   <option value="0">Non</option>
                   <option value="1"';
                   if ($adaptWeight) echo " selected ";
                   echo'>Oui</option>
-                </select>
+                </select><br/>
 	       </span>
 	         <input type="hidden" id="timezone" name="timezone" value="-01:00" />  
 	        <span class="fitem">
-               <span class="label">Pesée depuis:</span>
+               <span class="label">Pesée depuis :</span>
                <input class="inputDate"  type="datetime-local" name="wb" value="'.$RegistrationBegin.'" /><br/>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Pesée jusqu\'à:</span>
+               <span class="label">Pesée jusqu\'à :</span>
                <input class="inputDate"  type="datetime-local" name="we" value="'.$RegistrationEnd.'" /><br/>
 	        </span>
 	       <span class="btnBar"> 

@@ -45,6 +45,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         
+writeBand();
 
 	     $stmt = $mysqli->prepare("SELECT TournamentClub.Id,
 	                                            TournamentClub.Name,
@@ -62,10 +64,16 @@ echo'
 	          $Id=-1;
 	      }
 echo '	      
+           <span class="h_title">
+              CLUB
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                        <a class="pgeBtn" href="listingclub.php">Annuler/Fermer</a>
+                 </span>
+
 	      <form action="./club.php" method="post">
-	         <span class="ftitle">
-	             CLUB
-	         </span>';
+	        ';
 	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	         
 	         echo'

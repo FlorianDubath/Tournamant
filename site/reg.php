@@ -110,6 +110,8 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         
+writeBand();
 
 	     $stmt = $mysqli->prepare("SELECT Id, StrId, Surname, Name, Birth, GenderId, ClubId, GradeId,LicenceNumber FROM TournamentCompetitor WHERE Id=?");
       	  
@@ -123,11 +125,21 @@ echo'
 	          $Id=-1;
 	      }
 echo '	      
+
+          <span class="h_title">
+              COMPETITEUR
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                           <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>';
+if ($Id>0){
+  echo '<a class="pgeBtn" href="card.php?sid='.$sId.'" target="blanck">Carte</a> ';
+}
+	                   
+echo             '    </span>
+
 	      <form action="./reg.php" method="post" Id="F1">
-	       </form>
-	         <span class="ftitle">
-	             COMPETITEUR
-	         </span>';
+	      ';
 	         
 	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	         echo'
@@ -206,7 +218,7 @@ echo '
 	           <span class="ftitle">
 	            CATEGORIE(S)
 	           </span>
-	           <table>
+	           <table class="wt t4">
 	              <tr><th>Catégorie</th><th>Poid</th><th>Payé</th><th>Action</th></tr>';
 	              
 	           $stmt = $mysqli->prepare("SELECT 
@@ -306,7 +318,6 @@ echo'
 	       <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications" form="F1">
 	               <a class="pgeBtn" href="listingreg.php">Annuler/Fermer</a>
-	               <a class="pgeBtn" href="card.php?sid='.$sId.'" target="blanck">Carte</a> 
 	       </span>
            </div>     
         </div>   

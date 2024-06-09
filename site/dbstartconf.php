@@ -51,12 +51,18 @@ echo'
 echo'        
        <div class="cont_l">
          <div class="h">'; 
+         writeBand();
 
-echo '	      
+
+echo '	     <span class="h_title">
+               AJOUTER UN DOUBLE DEPART
+            </span>
+            <span class="h_txt">
+                 <span class="btnBar"> 
+                       <a class="pgeBtn" href="double_start_conf.php" title="Annuler" >Annuler</a>
+                 </span>
 	      <form action="./dbstartconf.php" method="post">
-	         <span class="ftitle">
-	             Configuration double départ
-	         </span>';
+	      ';
 	           $stmt2 = $mysqli->prepare("SELECT TournamentAgeCategory.Id,
 	                                            TournamentAgeCategory.Name,
 	                                            TournamentAgeCategory.ShortName,
@@ -69,7 +75,7 @@ echo '
 	             $stmt2->execute();
 	             $stmt2->bind_result($ccId,$cccatName,$cccatShortName,$ccgender);
 	            echo '<span class="fitem">
-	                 <span class="label">Catégorie d\'âge du participant</span>
+	                 <span class="label">Catégorie d\'âge du participant :</span>
 	                 <select name="mac">';
 	             $list='';
                  while($stmt2->fetch()) {
@@ -82,7 +88,7 @@ echo '
 	        </span>';
 	        
 	        echo '<span class="fitem">
-	                 <span class="label">Double départ possible dans la catégorie</span>
+	                 <span class="label">Double départ possible dans la catégorie :</span>
 	                 <select name="aac">'. $list.'</select>
 	        </span>
 	        

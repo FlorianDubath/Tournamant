@@ -36,7 +36,8 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
          
-         
+   
+writeBand();      
 $mysqli= ConnectionFactory::GetConnection(); 
  $stmt = $mysqli->prepare("select
                                  TournamentCategory.Id, 
@@ -98,15 +99,19 @@ echo '
                '.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'
             </span>
             <span class="h_txt">
+                <span class="btnBar"> 
+                   <a class="pgeBtn" href="listingcat.php" title="Fermer" >Fermer</a>
+                 </span>
                   <span class="btnBar"> ';
        if ($missing==-1) {
-          echo ' Participants pesés ('.$weighted.')
-          <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'" title="Tous les participants">Tous les participants ('.$total.')</a>
+          echo ' <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'" title="Tous les participants">Tous les participants ('.$total.')</a>
+                 Participants pesés ('.$weighted.')
                  <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=1" title="Participants à peser/manquants">Participants à peser/manquants ('.$total - $weighted.')</a>';
        } else if ($missing==1) {
-                 echo ' Participants à peser/manquants ('.$total - $weighted.')
+                 echo ' 
                  <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'" title="Tous les participants">Tous les participants ('.$total.')</a>
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>';
+                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>
+                 Participants à peser/manquants ('.$total - $weighted.')';
        }  else {
                  echo ' 
                  Tous les participants ('.$total.')
@@ -115,7 +120,8 @@ echo '
        }                    
                   
 	              
-echo'
+echo'  
+                  
 	             </span>
       <table class="wt t4">
       <tr class="tblHeader">
@@ -190,7 +196,9 @@ echo'
         echo $ac_name.'</span>';
       
         
-        echo'
+        echo' <span class="btnBar"> 
+                   <a class="pgeBtn" href="listingcat.php" title="Fermer" >Fermer</a>
+               </span>
              <span class="h_txt"> <span class="btnBar"> Participants  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'part_list\'), \'hidden_pannel\')">montrer/cacher</a></span></span>
        <span id="part_list" class="'; 
        if ($started==1) {echo'hidden_pannel';}

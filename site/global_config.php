@@ -58,11 +58,45 @@ writeHead();
 echo'
 <body>
     <div class="f_cont">';
-
     
+writeBand();
+
 echo'        
        <div class="cont_l">
-         <div class="h">'; 
+         <div class="h"> 
+         <span class="h_title">
+               INFORMATIONS GLOBALES
+	</span>
+	<span class="h_txt">
+	   <span class="btnBar"> 
+	       <a class="pgeBtn" href="index.php" title="Annuler/Fermer" >Annuler/Fermer</a>
+	   </span>
+	   <span class="btnBar"> 
+	            <span class="pop_back pop_hide" Id="pop_d">
+	               <span class="popcont">
+	                   <span class="pop_tt">
+		            Vous êtes en train d\'effacer les enregistrements (compétiteurs et résultats) de la dernière édition!<br/>
+		            Etes-vous sur ? <br/> 
+		            Cette opération ne peut être annulée !
+		           </span> 
+		            Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
+		            
+		            
+		 	    <span class="btnBar"> 
+				    <form action="./global_config.php" method="post">         
+				             <input type="hidden" value="1" name="del"/>
+				             <input class="pgeBtn" type="submit" value="Effacer les données précédentes">
+				             <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Annuler</a>
+				   </form>
+		          </span>
+                     </span>
+                  </span>
+                  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Effacer les données précédentes</a></td> 
+	  </span>'; 
+         
+         
+         
+         
 
 	     if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, System,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
@@ -75,10 +109,7 @@ echo'
           $stmt->fetch();
 	      $stmt->close();
 echo '	      
-	      <form action="./global_config.php" method="post">
-	         <span class="ftitle">
-	             Informations Globales
-	         </span>';       
+	      <form action="./global_config.php" method="post">';       
 	if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	      echo'  <input type="hidden" name="id" value="'.$Id.'"/>
 	        <span class="fitem">
@@ -136,45 +167,15 @@ echo '
 	        <span class="fitem">
                <span class="label">Fin du Tournois:</span>
                <input class="inputDate"  type="date" name="te" value="'.$TournamentEnd.'" /><br/>
-	        </span>
+	        </span><br/>
 	       
 	       <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Enregistrer les modifications">
 	               <a class="pgeBtn" href="index.php">Annuler/Fermer</a>
 	       </span>
 	       </form>
-	        
-	          <span class="btnBar"> 
-	          
-	          
-	          
-	            <span class="pop_back pop_hide" Id="pop_d"><span class="popcont">
-                    Vous êtes en train d\'effacer les enregistrements (compétiteurs et résultats) de la dernière édition!<br/>
-                    Vous êtes sur ? Cette opération ne peut être annulée!<br/>
-                    Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
-                    
-                    
-         
-                    <form action="./global_config.php" method="post">         
-                             <input type="hidden" value="1" name="del"/>
-                             <input type="submit" value="Effacer les données précédentes">
-                   </form>
-                   
-                   
-                   <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Annuler</a>
-                  
-                  </span></span>
-                  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_d\'),\'pop_hide\');">Effacer les données précédentes</a></td>
-	          
-	          
-	          
-	          
-	       <span class="btnBar"> 
-	               
-	               <a class="pgeBtn" href="index.php">Annuler/Fermer</a>
-	       </span>
-	       '
-	         ;
+	     </span>
+	       ';
 	
 echo '	
            </div>     

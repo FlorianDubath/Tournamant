@@ -42,6 +42,7 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
          
+writeBand();
          
 echo ' 
             <span class="h_title">

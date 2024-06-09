@@ -55,13 +55,17 @@ echo'
 <body>
   <div class="f_cont">       
       <div class="cont_l">
-        <div class="h">
-            <span class="h_title">Accès unique pour changer de mot de passe</span>
-            Desiné à :'.$disp.'<br/>
-            Valide jusqu\'à :'. $date.'<br/>
-            <div id="qrcode"></div>
+        <div class="h">';
+        
+writeBand();
+echo'
+            <span class="h_title">ACCES UNIQUE POUR CHANGER DE MOT DE PASSE</span>
+            <span style="text-align:center">
+            <div>  Desiné à :'.$disp.'</div><br/>
+            <div>Valide jusqu\'à :'. $date.'</div><br/><br/>
+            <div style="width:250px;margin:10px auto 10px auto;"><div id="qrcode"></div></div>
            <div class="url">https://'.$_SERVER['HTTP_HOST'].'/mdp.php?ota='.$new_otid.'</div>
-
+           </span>
          </div>     
         </div>  
      </div>   
