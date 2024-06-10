@@ -2,10 +2,6 @@ A faire
 ------- 
 
 
-Basique
-----------------
-
-
 Inscriptions multiples depuis csv
 payement multiple depuis csv
 
@@ -13,11 +9,17 @@ payement multiple depuis csv
 cas avec 1 seul participant 
 cas avec 1 seul participant + grouping
 
+Ajouter médaille au résultats + médaille au 4ème dans les pool ou plusieurs si tie
+entrer un résultat manuellement (catégorie sans combat)
+
+
+? tableau catégorie sur feuile résultats
 
 
 bug:
 ------
-
+liste des club dans le fichier de DB
+vérifier la création de actualcatégorie si la liste de cat est bien filtrée 
 
 
 clean db:
