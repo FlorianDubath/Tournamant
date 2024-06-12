@@ -75,6 +75,7 @@ echo '
 	             </form>
 	             
 	             <span class="btnBar"> 
+	               <a class="pgeBtn"  href="regs.php" title="Inscriptions Groupées">Inscriptions Groupées</a>
 	               <a class="pgeBtn"  href="reg.php?id=0" title="Nouvel Inscrit">Nouvel Inscrit</a>
 	               
 	             </span>
