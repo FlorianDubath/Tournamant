@@ -3,6 +3,7 @@ A faire
 
 
 Inscriptions multiples depuis csv
+parser numéro license (nombre 6 chifres)
 payement multiple depuis csv
 
 
@@ -18,8 +19,6 @@ entrer un résultat manuellement (catégorie sans combat)
 
 bug:
 ------
-liste des club dans le fichier de DB
-vérifier la création de actualcatégorie si la liste de cat est bien filtrée 
 
 
 clean db:

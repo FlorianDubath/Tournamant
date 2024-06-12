@@ -424,6 +424,7 @@ INSERT INTO TournamentClub (Id ,Name) VALUES(20, 'SHINBUDO-ONEX');
 INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHUNG DO KWAN BUDO')
 
 
+
 // Audit
 Alter table TournamentCompetitor add column CheckedInBy INT NULL;
 Alter table TournamentRegistration add column WeightCheckedBy INT NULL;
@@ -441,3 +442,4 @@ CREATE TABLE OTA(
      SId  VARCHAR( 12 ) NULL,
      CONSTRAINT fk_ota_us FOREIGN KEY (userId) REFERENCES  TournamentSiteUser(Id)
 );
+
