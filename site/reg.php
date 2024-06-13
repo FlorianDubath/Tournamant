@@ -151,15 +151,15 @@ echo             '    </span>
 	           echo'
 	        <span class="fitem">
                <span class="label">Nom :</span>
-               <input class="inputDate"  type="text" name="sm" value="'.$sn.'"  form="F1"/><br/>
+               <input class="inputDate"  type="text" name="sm" value="'.$sn.'"  required form="F1"/><br/>
 	        </span>
 	        <span class="fitem">
                <span class="label">Prénom :</span>
-               <input class="inputDate"  type="text" name="nm" value="'.$nm.'" / form="F1"><br/>
+               <input class="inputDate"  type="text" name="nm" value="'.$nm.'" required form="F1"/><br/>
 	        </span>
 	        <span class="fitem">
                <span class="label">Date de naissence :</span>
-               <input class="inputDate"  type="date" name="bt" value="'.$bt.'"  form="F1"/><br/>
+               <input class="inputDate"  type="date" name="bt" value="'.$bt.'" required form="F1"/><br/>
 	        </span>
 	        
 	        <span class="fitem">
@@ -210,7 +210,7 @@ echo             '    </span>
 	        
 	        <span class="fitem">
                <span class="label">Numéro de licence :</span>
-               <input class="inputDate"  type="text" name="lc" value="'.$licence.'"  form="F1"/><br/>
+               <input class="inputDate"  type="number" name="lc" maxlength="6" min="100000"  max="999999" required value="'.$licence.'"  form="F1"/><br/>
 	        </span>';
 	        
 	        if ($Id>0) {
@@ -219,7 +219,7 @@ echo             '    </span>
 	            CATEGORIE(S)
 	           </span>
 	           <table class="wt t4">
-	              <tr><th>Catégorie</th><th>Poid</th><th>Payé</th><th>Action</th></tr>';
+	              <tr class="tblHeader"><th>Catégorie</th><th>Poid</th><th>Payé</th><th>Action</th></tr>';
 	              
 	           $stmt = $mysqli->prepare("SELECT 
 	                                            TournamentRegistration.Id, 
@@ -289,6 +289,7 @@ echo             '    </span>
 	                                            TournamentGender.Name
 	                                     FROM TournamentCategory Cat
 	                                     INNER JOIN TournamentAgeCategory TAC_1 ON TAC_1.Id = Cat.AgeCategoryId
+	                                     INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TAC_1.Id
 	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TAC_1.GenderId
 	                                     LEFT OUTER JOIN V_Age_Reg on V_Age_Reg.AgeCategoryId=Cat.AgeCategoryId and V_Age_Reg.CompetitorId=?
 	                                     left outer join TournamentDoubleSatrt on AcceptedAgeCategoryId=TAC_1.Id

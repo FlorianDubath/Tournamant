@@ -282,6 +282,10 @@ td, th {
    text-align:center;
 }
 
+.dta_inv{
+  background-color:#FFDDDD;
+}
+
 .tblHeader{
   background-color:#DDDDDD;
   border-bottom:solid 1px black;
