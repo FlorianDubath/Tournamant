@@ -198,8 +198,55 @@ echo'
         
         echo' <span class="btnBar"> 
                    <a class="pgeBtn" href="listingcat.php" title="Fermer" >Fermer</a>
+               </span>';
+               
+ if ($cat_completed==1){
+          echo'<span class="h_title">
+               Résultats
                </span>
-             <span class="h_txt"> <span class="btnBar"> Participants  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'part_list\'), \'hidden_pannel\')">montrer/cacher</a></span></span>
+               
+                 <table class="wt t4">
+      <tr class="tblHeader">
+      <th>Classement</th>
+      <th>Nom Prénom</th>
+      <th>Club</th>
+      </tr>';
+      $mysqli= ConnectionFactory::GetConnection(); 
+      
+      
+      $stmt = $mysqli->prepare("select
+                                 RankId,
+                                 Medal,
+                                 TournamentCompetitor.Surname,
+                                 TournamentCompetitor.Name,  
+                                 TournamentClub.Name
+                             FROM ActualCategoryResult
+                             INNER JOIN TournamentCompetitor on TournamentCompetitor.Id =  Competitor1Id
+                             INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
+                             WHERE  ActualCategoryId=?");
+     $stmt->bind_param("i", $actual_cat_Id );
+     $stmt->bind_result( $rk, $Medal, $Surname, $Name, $Club);
+     $stmt->execute();
+     
+     while ($stmt->fetch()){
+          echo ' <tr class="result_'.$Medal.'">
+          <td>'.$rk.'</td>
+      <td>'.$Surname.' '.$Name.'</td>
+      <td>'. $Club.'</td>
+      </tr>';
+
+     }
+     
+     $stmt->close();
+     echo '</table>';
+               
+               
+            
+      }               
+               
+               
+               
+ echo'            <span class="h_title"> Participants  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'part_list\'), \'hidden_pannel\')">montrer/cacher</a></span>
        <span id="part_list" class="'; 
        if ($started==1) {echo'hidden_pannel';}
        echo'">    
@@ -227,7 +274,7 @@ echo'
                              INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
                              INNER JOIN ActualCategory ON ActualCategory.CategoryId = TournamentRegistration.CategoryId OR ActualCategory.Category2Id = TournamentRegistration.CategoryId
                              WHERE  ActualCategory.Id=?
-                             ORDER BY ClubId, TournamentCompetitor.Surname, TournamentCompetitor.Name");
+                             ORDER BY TournamentCompetitor.Surname, TournamentCompetitor.Name");
      $stmt->bind_param("i", $actual_cat_Id );
      $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence);
      $stmt->execute();
@@ -252,7 +299,13 @@ echo'
      $stmt->close();
      echo '</table></span>';
      
-     echo ' <span class="h_txt"> <span class="btnBar"> Combats (Durée :'.$cat_dur.'min)</span></span>
+           
+     
+     
+     
+
+     
+     echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>
      
           <table class="wt t4">
       <tr class="tblHeader">
@@ -319,7 +372,7 @@ echo'
                                  <input type="hidden" name="pv1" value="10" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Ippon">
+                                 <input class="resbtn" type="submit" value="Ippon">
                        </form>
                        
                        <form action="figtRes.php" method="post">
@@ -328,7 +381,7 @@ echo'
                                  <input type="hidden" name="pv1" value="7" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Waza-ari ">
+                                 <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
                        <!--
                        <form action="figtRes.php" method="post">
@@ -337,7 +390,7 @@ echo'
                                  <input type="hidden" name="pv1" value="1" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Décision">
+                                 <input  class="resbtn" type="submit" value="Décision">
                        </form>
                        --!>
                        
@@ -363,7 +416,7 @@ echo'
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="10" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Ippon">
+                                 <input class="resbtn" type="submit" value="Ippon">
                        </form>
                        
                        <form action="figtRes.php" method="post">
@@ -372,7 +425,7 @@ echo'
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="7" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Waza-ari ">
+                                 <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
                        <!--
                        <form action="figtRes.php" method="post">
@@ -381,7 +434,7 @@ echo'
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="1" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
-                                 <input type="submit" value="Décision">
+                                 <input class="resbtn" type="submit" value="Décision">
                        </form>
                        --!>
                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
@@ -428,52 +481,6 @@ echo'
      echo '</table>';
      
  
-     
-       
-             
-      if ($cat_completed==1){
-          echo'<span class="h_title">
-               Résultats
-               </span>
-               
-                 <table class="wt t4">
-      <tr class="tblHeader">
-      <th>Classement</th>
-      <th>Nom Prénom</th>
-      <th>Club</th>
-      </tr>';
-      $mysqli= ConnectionFactory::GetConnection(); 
-      
-      
-      $stmt = $mysqli->prepare("select
-                                 RankId,
-                                 TournamentCompetitor.Surname,
-                                 TournamentCompetitor.Name,  
-                                 TournamentClub.Name
-                             FROM ActualCategoryResult
-                             INNER JOIN TournamentCompetitor on TournamentCompetitor.Id =  Competitor1Id
-                             INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
-                             WHERE  ActualCategoryId=?");
-     $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $rk,  $Surname, $Name, $Club);
-     $stmt->execute();
-     
-     while ($stmt->fetch()){
-          echo ' <tr class="result_'.$rk.'">
-          <td>'.$rk.'</td>
-      <td>'.$Surname.' '.$Name.'</td>
-      <td>'. $Club.'</td>
-      </tr>';
-
-     }
-     
-     $stmt->close();
-     echo '</table>';
-               
-               
-            
-      }     
-      
       
     include '_visualizationHelper.php';   
       $mysqli= ConnectionFactory::GetConnection(); 

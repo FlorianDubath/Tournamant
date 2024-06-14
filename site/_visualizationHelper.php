@@ -61,7 +61,7 @@ function plot_pool($step_id, $catName, $stepName){
     // background and grid
      
     echo '
-      <svg height="'.(202+100*count($comp)).'" width="'.(300+100*count($comp)).'">';
+      <svg width="100%" height="auto" viewBox="0 0 '.(300+100*count($comp)).' '.(202+100*count($comp)).'">';
     for ($counter=0; $counter<count($comp); $counter+=1) {
         echo ' 
             <rect width="200" height="100" x="0" y="'.(200+100*$counter).'" style="fill:rgb(230,230,230);"/>
@@ -235,7 +235,7 @@ function plot_table($top_step_id, $catName){
  
     // background and grid
     if ($multiple) {
-         echo '<svg height="400" width="900">';
+         echo '<svg  width="100%" height="auto" viewBox="0 0 900 400" >';
          if ($h1_type==1) {
             echo '      
             <rect width="200" height="80" x="200" y="10"   style="fill:rgb(230,230,230);stroke-width:2;stroke:black"/>
@@ -318,12 +318,12 @@ function plot_table($top_step_id, $catName){
         }
       
     } else {
-        echo '<svg height="200" width="650">
+        echo '<svg  width="100%" height="auto" viewBox="0 0 650 200" >
         <rect width="200" height="80" x="200" y="10"   style="fill:rgb(230,230,230);stroke-width:2;stroke:black"/>
         <rect width="200" height="80" x="200" y="110"   style="fill:rgb(230,230,230);stroke-width:2;stroke:black"/>
         <rect width="200" height="80" x="440" y="60"   style="fill:rgb(230,230,230);stroke-width:2;stroke:black"/>
    
-        <line x1="400" y1="50" x2=422" y2="50" style="stroke:black;stroke-width:4" />
+        <line x1="400" y1="50" x2="422" y2="50" style="stroke:black;stroke-width:4" />
         <line x1="400" y1="150" x2="422" y2="150" style="stroke:black;stroke-width:4" />
         <line x1="420" y1="50" x2="420" y2="150" style="stroke:black;stroke-width:4" />
         <line x1="420" y1="100" x2="440" y2="100" style="stroke:black;stroke-width:4" />';
@@ -347,12 +347,12 @@ function plot_table($top_step_id, $catName){
         
           if ($f_1_pv>0) {
               echo'
-                <text x="490" y="90" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
-                <text x="490" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_1_name.'</text>';
+                <text x="540" y="90" fill="black" font-size="20" text-anchor="middle">'.$f_1_surname.'</text>
+                <text x="540" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_1_name.'</text>';
           } else if ($f_2_pv>0) {
              echo'
-                <text x="490" y="90" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
-                <text x="490" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_2_name.'</text>';
+                <text x="540" y="90" fill="black" font-size="20" text-anchor="middle">'.$f_2_surname.'</text>
+                <text x="540" y="120" fill="black" font-size="20" text-anchor="middle">'.$f_2_name.'</text>';
           }
     }
      

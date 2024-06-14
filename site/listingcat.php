@@ -116,19 +116,25 @@ echo '
              echo 'Terminée';
          } else if ($a_cat_id and $a_cat_id>0){
              echo 'En cours';
-         }  else if ($now > $w_end && $_SESSION['_IsMainTable']==1) {
-            echo' <a href="acat.php?cid='.$catId.'">Préparer</a>';
+         }  else if ($now > $w_end && $_SESSION['_IsMainTable']==1 ) {
+            if ($weighted>0) {
+                 echo' <a href="acat.php?cid='.$catId.'">Préparer</a>';
+            } else {
+                 echo '--';
+            }
          } else {
              echo 'En attente';
          }       
                    
          echo'</td>
                    <td>';
-         if (empty($a_cat_id)){
+         if ($total>0) {
+             if (empty($a_cat_id)){
                    echo'<a href="cat.php?cid='.$catId.'&m=1">A peser</a>';
-                   }
-                   echo'
-                   <a href="cat.php?cid='.$catId.'">Détails</a></td></tr>';
+               }
+               echo'
+               <a href="cat.php?cid='.$catId.'">Détails</a></td></tr>';
+        }
      }
      
      $stmt->close();

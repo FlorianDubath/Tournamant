@@ -54,8 +54,8 @@ echo '
                </span>
             <span class="h_txt">
            
-	             <form action="./listingreg.php" method="get">
-	                Filtrer les inscrits: <br/>
+	             <form class="filter" action="./listingreg.php" method="get">
+	                <span  class="h_title">Filtrer les inscrits: </span>
 	                
 	                Filtre sur "Nom Prénom" : <input type="text" name="fnm" value="'.$fnm.'"/><br/>
 	                Filtre sur le club : <select name="fcid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
@@ -70,11 +70,14 @@ echo '
 	           $stmt->close();
                
                echo'
-                </select><br/>
+                </select>
+                 <span class="btnBar"> 
 	                <input class="pgeBtn" type="submit" value="Appliquer">
+	                </span>
 	             </form>
 	             
 	             <span class="btnBar"> 
+	               <a class="pgeBtn"  href="pays.php" title="Payements Groupés">Payements Groupés</a>
 	               <a class="pgeBtn"  href="regs.php" title="Inscriptions Groupées">Inscriptions Groupées</a>
 	               <a class="pgeBtn"  href="reg.php?id=0" title="Nouvel Inscrit">Nouvel Inscrit</a>
 	               

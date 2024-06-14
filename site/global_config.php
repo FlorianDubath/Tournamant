@@ -39,6 +39,7 @@ if($_POST && !empty($_POST['del'])) {
         $mysqli->query("DELETE FROM StepLinking;");
         $mysqli->query("DELETE FROM CategoryStep;");
         $mysqli->query("DELETE FROM ActualCategory;");
+        $mysqli->query("DELETE FROM TournamentRegistration;");
         $mysqli->query("DELETE FROM TournamentCompetitor;");
         $mysqli->commit();
     } catch (mysqli_sql_exception $exception) {
@@ -79,7 +80,7 @@ echo'
 		            Etes-vous sur ? <br/> 
 		            Cette opération ne peut être annulée !
 		           </span> 
-		            Peut-être voulez-vous sauvegarder encore une fois <a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
+		            Peut-être voulez-vous sauvegarder encore une fois <br/><a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <br/><a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
 		            
 		            
 		 	    <span class="btnBar"> 

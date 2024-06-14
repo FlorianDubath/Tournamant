@@ -443,3 +443,11 @@ CREATE TABLE OTA(
      CONSTRAINT fk_ota_us FOREIGN KEY (userId) REFERENCES  TournamentSiteUser(Id)
 );
 
+
+
+
+
+ALTER TABLE ActualCategoryResult ADD COLUMN Medal INT NOT NULL DEFAULT 0;
+
+
+ALTER tABLE ActualCategory ADD COLUMN Dummy INT NOT NULL DEFAULT 0;

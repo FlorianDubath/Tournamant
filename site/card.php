@@ -100,7 +100,7 @@ echo'
          <div class="h">'; 
 if ( ! empty($_SESSION['_UserId'])) {
     if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1) {
-       echo '<span class="item_action"><span class="ftitle">ACCUEIL</span>';
+       echo '<span class="item_action"><span class="h_title">ACCUEIL</span>';
        if (!empty($Id) && $Id>0) {
             
             if (!empty($_POST['pr'])&&$_POST['pr']==1) { 
@@ -139,9 +139,9 @@ if ( ! empty($_SESSION['_UserId'])) {
       	       $stmt->execute();
                $stmt->bind_result($trid,$cat_n,$cat_sn,$cat_gen,$payed);
                while ($stmt->fetch()){
-                    echo ' &nbsp; &nbsp; Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' :';
+                    echo ' <span class="cacceuil"> Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' :';
                     if ($payed==1) {
-                        echo ' Payement reçu<br/>';
+                        echo ' Payement reçu !</span>';
                     } else {
                         echo '<form action="./card.php" method="post">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
@@ -149,7 +149,7 @@ if ( ! empty($_SESSION['_UserId'])) {
                              <input type="hidden" name="trid" value="'.$trid.'"/> 
                              A payer! 
                              <input class="pgeBtn"  type="submit" value="Encaisser"/> 
-                            </form> <br/>';
+                            </form> </span>';
                     }
                }
             
@@ -175,6 +175,7 @@ if ( ! empty($_SESSION['_UserId'])) {
         echo '</span>'; 
     }
     
+ 
     if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
          if (!empty($_POST['wgok'])&&$_POST['wgok']==1 && !empty($_POST['wgc']) && !empty($_POST['trid'])) { 
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=?, WeightCheckedBy=? WHERE Id=?");
@@ -184,7 +185,8 @@ if ( ! empty($_SESSION['_UserId'])) {
          } 
     
     
-       echo '<span class="item_action"><span class="ftitle">PESEE</span>Catégorie:';
+       echo '<span class="item_action"><span class="h_title">PESEE</span>
+              <span class="fsubtitle">Catégorie :</span>';
               $stmt = $mysqli->prepare("SELECT 
 	                                            TournamentRegistration.Id, 
 	                                            TournamentAgeCategory.Name,
@@ -209,10 +211,10 @@ if ( ! empty($_SESSION['_UserId'])) {
                $stmt->bind_result($tr_to_w_id, $cat_n,$cat_sn,$cat_gen, $dpw, $w_to_confirm, $age_cat_id, $weighting_begin, $weighting_end,$wck);
                while ($stmt->fetch()){
                     if ($wck==1) {
-                           echo '<div>&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</div>';
+                           echo '<span class="cacceuil">&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</span>';
                     } else {
                     
-                    echo '<form action="./card.php" method="post">
+                    echo '<span class="cacceuil"><form action="./card.php" method="post">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
                              <input type="hidden" name="wgok" value="1"/>
@@ -224,7 +226,7 @@ if ( ! empty($_SESSION['_UserId'])) {
                                 echo' <input class="pgeBtn"  type="submit" value="Poid vérifié">';
                             }
                             echo '</span>
-                          </form>';
+                          </form></span>';
                     }
                
                
@@ -291,6 +293,7 @@ echo'
    <span class="ftitle">
 	         CATEGORIE(S)
 	           </span>';
+
 	              
 	           $stmt = $mysqli->prepare("SELECT 
 	                                            TournamentRegistration.Id, 
@@ -304,7 +307,8 @@ echo'
 	                                            TournamentWeighting.WeightingBegin,
 	                                            TournamentWeighting.WeightingEnd,
 	                                            ActualCategory.Name,
-	                                            ActualCategoryResult.RankId
+	                                            ActualCategoryResult.RankId,
+	                                            ActualCategoryResult.Medal
 	                                     FROM TournamentRegistration 
 	                                     INNER JOIN TournamentCategory ON TournamentRegistration.CategoryId=TournamentCategory.Id
 	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
@@ -318,7 +322,7 @@ echo'
 	                            
                $stmt->bind_param("i", $Id);         
       	       $stmt->execute();
-               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$checkedin,$weight_checked, $weighting_begin, $weighting_end, $acname, $acrk);
+               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$checkedin,$weight_checked, $weighting_begin, $weighting_end, $acname, $acrk, $medal);
                $cat_regist = array();
                while ($stmt->fetch()){
                    $pay_cls = "c_p_todo";
@@ -369,7 +373,7 @@ echo'
                           echo '<span class="c_p_element c_p_done"> Pesée </span>';
                           
                           if (!empty($acrk)) {
-                               echo '<span class="c_p_element result_'.$acrk.'"> Classement : '.wrap_res($acrk).' </span>';
+                               echo '<span class="c_p_element result_'.$medal.'"> Classement : '.wrap_res($acrk).' </span>';
                           }
                           
                       }

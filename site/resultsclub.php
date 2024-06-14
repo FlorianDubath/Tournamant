@@ -58,7 +58,7 @@ writeBand();
     </div>
 
     <div id="print" style="display:none;">
-         <img id="logo" src="css/Logo_ACG_JJJ_light.png"></img>
+         <img id="logo_lt" src="css/Logo_ACG_JJJ_light.png"></img>
     </div>
     
     </div>
@@ -115,7 +115,7 @@ function getImgData(id) {
 }
 
 function add_title(doc){
-  var imgAddData = wrapImgData(getImgData("logo"));
+  var imgAddData = wrapImgData(getImgData("logo_lt"));
   doc.addImage(imgAddData, "PNG", doc.internal.pageSize.width/2-60,doc.internal.pageSize.height/2-60, 120, 120);
   
   doc.setFontSize(16).setFont("helvetica", "bold");

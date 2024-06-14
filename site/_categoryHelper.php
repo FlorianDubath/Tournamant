@@ -721,6 +721,43 @@ function get_full_result($ActualCategoryId){
     }  
 }
 
+function promote_Unique($tc_id_1){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $stmt = $mysqli->prepare("SELECT
+                                  TournamentAgeCategory.Name,
+                                  TournamentAgeCategory.ShortName,
+                                  TournamentGender.Name,     
+                                  IFNULL(-TC1.MaxWeight, IFNULL(concat('+',TC1.MinWeight),'OPEN')),
+                                  TournamentRegistration. CompetitorId
+                              FROM TournamentCategory TC1
+                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id=TC1.AgeCategoryId
+                              INNER JOIN TournamentGender on TournamentGender.Id=TournamentAgeCategory.GenderId
+                              INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
+                              LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CategoryId=TC1.Id AND WeightChecked=1 
+
+                              WHERE  TC1.Id=?
+                         ");               
+    $stmt->bind_param("i", $tc_id_1);         
+    $stmt->bind_result($cat_n,$cat_sn,$cat_gen,$weight,$compId);   
+    $stmt->execute(); 
+    $stmt->fetch(); 
+    $stmt->close(); 
+    
+    $name = $cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight;
+
+    $stmt = $mysqli->prepare("INSERT INTO ActualCategory (CategoryId,Name,IsCompleted,Dummy) VALUES (?,?,1,1)");
+    $stmt->bind_param("is", $tc_id_1, $name);         
+    $stmt->execute();
+    $actual_category_id = $mysqli->insert_id;
+    $stmt->close();
+    
+    $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,1,1)");
+    $stmt->bind_param("ii", $actual_category_id, $compId );   
+    $stmt->execute();
+    $actual_category_id = $mysqli->insert_id;
+    $stmt->close();      
+}
+
 function open_Category($tc_id_1,$tc_id_2,$name){
     $mysqli= ConnectionFactory::GetConnection(); 
     $actual_category_id = -1;
@@ -839,18 +876,49 @@ function open_Category($tc_id_1,$tc_id_2,$name){
 function close_category($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     $result = get_full_result($ActualCategoryId);
+    
+    
     if (! empty($result)){
-        foreach($result as $rank=>$cid){
-            if (!is_array($cid)) {
-                $cid=array($cid);    
-            }
-            foreach($cid as $compid){
-                $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId) VALUES (?,?,?)");
-                $stmt->bind_param("iii", $ActualCategoryId, $compid, $rank);         
-                $stmt->execute();
-                $stmt->close();
-            }
+    /*
+        // TODO check for only Pool and if so add 4th medal and tie handling
+        // Check for tie =1 in ckĥecktie
+        $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
+        $stmt->bind_param("i", $ActualCategoryId);  
+        $stmt->bind_result($id_step);         
+        $stmt->execute();
+        $multiple=0;
+        while ($stmt->fetch()){
+            $multiple+=1;
         }
+        $stmt->close();
+        
+        if ($multiple==1) {
+            $s_res = get_step_results($id_step);
+            //"ordered"=>$res,"full"=>$results,"tie"=>$tie
+    
+    
+       } else {*/
+            $number=0;
+            $Medal=1;
+            foreach($result as $rank=>$cid){
+                if (!is_array($cid)) {
+                    $cid=array($cid);    
+                }
+                
+                foreach($cid as $compid){
+                    $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
+                    $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $Medal);         
+                    $stmt->execute();
+                    $stmt->close();
+                    $number+=1;
+                }
+                
+                if($Medal>0) {$Medal+=1;} 
+                if ($Medal==4){
+                   $Medal=0;
+                }
+            }
+     /*   }*/
         
          $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
          $stmt->bind_param("i", $ActualCategoryId);         

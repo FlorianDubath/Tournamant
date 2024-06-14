@@ -1,24 +1,15 @@
 A faire
 ------- 
 
+médaille au 4ème dans les pool ou plusieurs si tie
 
-Inscriptions multiples depuis csv
-parser numéro license (nombre 6 chifres)
-payement multiple depuis csv
+médaille dans pdf
 
-
-cas avec 1 seul participant 
-cas avec 1 seul participant + grouping
-
-Ajouter médaille au résultats + médaille au 4ème dans les pool ou plusieurs si tie
-entrer un résultat manuellement (catégorie sans combat)
-
-
-? tableau catégorie sur feuile résultats
 
 
 bug:
 ------
+
 
 
 clean db:
@@ -38,4 +29,5 @@ pool avec 3 participants (tie mais pas de combat en plus)
 pool avec 4 participants (question : médaille au 4ème?)
 2 pool + demi et finales pour 6 participants (+ avec tie dans les 2 pools)
 2 pool + demi et finales pour 7 participants avec tie dans la pool de 4 entre 234
+
 

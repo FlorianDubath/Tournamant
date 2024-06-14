@@ -74,7 +74,7 @@ function loadAge($agecatid) {
     $stmt = $mysqli->prepare("  SELECT MIN(LEAST(AC_1.MinAge,IFNULL(AC_2.MinAge,100))), MAX(GREATEST(AC_1.MaxAge,IFNULL(AC_2.MaxAge,0))) 
                                 FROM TournamentAgeCategory  AC_1
                                 LEFT OUTER JOIN TournamentDoubleSatrt on AC_1.Id=AcceptedAgeCategoryId
-                                LEFT OUTER JOIN TournamentAgeCategory  AC_2  on AC_1.Id=MainAgeCategoryId
+                                LEFT OUTER JOIN TournamentAgeCategory  AC_2  on AC_2.Id=MainAgeCategoryId
                                 WHERE AC_1.Id=?");
     $stmt->bind_param('i',$agecatid);
     $stmt->execute();
@@ -92,7 +92,7 @@ function getOpenCat($agecatid){
     $stmt->bind_result($catId);
     $stmt->fetch();
     $stmt->close();
-    return array("value"=>$catId, "error"=>False);;
+    return array("value"=>$catId, "error"=>False);
 }
 
 function parseGrade($grades, $str) {
@@ -144,44 +144,50 @@ function parseName($str) {
     }
 }
 
-/*
-CREATE TABLE TournamentCompetitor(
-  Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY , 
-  StrId  VARCHAR( 12 ) NOT NULL,
-  Name VARCHAR( 255 ) NOT NULL,
-  Surname VARCHAR( 255 ) NOT NULL,
-  Birth  Date NOT NULL, 
-  GenderId INT NOT NULL , 
-  LicenceNumber INT NOT NULL , 
-  GradeId  INT NOT NULL , 
-  ClubId  INT NOT NULL , 
-  CheckedIn TINYINT NOT NULL DEFAULT 0,
-  
-  CONSTRAINT fk_comp_gen FOREIGN KEY (GenderId) REFERENCES TournamentGender(Id),
-  CONSTRAINT fk_comp_grade FOREIGN KEY (GradeId) REFERENCES TournamentGrade(Id),
-  CONSTRAINT fk_comp_club FOREIGN KEY (ClubId) REFERENCES TournamentClub(Id)
-);  
-
-
-CREATE TABLE TournamentRegistration(
-  Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-  CompetitorId INT NOT NULL, 
-  CategoryId INT NOT NULL,
-  Payed TINYINT NOT NULL DEFAULT 0,
-  WeightChecked TINYINT NOT NULL DEFAULT 0,
-  CONSTRAINT fk_reg_com FOREIGN KEY (CompetitorId) REFERENCES TournamentCompetitor(Id),
-  CONSTRAINT fk_reg_cat FOREIGN KEY (CategoryId) REFERENCES  TournamentCategory(Id)
-);
-*/
-
 function insertCompetitor($name, $surname, $birth, $gender, $licence, $grade, $club){
-   // check for user with same license, if same name warning + return id else error
-   // else return inserted id
+    $mysqli= ConnectionFactory::GetConnection();
+    $stmt = $mysqli->prepare("SELECT Id, Name, Surname FROM TournamentCompetitor WHERE LicenceNumber=? ");
+    $stmt->bind_param('i',$licence);
+    $stmt->execute();
+    $stmt->bind_result($comp_id, $alt_name, $alt_surname);
+    $stmt->fetch();
+    $stmt->close();
+    if (empty($comp_id)) {
+        $StrId = substr(md5($name.$surname.date('Y-m-d:h:m:s')),0,12);
+        $mysqli= ConnectionFactory::GetConnection();
+        $stmt = $mysqli->prepare("INSERT INTO TournamentCompetitor (StrId, Name, Surname, Birth, GenderId, LicenceNumber, GradeId, ClubId) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt->bind_param('ssssiiii', $StrId, $name, $surname, $birth, $gender, $licence, $grade, $club);
+        $stmt->execute();
+        $comp_id = $mysqli->insert_id;
+        $stmt->close();
+        return array("value"=>$comp_id, "error"=>False, "warning"=>False, "message"=>"");
+    } else {
+        if ($surname==$alt_surname) {
+             return array("value"=>$comp_id, "error"=>False, "warning"=>True, "message"=>"Compétiteur déjà enregistré");
+        } else {
+             return array("value"=>-1, "error"=>True, "message"=>True, "message"=>"Un autre compétiteur (".$surname." ".$name.") est inscrit avec ce numéro de licence ".$licence);
+        }
+    }
 }
 
 function insertRegistration($compid, $catid){
-   // check the combinaison do not exist => error
-   // else insert +ok
+    $mysqli= ConnectionFactory::GetConnection();
+    $stmt = $mysqli->prepare("SELECT Id FROM TournamentRegistration WHERE CompetitorId=? AND CategoryId=? ");
+    $stmt->bind_param('ii', $compid, $catid);
+    $stmt->execute();
+    $stmt->bind_result($reg_id);
+    $stmt->fetch();
+    $stmt->close();
+    if (!empty($reg_id)) {
+        return array("error"=>True, "message"=>"Enregistrement déjà effectué");
+    } else {
+        $mysqli= ConnectionFactory::GetConnection();
+        $stmt = $mysqli->prepare("INSERT INTO TournamentRegistration (CompetitorId, CategoryId) VALUES (?,?) ");
+        $stmt->bind_param('ii', $compid, $catid);
+        $stmt->execute();
+        $stmt->close();
+        return array("error"=>False, "message"=>"");
+    }
 }
 
 $mysqli= ConnectionFactory::GetConnection();
@@ -210,10 +216,10 @@ echo '
 
 	      
 	      ';
-
+$clubid = (int)$_POST['cid'];
+$agecatid = (int)$_POST['agcatid'];
 if ((int)$_POST['cid'] && (int)$_POST['agcatid'] && $_POST['bulk']) {
-    $clubid = (int)$_POST['cid'];
-    $agecatid = (int)$_POST['agcatid'];
+
     $isOpen = isOpenCat($agecatid);
     
     $year = loadYear();
@@ -262,36 +268,35 @@ if ((int)$_POST['cid'] && (int)$_POST['agcatid'] && $_POST['bulk']) {
                          $message=$message.'<br/>'.$res["message"];
                      }
                  }
-                 
                  if ($valid){
-                     //TODO check for unique License number, unique in this category, insert into DB, display result
-                     echo '<tr><td >'.$parsed["surname"]["value"].'</td><td >'.$parsed["name"]["value"].'</td><td >&check; Enregistrement réussi.</td></tr>';
+                     $competitor = insertCompetitor($parsed["name"]["value"], 
+                                                    $parsed["surname"]["value"], 
+                                                    $parsed["birth"]["value"], 
+                                                    $gender, 
+                                                    $parsed["licence"]["value"], 
+                                                    $parsed["grade"]["value"], 
+                                                    $clubid);
+                     if ($competitor["error"]) {
+                          echo '<tr class="dta_inv"><td colspan="3">La ligne "'.$line.'" n\'est pas valide, elle a été ignorée : '.$competitor["message"].'</td></tr>';
+                     } else {
+                          $res = insertRegistration($competitor["value"], $parsed['cat']["value"]);
+                          if ($res["error"]) {
+                              echo '<tr class="dta_inv"><td >'.$parsed["surname"]["value"].'</td><td >'.$parsed["name"]["value"].'</td><td >&#x274C; Déjà enregistré</td></tr>';
+                          } else {
+                              echo '<tr><td >'.$parsed["surname"]["value"].'</td><td >'.$parsed["name"]["value"].'</td><td >&check; Enregistrement réussi.</td></tr>';
+                          }
+                     }
                  } else {
                     echo '<tr class="dta_inv"><td colspan="3">La ligne "'.$line.'" n\'est pas valide, elle a été ignorée : '.$message.'</td></tr>';
                  }
-            }
-           
-            
+            }    
         }
     }
     
     echo '</table><br/>
     <span class="ftitle"> NOUVELLES DONNEES :</span>';
 }
-
-
-//TODO register pending and validate them (with message)
-// split on linebreak preg_split('/\r\n|[\r\n]/', $_POST['thetextarea'])
-/*str_getcsv(
-    $_POST['bulk'],
-    string $separator = "\t",
-    string $enclosure = "",
-    string $escape = "\\"
-): array
-	    
-*/	  
-
-	         
+         
 
 echo'
                <form action="./regs.php" method="post" Id="F1">
@@ -303,7 +308,7 @@ echo'
                $stmt->bind_result($ccId,$ccname);
                while ($stmt->fetch()){
                   $sel ='';
-                  if ($ccId==$cid) { $sel=' selected ';}
+                  if ($ccId==$clubid) { $sel=' selected ';}
                   echo '<option value="'.$ccId.'" '.$sel.'>'.$ccname.'</option>';
                }
 	           $stmt->close();
@@ -325,9 +330,11 @@ echo'
 	                                    
 	                                     ORDER BY IFNULL(TAC_1.MinAge,IFNULL(TAC_1.MaxAge,1000))");       
       	       $stmt->execute();
-               $stmt->bind_result($agcatid,$trname,$trshort,$gender);
+               $stmt->bind_result($agcat_id,$trname,$trshort,$gender);
                while ($stmt->fetch()){
-                  echo '<option value="'.$agcatid.'">'.$trshort.' '.$trname.' '.$gender.'</option>';
+                  $sel ='';
+                  if ($agcat_id==$agecatid) { $sel=' selected ';}
+                  echo '<option value="'.$agcat_id.'" '.$sel.'>'.$trshort.' '.$trname.' '.$gender.'</option>';
                }
 	           $stmt->close();    
 	           echo'

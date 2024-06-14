@@ -138,7 +138,7 @@ if ($Id>0){
 	                   
 echo             '    </span>
 
-	      <form action="./reg.php" method="post" Id="F1">
+	      <form action="./reg.php" method="post" Id="F1" ></form>
 	      ';
 	         
 	         if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}

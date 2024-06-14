@@ -41,6 +41,7 @@ echo '
                                  ActualCategory.Id,
                                  ActualCategory.Name,
                                  ActualCategoryResult.RankId,
+                                 ActualCategoryResult.Medal,
                                  TournamentCompetitor.Name,
                                  TournamentCompetitor.Surname,
                                  TournamentClub.Name
@@ -51,9 +52,9 @@ echo '
                              INNER JOIN TournamentCategory ON TournamentCategory.Id = ActualCategory.CategoryId
                              INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
                              INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id
-                             ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC, ActualCategoryResult.RankId ASC;
+                             ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC, ActualCategory.Id, ActualCategoryResult.RankId ASC;
                            ");
-     $stmt->bind_result( $acat_id, $agcat_name,$rank,$name,$surname,$club);
+     $stmt->bind_result( $acat_id, $agcat_name,$rank,$medal,$name,$surname,$club);
      $stmt->execute();
      
     
@@ -78,7 +79,7 @@ echo '
             
         }
         
-        echo ' <tr class="result_'.$rank.'">
+        echo ' <tr class="result_'.$medal.'">
           <td>'.$rank.'</td>
       <td>'.$surname.' '.$name.'</td>
       <td>'. $club.'</td>

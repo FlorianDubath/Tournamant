@@ -163,6 +163,13 @@ font-weight:bold;
   text-align:left;
 }
 
+.resbtn{
+   display:block; 
+   padding:20px;
+   width:100px;
+   margin:7px auto 7px auto;
+}
+
 
 .card {
    margin:10px;
@@ -187,9 +194,24 @@ display:inline-block;
 }
 
 .cprogress{
-    display:inline-block;    
+    display:block;    
     border:solid 1px black;
     padding:3px;
+}
+
+.cacceuil{
+    display:block;    
+    border:solid 1px black;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.filter{
+    text-align:center;
+    display:block;    
+    border:solid 1px black;
+    padding:5px;
+    margin-bottom:5px;
 }
 
 .c_p_todo{
@@ -223,6 +245,7 @@ display:inline-block;
 
 .c_p_title{
  display:block;
+ font-weight:bold;
 }
 
 .c_p_element {
@@ -280,6 +303,11 @@ td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active,  .gridButton:hover,
 td, th {
    padding:3px;
    text-align:center;
+}
+
+.fsubtitle{
+  display: block;
+  font-weight:bold;
 }
 
 .dta_inv{
