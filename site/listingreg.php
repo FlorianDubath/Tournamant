@@ -50,6 +50,7 @@ echo '
             </span>
              <span class="btnBar"> 
                    <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" target="_blanck" href="Inscriptions.xltx" title="Fichier Club" >Fichier Club</a>
                    <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>
                </span>
             <span class="h_txt">

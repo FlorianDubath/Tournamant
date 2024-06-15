@@ -262,6 +262,10 @@ display:inline-block;
     line-height: 2em; 
 }
 
+.sup{
+   font-size:12px;
+}
+
 td > a, .pgeBtn, .gridButton {
   display:inline-block; 
   text-decoration:none;
@@ -361,10 +365,13 @@ background-color:#FFBBBB;
   color:grey;
 }
 
+
+
 .result_1{
  background-color:#d4af37;
  }
  
+
  .result_2{
  background-color:#c0c0c0;
  }

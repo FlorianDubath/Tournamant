@@ -230,7 +230,7 @@ echo'
      
      while ($stmt->fetch()){
           echo ' <tr class="result_'.$Medal.'">
-          <td>'.$rk.'</td>
+          <td>'.$medal_char[$Medal].$rk.'</td>
       <td>'.$Surname.' '.$Name.'</td>
       <td>'. $Club.'</td>
       </tr>';

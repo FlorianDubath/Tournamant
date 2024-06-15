@@ -16,6 +16,7 @@ include '_commonBlock.php';
 writeHead();
 $mysqli= ConnectionFactory::GetConnection(); 
 
+
 echo'
 <body>
     <div class="f_cont">';
@@ -80,7 +81,7 @@ echo '
         }
         
         echo ' <tr class="result_'.$medal.'">
-          <td>'.$rank.'</td>
+          <td>'.$medal_char[$medal].$rank.'</td>
       <td>'.$surname.' '.$name.'</td>
       <td>'. $club.'</td>
       </tr>';

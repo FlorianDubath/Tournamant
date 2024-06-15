@@ -879,7 +879,9 @@ function close_category($ActualCategoryId){
     
     
     if (! empty($result)){
-    /*
+    
+        $skip_nominal=False;
+    
         // TODO check for only Pool and if so add 4th medal and tie handling
         // Check for tie =1 in ckĥecktie
         $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
@@ -894,10 +896,42 @@ function close_category($ActualCategoryId){
         
         if ($multiple==1) {
             $s_res = get_step_results($id_step);
-            //"ordered"=>$res,"full"=>$results,"tie"=>$tie
+            
+	    $skip_nominal=True;
+
+	    $curr_score=-1;
+	    $cur_rank=1;
+	    $counter=1;
+	    $palmares=array();
+	    foreach($s_res['full'] as $comp_id => $score){
+	       if ($curr_score!=$score){
+	           $cur_rank=$counter;
+	           $palmares[$cur_rank]=array();
+	           $curr_score=$score;
+	       }
+		   
+	       array_push($palmares[$cur_rank],$comp_id);
+		   
+	       $counter+=1;
+	    }
+            
+            $counter=0;
+            foreach($palmares as $rank=>$clist){
+                foreach($clist as $compid){
+                    $medal=$rank;
+                    if ($medal>3) { $medal=0;}
+                    if ($medal==0 && $counter==3){$medal=3; } // in a pool the forth get also a bronz medal 
+                    $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
+                    $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $medal);         
+                    $stmt->execute();
+                    $stmt->close();
+                    $counter +=1;
+                }
+            }   
+        } 
     
-    
-       } else {*/
+   
+       if (!$skip_nominal) {
             $number=0;
             $Medal=1;
             foreach($result as $rank=>$cid){
@@ -918,7 +952,7 @@ function close_category($ActualCategoryId){
                    $Medal=0;
                 }
             }
-     /*   }*/
+       }
         
          $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
          $stmt->bind_param("i", $ActualCategoryId);         

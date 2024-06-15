@@ -6,9 +6,9 @@ session_start();
 
 function wrap_res($rk){
   if ($rk==1){
-  return $rk.'<sup>re</sup>';
+  return $rk.'<span class="sup">re</span>';
   } else {
-  return $rk.'<sup>e</sup>';
+  return $rk.'<span class="sup">e</span';
   }
 }
 
@@ -373,7 +373,7 @@ echo'
                           echo '<span class="c_p_element c_p_done"> Pesée </span>';
                           
                           if (!empty($acrk)) {
-                               echo '<span class="c_p_element result_'.$medal.'"> Classement : '.wrap_res($acrk).' </span>';
+                               echo '<span class="c_p_element result_'.$medal.'"> Classement : '.$medal_char[$medal].wrap_res($acrk).' </span>';
                           }
                           
                       }

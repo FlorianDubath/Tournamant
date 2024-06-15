@@ -59,6 +59,9 @@ writeBand();
 
     <div id="print" style="display:none;">
          <img id="logo_lt" src="css/Logo_ACG_JJJ_light.png"></img>
+         <img id="gold" src="css/gold.png"></img>
+         <img id="silver" src="css/silver.png"></img>
+         <img id="bronze" src="css/bronze.png"></img>
     </div>
     
     </div>
@@ -127,12 +130,16 @@ function add_title(doc){
 
 function makePDF(pdf_name) {
 
-  var doc = new jsPDF({format: \'a4\',orientation:\'p\'});';
+  var doc = new jsPDF({format: \'a4\',orientation:\'p\'});
+  var imgGold = wrapImgData(getImgData("gold"));
+  var imgSilver = wrapImgData(getImgData("silver"));
+  var imgBronze = wrapImgData(getImgData("bronze"));';
   
      $stmt = $mysqli->prepare("select
                                  ActualCategory.Id,
                                  ActualCategory.Name,
                                  ActualCategoryResult.RankId,
+                                 ActualCategoryResult.Medal,
                                  TournamentCompetitor.Name,
                                  TournamentCompetitor.Surname,
                                  TournamentClub.Name
@@ -146,7 +153,7 @@ function makePDF(pdf_name) {
                              ".$where_clause."
                              ORDER bY TournamentClub.Name, ActualCategoryResult.RankId ASC, TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC;
                            ");
-     $stmt->bind_result( $acat_id, $agcat_name,$rank,$name,$surname,$club);
+     $stmt->bind_result( $acat_id, $agcat_name,$rank,$medal,$name,$surname,$club);
      $stmt->execute();
      
      
@@ -171,6 +178,14 @@ function makePDF(pdf_name) {
               $position= 55;
               $current_club=$club;
         }
+        
+       if ($medal==1){
+          echo 'doc.addImage(imgGold, "PNG", 22, '.($position-6).', 5, 8);';
+       } else if ($medal==2){
+          echo 'doc.addImage(imgSilver, "PNG", 22, '.($position-6).', 5, 8);';
+       } else if ($medal==1){
+          echo 'doc.addImage(imgBronze, "PNG", 22, '.($position-6).', 5, 8);';
+       } 
         
         echo "doc.text('".$agcat_name." - ".$rank."e : ".$surname." ".$name."', 30, ".$position.");";
        
