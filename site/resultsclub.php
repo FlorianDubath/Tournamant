@@ -183,7 +183,7 @@ function makePDF(pdf_name) {
           echo 'doc.addImage(imgGold, "PNG", 22, '.($position-6).', 5, 8);';
        } else if ($medal==2){
           echo 'doc.addImage(imgSilver, "PNG", 22, '.($position-6).', 5, 8);';
-       } else if ($medal==1){
+       } else if ($medal==3){
           echo 'doc.addImage(imgBronze, "PNG", 22, '.($position-6).', 5, 8);';
        } 
         

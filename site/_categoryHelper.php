@@ -894,7 +894,7 @@ function close_category($ActualCategoryId){
         }
         $stmt->close();
         
-        if ($multiple==1) {
+        if ($multiple==1 && count($result)>2) {
             $s_res = get_step_results($id_step);
             
 	    $skip_nominal=True;

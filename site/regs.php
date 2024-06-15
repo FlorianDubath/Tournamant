@@ -162,10 +162,10 @@ function insertCompetitor($name, $surname, $birth, $gender, $licence, $grade, $c
         $stmt->close();
         return array("value"=>$comp_id, "error"=>False, "warning"=>False, "message"=>"");
     } else {
-        if ($surname==$alt_surname) {
+        if (trim($surname)==trim($alt_surname)) {
              return array("value"=>$comp_id, "error"=>False, "warning"=>True, "message"=>"Compétiteur déjà enregistré");
         } else {
-             return array("value"=>-1, "error"=>True, "message"=>True, "message"=>"Un autre compétiteur (".$surname." ".$name.") est inscrit avec ce numéro de licence ".$licence);
+             return array("value"=>-1, "error"=>True, "message"=>True, "message"=>"Un autre compétiteur (".$alt_surname." ".$alt_name.") est inscrit avec ce numéro de licence ".$licence);
         }
     }
 }

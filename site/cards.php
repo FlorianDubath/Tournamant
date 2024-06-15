@@ -241,7 +241,7 @@ function makePDF(pdf_name) {
 
 }
 
- makePDF(\'test.pdf\');
+ makePDF(\'Cartes_combatants.pdf\');
 
 </script>
 </html>';

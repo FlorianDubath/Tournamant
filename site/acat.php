@@ -160,7 +160,7 @@ if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
                 $choice=$choice.$last_cat.'<span class="f_info"> <input type="checkbox" name="ccid"  checked disabled/> <input type="hidden" name="ccid" value="'.$catId.'" /> Category '.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.' avec '.$weighted.' inscrit(s)';
                 
                 if ($weighted==1 && empty($dummy)){
-                    $choice=$choice.' <a class="pgeBtn" href="./acat.php?pscid=1&cid='.$catId.'"> Promouvoir l\'unique inscrit comme champion"</a>';
+                    $choice=$choice.' <a class="pgeBtn" href="./acat.php?pscid=1&cid='.$catId.'"> Promouvoir l\'unique inscrit comme champion</a>';
                 }
                 
                 $choice=$choice.'</span>';
