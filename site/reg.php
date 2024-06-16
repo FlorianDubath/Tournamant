@@ -87,6 +87,10 @@ if($_POST && !empty($_POST['id'])) {
                  $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
                  $stmt->bind_param("i", $_POST['trid'] );
                  $stmt->execute();
+             } else if (!empty($_POST['pay']) && ((int)$_POST['pay']==-1)) {
+                 $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=0 WHERE Id=?");
+                 $stmt->bind_param("i", $_POST['trid'] );
+                 $stmt->execute();
              } 
          } else {
              $stmt = $mysqli->prepare("UPDATE TournamentCompetitor  SET Name=?, Surname=?, Birth=?, GenderId=?, LicenceNumber=?, GradeId=?, ClubId=? WHERE Id=?");
@@ -227,7 +231,8 @@ echo             '    </span>
 	                                            TournamentAgeCategory.ShortName,
 	                                            IFNULL(-MaxWeight, IFNULL(MinWeight,'OPEN')),
 	                                            TournamentGender.Name,
-	                                            TournamentRegistration.Payed
+	                                            TournamentRegistration.Payed,
+	                                            TournamentRegistration.WeightChecked
 	                                     FROM TournamentRegistration 
 	                                     INNER JOIN TournamentCategory ON TournamentRegistration.CategoryId=TournamentCategory.Id
 	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
@@ -237,24 +242,36 @@ echo             '    </span>
 	                            
                $stmt->bind_param("i", $New_Id );         
       	       $stmt->execute();
-               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed);
+               $stmt->bind_result($trid,$trname,$trshort,$wgt,$gender,$payed,$weighted);
                while ($stmt->fetch()){
                   echo '<tr><td>'.$trshort.' '.$trname.' '.$gender.'</td>
                             <td>'.$wgt.'</td>
                             <td>'.$payed.'</td>
-                            <td>
+                            <td>';
+                 if ($weighted==0){
+                        echo'
                                 <form action="./reg.php" method="post">
                                      <input type="hidden" name="id" value="'.$Id.'"/>
                                      <input type="hidden" name="trid" value="'.$trid.'"/>
                                      <input type="hidden" name="delt" value="1"/>
                                      <input class="gridButton" type="submit" value="Supprimer"/> 
                                 </form>';
+                 } else {
+                     echo 'Déjà pesé!';
+                 }
                  if ($payed!=1) {
                        echo'    <form action="./reg.php" method="post">
                                      <input type="hidden" name="id" value="'.$Id.'"/>
                                      <input type="hidden" name="trid" value="'.$trid.'"/>
                                      <input type="hidden" name="pay" value="1"/>
                                      <input class="gridButton" type="submit" value="Encaisser"/> 
+                                </form>';
+                 } else {
+                       echo'    <form action="./reg.php" method="post">
+                                     <input type="hidden" name="id" value="'.$Id.'"/>
+                                     <input type="hidden" name="trid" value="'.$trid.'"/>
+                                     <input type="hidden" name="pay" value="-1"/>
+                                     <input class="gridButton" type="submit" value="Annuler le Payement"/> 
                                 </form>';
                        }
                  echo'

@@ -104,6 +104,7 @@ echo '
                                       Birth, 
                                       TournamentGender.Name, 
                                       TournamentClub.Name, 
+                                      TournamentClub.Contact,
                                       TournamentGrade.Name,
                                       LicenceNumber, 
                                       TournamentAgeCategory.ShortName, 
@@ -119,12 +120,13 @@ echo '
                                ".$where_clause."
                                ORDER BY TournamentClub.Name, Surname, TournamentCompetitor.Name, ShortName
  ");
-     $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $Grade, $licence, $cat, $payed);
+     $stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $ContactClub, $Grade, $licence, $cat, $payed);
      $stmt->execute();
      
      $cur_id=-1;
      $cur_strId='';
      $cur_club='';
+     $cur_cc='';
      $cur_Surname='';
      $cur_Name='';
      $cur_birth='';
@@ -145,7 +147,31 @@ echo '
       if ($cur_id!=$Id) {
        if ( $cur_id>0) {
        echo' <tr >
-     <td >'. $cur_club.'</td>
+     <td >';
+     
+     if ($cur_cc==''){
+         echo $cur_club;
+     } else {
+         
+         echo '
+                    <a class="btn_info" onclick="toggleClass(document.getElementById(\'pop_'.$cur_id.'\'),\'pop_hide\');">'. $cur_club.'</a>
+                    <span class="pop_back pop_hide" Id="pop_'.$cur_id.'">
+	               <span class="popcont_info">
+	                   <span class="pop_tt">CONTACT </span> 
+		             '. $cur_club.'<br/>
+		            '.$cur_cc.'
+		           
+		 	    <span class="btnBar"> 
+				 <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_'.$cur_id.'\'),\'pop_hide\');">Fermer</a>
+			     </span
+		          </span>
+                     </span>';
+     
+     }
+     
+     
+     
+     echo '</td>
       <td class="rt">'.$cur_Surname.' '.$cur_Name.'</td>
       <td class="rt">'.$cur_birth.'</td>
       <td class="rt">'.$cur_gend.'</td>
@@ -168,6 +194,7 @@ echo '
          $cur_id=$Id;
          $cur_strId = $strId;
          $cur_club=$Club;
+         $cur_cc=$ContactClub;
          $cur_Surname=$Surname;
          $cur_Name=$Name;
          $cur_birth=$date;

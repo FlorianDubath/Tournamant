@@ -266,7 +266,7 @@ display:inline-block;
    font-size:12px;
 }
 
-td > a, .pgeBtn, .gridButton {
+td > a, .pgeBtn, .gridButton, .btn_info {
   display:inline-block; 
   text-decoration:none;
   padding:2px 5px 2px 5px;
@@ -276,6 +276,23 @@ td > a, .pgeBtn, .gridButton {
   background-color:#CCCCCC;
   border-radius:5px;
   font-size:12px;
+}
+
+.btn_info{
+   border:solid 1px #DDDDDD;
+}
+
+.btn_sos{
+ display:inline-box;
+ width:15px ! important;
+ height:15px ! important;
+ float:right;
+ background-image: url("sos.png"); 
+ background-position: center; 
+ background-repeat: no-repeat; 
+ background-size: cover;
+ padding:0px;
+ border:none;
 }
 
 td > a:hover , td > a:active, .pgeBtn:hover, .pgeBtn:active,  .gridButton:hover, .gridButton:active{
@@ -333,13 +350,20 @@ td, th {
     background-color: RGBA(255, 255, 255, 0.8);
 }
 
-.popcont {
+.popcont, .popcont_info {
     display:block;
     border: solid 2px black;
     margin:100px auto 0 auto;
     width:75%;
     max-width:400px;
     padding:20px 10px 10px 10px;
+}
+.popcont_info {
+
+    background-color:#FFFFFF;
+}
+.popcont {
+  
     background-color:#FFEEDD;
 }
 

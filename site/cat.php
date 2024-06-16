@@ -8,8 +8,31 @@ if (empty($_SESSION['_UserId'])) {
 	header('Location: ./index.php');
 }
 
-if(empty($_GET['cid']) ) {
+$is_table =  $_SESSION['_IsMainTable'] ==1 ||  $_SESSION['_IsMatTable'] ==1;
+
+include 'connectionFactory.php';
+include '_categoryHelper.php';
+$curr_c_id=0;
+if ($_SESSION['_IsMainTable']==1 && !empty($_POST['acat']) && !empty($_POST['cid']) && !empty($_POST['cc']) && $_POST['cc']==1){
+   
+    cancel_Category($_POST['acat'], False);
+    $curr_c_id=(int)$_POST['cid'];
+}
+
+if ($is_table && !empty($_POST['fid']) && !empty($_POST['acat']) && !empty($_POST['cid']) && !empty($_POST['cc']) && $_POST['cc']==1){
+   
+    cancel_fight($_POST['acat'], $_POST['fid']);
+    $curr_c_id=(int)$_POST['cid'];
+}
+
+
+
+if(empty($_GET['cid']) && $curr_c_id==0) {
       	header('Location: ./index.php');
+}
+
+if (!empty($_GET['cid'])){
+    $curr_c_id=(int)$_GET['cid'];
 }
 
 $missing=0;
@@ -18,13 +41,10 @@ if (!empty($_GET['m'])) {
 }
 
 
-$is_table =  $_SESSION['_IsMainTable'] ==1 ||  $_SESSION['_IsMatTable'] ==1;
 
 
-include 'connectionFactory.php';
 
 include '_commonBlock.php';
-include '_categoryHelper.php';
 
 writeHead();
 
@@ -66,7 +86,7 @@ $mysqli= ConnectionFactory::GetConnection();
                                  TournamentWeighting.WeightingEnd;
                            ");
                              
-     $stmt->bind_param("i", $_GET['cid'] );
+     $stmt->bind_param("i", $curr_c_id );
      $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_dur,$cat_gen,$weight, $weighting_end, $total, $weighted);
      $stmt->execute();
      $stmt->fetch();
@@ -85,7 +105,7 @@ $mysqli= ConnectionFactory::GetConnection();
                              GROUP BY ActualCategory.Id, ActualCategory.Name, CategoryId, Category2Id, IsCompleted
                            ");
                              
-     $stmt->bind_param("ii", $_GET['cid'],$_GET['cid'] );
+     $stmt->bind_param("ii", $curr_c_id,$curr_c_id );
      $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $started);
      $stmt->execute();
      $stmt->fetch();
@@ -96,7 +116,12 @@ $mysqli= ConnectionFactory::GetConnection();
 
 echo '
             <span class="h_title">
-               '.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'
+               '.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'';
+               
+
+               
+               
+            echo'   
             </span>
             <span class="h_txt">
                 <span class="btnBar"> 
@@ -104,19 +129,19 @@ echo '
                  </span>
                   <span class="btnBar"> ';
        if ($missing==-1) {
-          echo ' <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'" title="Tous les participants">Tous les participants ('.$total.')</a>
+          echo ' <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'" title="Tous les participants">Tous les participants ('.$total.')</a>
                  Participants pesés ('.$weighted.')
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=1" title="Participants à peser/manquants">Participants à peser/manquants ('.$total - $weighted.')</a>';
+                 <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'&m=1" title="Participants à peser/manquants">Participants à peser/manquants ('.$total - $weighted.')</a>';
        } else if ($missing==1) {
                  echo ' 
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'" title="Tous les participants">Tous les participants ('.$total.')</a>
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>
+                 <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'" title="Tous les participants">Tous les participants ('.$total.')</a>
+                 <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>
                  Participants à peser/manquants ('.$total - $weighted.')';
        }  else {
                  echo ' 
                  Tous les participants ('.$total.')
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>
-                 <a class="pgeBtn"  href="cat.php?cid='.$_GET['cid'].'&m=1" title="Participants à peser/manquants">Participants à peser/manquants ('.$total - $weighted.')</a>';
+                 <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'&m=-1" title="Participants pesés">Participants pesés ('.$weighted.')</a>
+                 <a class="pgeBtn"  href="cat.php?cid='.$curr_c_id.'&m=1" title="Participants à peser/manquants">Participants à peser/manquants ('.$total - $weighted.')</a>';
        }                    
                   
 	              
@@ -157,7 +182,7 @@ echo'
       
       
       $stmt = $mysqli->prepare($query);
-     $stmt->bind_param("i", $_GET['cid'] );
+     $stmt->bind_param("i", $curr_c_id );
      $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin);
      $stmt->execute();
      
@@ -193,7 +218,42 @@ echo'
         }
         
        
-        echo $ac_name.'</span>';
+        echo $ac_name;
+        
+if ($_SESSION['_IsMainTable']==1 || !empty($actual_cat_Id)) {
+ echo'    
+      <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_acat\'),\'pop_hide\');"></a>
+			    <span class="pop_back pop_hide" Id="pop_acat">
+			       <span class="popcont">
+				   <span class="pop_tt">ANNULER LA CATEGORIE </span> 
+				   '.$ac_name.'<br/><br/>
+				     
+				     <span class="fmessage">Cette opération sera annulée si des combats ont déjà eu lieu. Dans ce cas commencez par les annuler</span><br/>';
+				    
+				        echo '<br/><span class="btnBar"> 
+				        
+				        <form action="./cat.php" method="post">
+                                        <input type="hidden" name="acat" value="'.$actual_cat_Id.'"/>
+                                        <input type="hidden" name="cid" value="'.$curr_c_id.'"/>
+		                       <input type="hidden" name="cc" value="1"/>
+		                        <input class="pgeBtn"  type="submit" value="Annuler la catégorie">
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_acat\'),\'pop_hide\');">Fermer</a>  
+		                        </form>
+		                         </span>';
+		                      
+				  
+				    
+				   echo'
+			 	    
+					
+				  </span>
+			     </span>      
+     
+   ';
+}  
+        
+        
+        echo'</span>';
       
         
         echo' <span class="btnBar"> 
@@ -299,9 +359,7 @@ echo'
      $stmt->close();
      echo '</table></span>';
      
-           
-     
-     
+
      
 
      
@@ -453,7 +511,35 @@ echo'
               $cl_2="VIC";
            }
            $row_value = ' <tr > 
-                  <td>'. $step_name.' '.$tb_s.'</td>
+                  <td>'. $step_name.' '.$tb_s;   
+           if($is_table){   
+   $row_value=$row_value.'    
+      <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_canc_fgt_'.$f_id.'\'),\'pop_hide\');"></a>
+			    <span class="pop_back pop_hide" Id="pop_canc_fgt_'.$f_id.'">
+			       <span class="popcont">
+				   <span class="pop_tt">ANNULER LE RESULTAT DU COMBAT </span> 
+				   <br/>
+				     
+				     <span class="fmessage">Cette opération sera annulée si des combats dépendant de celui-ci ont déjà eu lieu. Dans ce cas commencez par les annuler</span><br/>
+				     <br/><span class="btnBar"> 
+				        
+				        <form action="./cat.php" method="post">
+                                        <input type="hidden" name="fid" value="'.$f_id.'"/>
+                                        <input type="hidden" name="acat" value="'.$actual_cat_Id.'"/>
+                                        <input type="hidden" name="cid" value="'.$curr_c_id.'"/>
+		                       <input type="hidden" name="cc" value="1"/>
+		                        <input class="pgeBtn"  type="submit" value="Annuler le Résultat">
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_canc_fgt_'.$f_id.'\'),\'pop_hide\');">Fermer</a>  
+		                        </form>
+		                         </span>
+			 	    
+					
+				  </span>
+			     </span>       ';                 
+                  
+           }       
+                  
+   $row_value=$row_value.'</td>
                   <td class="'.$cl_1.'">'.$pv1.'</td>
                   <td class="'.$cl_1.'">'.$Surname1.' '.$Name1.'</td>
                   <td>V.S.</td>

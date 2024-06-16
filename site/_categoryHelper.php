@@ -871,6 +871,84 @@ function open_Category($tc_id_1,$tc_id_2,$name){
     }
 }
 
+function cancel_fight($ActualCategoryId, $fight_Id){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $stmt = $mysqli->prepare("SELECT
+                             
+			       count(FI.Id)
+			     FROM Fight FI
+			     INNER JOIN StepLinking ON in_step_1_id = FI.step_id OR in_step_2_id = FI.step_id
+			     INNER JOIN  Fight FD ON FD.step_id = out_step_id AND FD.pv1 IS NOT NULL
+			     WHERE FI.Id=? ");
+    $stmt->bind_param("i", $fight_Id);  
+    $stmt->bind_result($already_fighted);         
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+    if ($already_fighted==0) {
+         echo 'ACATID='.$ActualCategoryId;
+         $stmt = $mysqli->prepare(" DELETE FROM ActualCategoryResult WHERE ActualCategoryId=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=0 WHERE Id=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare("UPDATE Fight FD
+	 INNER JOIN StepLinking ON FD.step_id = out_step_id 
+	 INNER JOIN Fight FI ON (FI.step_id = in_step_1_id OR  FI.step_id = in_step_2_id) AND FI.Id=?
+	 SET FD.TournamentCompetitor1Id=NULL, FD.pv1=NULL, FD.TournamentCompetitor2Id=NULL, FD.pv2=NULL");
+         $stmt->bind_param("i", $fight_Id);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 
+	 $stmt = $mysqli->prepare("UPDATE Fight SET pv1=NULL, pv2=NULL WHERE Id=?");
+         $stmt->bind_param("i", $fight_Id);  
+	 $stmt->execute();
+	 $stmt->close();
+    }
+    
+}
+
+function cancel_Category($ActualCategoryId, $force){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $stmt = $mysqli->prepare("SELECT COUNT(Fight.Id) FROM Fight WHERE pv1 IS NOT NULL AND ActualCategoryId=?");
+    $stmt->bind_param("i", $ActualCategoryId);  
+    $stmt->bind_result($already_fighted);         
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+    if ($already_fighted==0 || $force) {
+         $stmt = $mysqli->prepare(" DELETE FROM ActualCategoryResult WHERE ActualCategoryId=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare(" DELETE FROM Fight WHERE ActualCategoryId=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare(" DELETE FROM StepLinking WHERE ActualCategoryId=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare(" DELETE FROM CategoryStep WHERE ActualCategoryId=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+	 
+	 $stmt = $mysqli->prepare(" DELETE FROM ActualCategory WHERE Id=?");
+         $stmt->bind_param("i", $ActualCategoryId);  
+	 $stmt->execute();
+	 $stmt->close();
+    }
+}
 
 
 function close_category($ActualCategoryId){
@@ -882,7 +960,6 @@ function close_category($ActualCategoryId){
     
         $skip_nominal=False;
     
-        // TODO check for only Pool and if so add 4th medal and tie handling
         // Check for tie =1 in ckĥecktie
         $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
         $stmt->bind_param("i", $ActualCategoryId);  

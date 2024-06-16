@@ -34,16 +34,18 @@ writeHead();
                                       CollectVP,
                                       TournamentGrade.Name,
                                       LicenceNumber,
-                                      TournamentCompetitor.CheckedIn
+                                      TournamentCompetitor.CheckedIn,
+                                      SUM(TournamentRegistration.WeightChecked)
                                FROM TournamentCompetitor 
                                INNER JOIN TournamentGender ON TournamentCompetitor.GenderId=TournamentGender.Id
                                INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
                                INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
+                               LEFT OUTER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId=TournamentCompetitor.Id
                               WHERE StrId=?
  ");
  
 $stmt->bind_param("s", $_REQUEST['sid'] );
-$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $GradeCollectVP, $Grade, $licence,$chin);
+$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $GradeCollectVP, $Grade, $licence,$chin,$alreadyWC);
 $stmt->execute();
 $stmt->fetch();
 $stmt->close();
@@ -107,16 +109,24 @@ if ( ! empty($_SESSION['_UserId'])) {
               $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET CheckedIn=1, CheckedInBy=? WHERE Id=?");
               $stmt->bind_param("ii",$_SESSION['_UserId'] , $Id );
               $stmt->execute();
-	          $stmt->close();
+	      $stmt->close();
               $chin=1;
-            } 
-            
-             if (!empty($_POST['py'])&&$_POST['py']==1&&!empty($_POST['trid'])) { 
+            } else  if (!empty($_POST['npr'])&&$_POST['npr']==1) { 
+              $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET CheckedIn=0, CheckedInBy=? WHERE Id=?");
+              $stmt->bind_param("ii",$_SESSION['_UserId'] , $Id );
+              $stmt->execute();
+	      $stmt->close();
+              $chin=0;
+            } else if (!empty($_POST['py'])&&$_POST['py']==1&&!empty($_POST['trid'])) { 
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=1 WHERE Id=?");
               $stmt->bind_param("i", $_POST['trid'] );
               $stmt->execute();
+	      $stmt->close();
+            } else if (!empty($_POST['npy'])&&$_POST['npy']==1&&!empty($_POST['trid'])) { 
+              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET Payed=0 WHERE Id=?");
+              $stmt->bind_param("i", $_POST['trid'] );
+              $stmt->execute();
 	          $stmt->close();
-              $chin=1;
             } 
             
             
@@ -139,15 +149,47 @@ if ( ! empty($_SESSION['_UserId'])) {
       	       $stmt->execute();
                $stmt->bind_result($trid,$cat_n,$cat_sn,$cat_gen,$payed);
                while ($stmt->fetch()){
-                    echo ' <span class="cacceuil"> Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' :';
+                    echo ' <span class="cacceuil">';
                     if ($payed==1) {
-                        echo ' Payement reçu !</span>';
+                        echo '&nbsp; &nbsp; Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' : Payement reçu !
+                        
+                         <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_pay_'.$trid.'\'),\'pop_hide\');"></a>
+			    <span class="pop_back pop_hide" Id="pop_pay_'.$trid.'">
+			       <span class="popcont">
+				   <span class="pop_tt">ANNULER LE PAYEMENT </span> 
+				     Pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.'<br/>';
+				     
+				     if (empty($act)){
+				        echo '<br/><span class="btnBar"> 
+				        
+				        <form action="./card.php" method="post">
+                                        <input type="hidden" name="sid" value="'.$strId.'"/>
+		                       <input type="hidden" name="npy" value="1"/>
+		                       <input type="hidden" name="trid" value="'.$trid.'"/> 
+		                        <input class="pgeBtn"  type="submit" value="Annuler le payement">
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_pay_'.$trid.'\'),\'pop_hide\');">Fermer</a>  
+		                        </form>
+		                         </span>';
+		                      
+				    } else {
+				       echo '<span class="fmessage">Opération impossible car la catégorie est déjà en cours. Contactez la table centrale</span>
+				       <span class="btnBar">  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_pay_'.$trid.'\'),\'pop_hide\');">Fermer</a>
+				     </span>'; 
+				     }
+				    
+				   echo'
+			 	    
+					
+				  </span>
+			     </span>
+                        
+                        </span>';
                     } else {
                         echo '<form action="./card.php" method="post">
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="py" value="1"/>
                              <input type="hidden" name="trid" value="'.$trid.'"/> 
-                             A payer! 
+                             &nbsp; &nbsp; Catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' : A payer! 
                              <input class="pgeBtn"  type="submit" value="Encaisser"/> 
                             </form> </span>';
                     }
@@ -165,7 +207,40 @@ if ( ! empty($_SESSION['_UserId'])) {
                              <input class="pgeBtn" type="submit" value="Confirmer la présence et remise de la carte"/> 
                              </form><br/> ';
             } else {
-                echo 'Présence confirmée / carte remise au participant.  ';
+                echo '<span class="cacceuil">&nbsp; &nbsp;Présence confirmée / carte remise au participant. 
+                
+                  <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_card\'),\'pop_hide\');"></a>
+			    <span class="pop_back pop_hide" Id="pop_card">
+			       <span class="popcont">
+				   <span class="pop_tt">ANNULER LA REMISE DE LA CARTE </span> 
+				     ';
+				     
+				     if ($alreadyWC==0){
+				        echo '<br/><span class="btnBar"> 
+				        
+				        <form action="./card.php" method="post">
+                                        <input type="hidden" name="sid" value="'.$strId.'"/>
+		                        <input type="hidden" name="npr" value="1"/>
+		                        <input class="pgeBtn"  type="submit" value="Annuler la remise de la carte"> 
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_card\'),\'pop_hide\');">Fermer</a>  
+		                        </form>
+		                         </span>';
+		                      
+				    } else {
+				       echo '<span class="fmessage">Opération impossible car le compétiteur est déjà pesé. Contactez la table centrale</span>
+				       <span class="btnBar">  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_card\'),\'pop_hide\');">Fermer</a>
+				     </span>'; 
+				     }
+				    
+				   echo'
+			 	    
+					
+				  </span>
+			     </span>
+                           </span>
+                
+                
+                </span> ';
             }
             
 
@@ -181,13 +256,18 @@ if ( ! empty($_SESSION['_UserId'])) {
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=?, WeightCheckedBy=? WHERE Id=?");
               $stmt->bind_param("iii", $_POST['wgc'], $_SESSION['_UserId'], $_POST['trid']);
               $stmt->execute();
-	          $stmt->close();
-         } 
+	      $stmt->close();
+         } else if (!empty($_POST['wgnok'])&&$_POST['wgnok']==1 &&  !empty($_POST['trid'])) { 
+              $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=0, WeightCheckedBy=? WHERE Id=?");
+              $stmt->bind_param("ii", $_SESSION['_UserId'], $_POST['trid']);
+              $stmt->execute();
+	      $stmt->close();
+         }
     
     
        echo '<span class="item_action"><span class="h_title">PESEE</span>
               <span class="fsubtitle">Catégorie :</span>';
-              $stmt = $mysqli->prepare("SELECT 
+              $stmt = $mysqli->prepare("SELECT DISTINCT
 	                                            TournamentRegistration.Id, 
 	                                            TournamentAgeCategory.Name,
 	                                            TournamentAgeCategory.ShortName,
@@ -197,21 +277,54 @@ if ( ! empty($_SESSION['_UserId'])) {
 	                                            TournamentAgeCategory.Id,
 	                                            TournamentWeighting.WeightingBegin,
 	                                            TournamentWeighting.WeightingEnd,
-	                                            WeightChecked
+	                                            WeightChecked,
+	                                            ACT.Id
 	                                     FROM TournamentRegistration 
 	                                     INNER JOIN TournamentCategory ON TournamentRegistration.CategoryId=TournamentCategory.Id
 	                                     INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
 	                                     INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id 
 	                                     INNER JOIN TournamentGender ON TournamentGender.Id=TournamentAgeCategory.GenderId
+	                                     LEFT OUTER JOIN ActualCategory ACT ON ACT.CategoryId=TournamentCategory.Id OR ACT.Category2Id=TournamentCategory.Id
 	                                     WHERE CompetitorId =?
 	                                     ORDER BY TournamentWeighting.WeightingEnd");
 	                            
                $stmt->bind_param("i", $Id);         
       	       $stmt->execute();
-               $stmt->bind_result($tr_to_w_id, $cat_n,$cat_sn,$cat_gen, $dpw, $w_to_confirm, $age_cat_id, $weighting_begin, $weighting_end,$wck);
+               $stmt->bind_result($tr_to_w_id, $cat_n,$cat_sn,$cat_gen, $dpw, $w_to_confirm, $age_cat_id, $weighting_begin, $weighting_end,$wck,$act);
                while ($stmt->fetch()){
                     if ($wck==1) {
-                           echo '<span class="cacceuil">&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'</span>';
+                           echo '<span class="cacceuil">&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'
+                           
+                            <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_wgt_'.$tr_to_w_id.'\'),\'pop_hide\');"></a>
+			    <span class="pop_back pop_hide" Id="pop_wgt_'.$tr_to_w_id.'">
+			       <span class="popcont">
+				   <span class="pop_tt">ANNULER LA PESEE </span> 
+				     Pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'<br/>';
+				     
+				     if (empty($act)){
+				        echo '<br/><span class="btnBar"> 
+				        
+				        <form action="./card.php" method="post">
+                                        <input type="hidden" name="sid" value="'.$strId.'"/>
+		                        <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
+		                        <input type="hidden" name="wgnok" value="1"/>
+		                        <input class="pgeBtn"  type="submit" value="Annuler la pesée">
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_wgt_'.$tr_to_w_id.'\'),\'pop_hide\');">Fermer</a>  
+		                        </form>
+		                         </span>';
+		                      
+				    } else {
+				       echo '<span class="fmessage">Opération impossible car la catégorie est déjà en cours. Contactez la table centrale</span>
+				       <span class="btnBar">  <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_wgt_'.$tr_to_w_id.'\'),\'pop_hide\');">Fermer</a>
+				     </span>'; 
+				     }
+				    
+				   echo'
+			 	    
+					
+				  </span>
+			     </span>
+                           </span>';
                     } else {
                     
                     echo '<span class="cacceuil"><form action="./card.php" method="post">

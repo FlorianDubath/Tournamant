@@ -24,8 +24,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="2"
-     inkscape:cx="531"
-     inkscape:cy="316.25"
+     inkscape:cx="506"
+     inkscape:cy="500.75"
      inkscape:window-width="1850"
      inkscape:window-height="1016"
      inkscape:window-x="0"
@@ -34,6 +34,12 @@
      inkscape:current-layer="layer1" />
   <defs
      id="defs2">
+    <rect
+       x="412.91797"
+       y="473.85742"
+       width="143.12109"
+       height="88.240234"
+       id="rect2773" />
     <rect
        x="291.68845"
        y="318.73874"
@@ -81,6 +87,110 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <g
+       id="g10659"
+       inkscape:export-filename="/home/florian/Bureau/dev/Tournamant/site/css/sos.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <circle
+         style="fill:#dedede;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path886"
+         cx="147.45146"
+         cy="133.14587"
+         r="18.6092" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1189"
+         sodipodi:type="arc"
+         sodipodi:cx="194.26965"
+         sodipodi:cy="41.581978"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m 212.87885,41.581978 a 18.6092,18.6092 0 0 1 -2.502,9.319906 l -16.1072,-9.319906 z"
+         transform="rotate(30)" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1193"
+         sodipodi:type="arc"
+         sodipodi:cx="133.14587"
+         sodipodi:cy="-147.45146"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m 151.75507,-147.45146 a 18.6092,18.6092 0 0 1 -2.502,9.3199 l -16.1072,-9.3199 z"
+         transform="rotate(90)" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1197"
+         sodipodi:type="arc"
+         sodipodi:cx="-61.123768"
+         sodipodi:cy="-189.03345"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m -42.514568,-189.03345 a 18.6092,18.6092 0 0 1 -2.502007,9.31991 l -16.107193,-9.31991 z"
+         transform="rotate(150)" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1201"
+         sodipodi:type="arc"
+         sodipodi:cx="-194.26965"
+         sodipodi:cy="-41.581989"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m -175.66045,-41.581989 a 18.6092,18.6092 0 0 1 -2.50201,9.319906 l -16.10719,-9.319906 z"
+         transform="rotate(-150)" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1205"
+         sodipodi:type="arc"
+         sodipodi:cx="-133.1459"
+         sodipodi:cy="147.45145"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m -114.53671,147.45145 a 18.6092,18.6092 0 0 1 -2.502,9.3199 l -16.10719,-9.3199 z"
+         transform="rotate(-90)" />
+      <path
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+         id="path1209"
+         sodipodi:type="arc"
+         sodipodi:cx="61.123768"
+         sodipodi:cy="189.03345"
+         sodipodi:rx="18.6092"
+         sodipodi:ry="18.6092"
+         sodipodi:start="0"
+         sodipodi:end="0.52454878"
+         sodipodi:arc-type="slice"
+         d="m 79.732967,189.03345 a 18.6092,18.6092 0 0 1 -2.502006,9.3199 l -16.107193,-9.3199 z"
+         transform="rotate(-30)" />
+      <circle
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle1691"
+         cx="147.45146"
+         cy="133.14587"
+         r="11.16552" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.26458333,0,0,0.26458333,24.671362,0.10800376)"
+         id="text2771"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:53.3333px;line-height:1.25;font-family:serif;-inkscape-font-specification:'serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect2773);fill:#000000;fill-opacity:1;stroke:none"><tspan
+           x="412.91797"
+           y="522.38407"
+           id="tspan10796">SOS</tspan></text>
+    </g>
     <g
        id="g72109"
        inkscape:export-filename="/home/florian/Bureau/dev/Tournamant/site/css/silver.png"
@@ -132,9 +242,9 @@
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect39474);fill:#000000;fill-opacity:1;stroke:none"><tspan
            x="291.6875"
            y="367.26493"
-           id="tspan79419"><tspan
+           id="tspan10800"><tspan
              style="font-weight:bold;font-size:53.3333px;font-family:serif;-inkscape-font-specification:'serif, Bold'"
-             id="tspan79417">2</tspan></tspan></text>
+             id="tspan10798">2</tspan></tspan></text>
       <ellipse
          style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.210202;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="ellipse52465"
@@ -201,9 +311,9 @@
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect52573);fill:#000000;fill-opacity:1;stroke:none"><tspan
            x="291.6875"
            y="367.26493"
-           id="tspan79423"><tspan
+           id="tspan10804"><tspan
              style="font-weight:bold;font-size:53.3333px;font-family:serif;-inkscape-font-specification:'serif, Bold'"
-             id="tspan79421">1</tspan></tspan></text>
+             id="tspan10802">1</tspan></tspan></text>
     </g>
     <g
        id="g79169"
@@ -263,9 +373,9 @@
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect59237);fill:#000000;fill-opacity:1;stroke:none"><tspan
            x="291.6875"
            y="367.26493"
-           id="tspan79427"><tspan
+           id="tspan10808"><tspan
              style="font-weight:bold;font-size:53.3333px;font-family:serif;-inkscape-font-specification:'serif, Bold'"
-             id="tspan79425">3</tspan></tspan></text>
+             id="tspan10806">3</tspan></tspan></text>
     </g>
   </g>
 </svg>
