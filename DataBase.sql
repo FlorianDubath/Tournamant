@@ -444,10 +444,38 @@ CREATE TABLE OTA(
 );
 
 
-
-
-
 ALTER TABLE ActualCategoryResult ADD COLUMN Medal INT NOT NULL DEFAULT 0;
 
-
 ALTER tABLE ActualCategory ADD COLUMN Dummy INT NOT NULL DEFAULT 0;
+
+----------------------------------------
+
+INSERT INTO TournamentDoubleSatrt (MainAgeCategoryId, AcceptedAgeCategoryId)
+SELECT TCA_1.Id, TCA_2.Id FROM TournamentAgeCategory TCA_1
+INNER JOIN TournamentAgeCategory TCA_2 ON TCA_2.ShortName='FE'
+WHERE TCA_1.ShortName='F21';
+
+INSERT INTO TournamentDoubleSatrt (MainAgeCategoryId, AcceptedAgeCategoryId)
+SELECT TCA_1.Id, TCA_2.Id FROM TournamentAgeCategory TCA_1
+INNER JOIN TournamentAgeCategory TCA_2 ON TCA_2.ShortName='ME'
+WHERE TCA_1.ShortName='M21';
+
+-----------------------------------------
+
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 11:30:00', '2024-06-04 12:00:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='F13';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 08:00:00', '2024-06-04 08:30:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='M13';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 11:30:00', '2024-06-04 12:00:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='F15';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 10:45:00', '2024-06-04 11:15:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='M15';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 13:00:00', '2024-06-04 13:30:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='F18';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 12:30:00', '2024-06-04 13:00:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='M18';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 14:30:00', '2024-06-04 15:00:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='F21';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 14:00:00', '2024-06-04 14:30:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='M21';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 15:00:00', '2024-06-04 15:30:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='FE';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 14:45:00', '2024-06-04 15:15:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='ME';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 13:30:00', '2024-06-04 14:00:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='MV';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 15:15:00', '2024-06-04 15:45:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='FO';
+INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 15:15:00', '2024-06-04 15:45:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='MO';
+
+
+
+

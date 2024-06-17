@@ -3,8 +3,6 @@ A faire
 
 Documentation
 
-Metre dans le script SQL les horaires de pesée et les double départs
-
 bug:
 ------
 
@@ -12,11 +10,6 @@ interdire la création de catégorie avec 0 ou 1 inscrit au total
 
 duplication ligne catégorie avec un seul participant vaincoeur (dans la list des cat)
 
-
-
-document xml
-formatage par age sur les open (ps la bonne column comme ref)
-Elite (titre page)
 
 clean db:
 ----------
