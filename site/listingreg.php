@@ -4,7 +4,7 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if ($_SESSION['_IsRegistration']!=1&& $_SESSION['_IsMainTable']!=1) {
+if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsMainTable']!=1 && $_SESSION['_IsAdmin']!=1) {
 	header('Location: ./index.php');
 }
 

@@ -114,46 +114,44 @@ echo '
 	if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
 	      echo'  <input type="hidden" name="id" value="'.$Id.'"/>
 	        <span class="fitem">
-               <span class="label">Nom du tournois:</span>
-               <input class="inputText"  type="text" name="nme" value="'.$Name.'" /><br/>
+               <span class="label">Nom du tournoi:</span><br/>
+                <textarea  name="nme" rows="1"  style="display:block;width:100%;">'.$Name.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Lieu:</span>
-               <input class="inputText"  type="text" name="plc" value="'.$Place.'" /><br/>
+               <span class="label">Lieu:</span><br/>
+                <textarea  name="plc" rows="4"  style="display:block;width:100%;">'.$Place.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Transports:</span>
-               <input class="inputText"  type="text" name="tsp" value="'.$Transport.'" /><br/>
+               <span class="label">Transports:</span><br/>
+                <textarea  name="tsp" rows="4"  style="display:block;width:100%;">'.$Transport.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Organisation:</span>
-               <input class="inputText"  type="text" name="org" value="'.$Organization.'" /><br/>
+               <span class="label">Organisation:</span><br/>
+                <textarea  name="org" rows="4"  style="display:block;width:100%;">'.$Organization.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Admission:</span>
-               <input class="inputText"  type="text" name="adm" value="'.$Admition.'" /><br/>
+               <span class="label">Admission:</span><br/>
+                <textarea  name="adm" rows="4"  style="display:block;width:100%;">'.$Admition.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Système:</span>
-               <input class="inputText"  type="text" name="sys" value="'.$System.'" /><br/>
+               <span class="label">Système:</span><br/>
+                <textarea  name="sys" rows="4"  style="display:block;width:100%;">'.$System.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Récompenses:</span>
-               <input class="inputText"  type="text" name="prz" value="'.$Prize.'" /><br/>
+               <span class="label">Récompenses:</span><br/>
+                <textarea  name="prz" rows="4"  style="display:block;width:100%;">'.$Prize.'</textarea>
 	        </span>
 	        <span class="fitem">
-               <span class="label">Arbitrage:</span>
-               <input class="inputText"  type="text" name="jdg" value="'.$Judge.'" /><br/>
+               <span class="label">Arbitrage:</span><br/>
+                <textarea  name="jdg" rows="4"  style="display:block;width:100%;">'.$Judge.'</textarea>
 	        </span>
-	       
 	        <span class="fitem">
-               <span class="label">Tenue:</span>
-               <input class="inputText"  type="text" name="drs" value="'.$Dressing.'" /><br/>
+               <span class="label">Tenue:</span><br/>
+                <textarea  name="drs" rows="4"  style="display:block;width:100%;">'.$Dressing.'</textarea>
 	        </span>
-	       
 	        <span class="fitem">
-               <span class="label">Contact:</span>
-               <input class="inputText"  type="text" name="ctc" value="'.$Contact.'" /><br/>
+               <span class="label">Contact:</span><br/>
+                <textarea  name="ctc" rows="4"  style="display:block;width:100%;">'.$Contact.'</textarea>
 	        </span>
 	        <span class="fitem">
                <span class="label">Inscription jusqu\'au:</span>
@@ -161,12 +159,12 @@ echo '
 	        </span>
 	        	       
 	        <span class="fitem">
-               <span class="label">Début du Tournois:</span>
+               <span class="label">Début du Tournoi:</span>
                <input class="inputDate"  type="date" name="ts" value="'.$TournamentStart.'" /><br/>
 	        </span>
 	        	       
 	        <span class="fitem">
-               <span class="label">Fin du Tournois:</span>
+               <span class="label">Fin du Tournoi:</span>
                <input class="inputDate"  type="date" name="te" value="'.$TournamentEnd.'" /><br/>
 	        </span><br/>
 	       

@@ -133,7 +133,7 @@ echo '
 	         $RegistrationEnd = $td;
 	       
 	       }
-	       echo' <span class="fitem">
+	       echo' <span class="fitem" style="display:none">
                <span class="label">Catégorie en fonction de la participation :</span>
                <select name="pp">
                   <option value="0">Non</option>
