@@ -49,17 +49,17 @@ echo '
             <input type="hidden" name="uid" value="'.$Id.'"/>
                 <span class="fitem">
                     <span class="label">Identifiant* :</span>
-                    <input type="text" name="mail" value="'.$EMail.'" '.$readonly.'/><br/>
+                    <input type="text" name="mail" value="'.$EMail.'" '.$readonly.' required/><br/>
                 </span>
                 <span class="fitem">
                     <span class="label">Nom publique* :</span>
-                    <input type="text" name="disp" value="'.$disp.'" /><br/>
+                    <input type="text" name="disp" value="'.$disp.'" required/><br/>
                 </span>';
 if ($isReadonly==0){
    echo' 
                 <span class="fitem">
                      <span class="label">Mot de passe* :</span>
-                     <input type="text" name="psw" /><br/>
+                     <input type="text" name="psw" value="'.md5(date("Y-m-d h:i:sa")).'" required/><br/>
                 </span>';
 }
 echo'  

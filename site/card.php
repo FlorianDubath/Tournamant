@@ -293,13 +293,13 @@ if ( ! empty($_SESSION['_UserId'])) {
                $stmt->bind_result($tr_to_w_id, $cat_n,$cat_sn,$cat_gen, $dpw, $w_to_confirm, $age_cat_id, $weighting_begin, $weighting_end,$wck,$act);
                while ($stmt->fetch()){
                     if ($wck==1) {
-                           echo '<span class="cacceuil">&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'
+                           echo '<span class="cacceuil">&nbsp; &nbsp; Pesée effectuée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poids:'.$dpw.'
                            
                             <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_wgt_'.$tr_to_w_id.'\'),\'pop_hide\');"></a>
 			    <span class="pop_back pop_hide" Id="pop_wgt_'.$tr_to_w_id.'">
 			       <span class="popcont">
 				   <span class="pop_tt">ANNULER LA PESEE </span> 
-				     Pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:'.$dpw.'<br/>';
+				     Pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poids:'.$dpw.'<br/>';
 				     
 				     if (empty($act)){
 				        echo '<br/><span class="btnBar"> 
@@ -331,12 +331,12 @@ if ( ! empty($_SESSION['_UserId'])) {
                              <input type="hidden" name="sid" value="'.$strId.'"/>
                              <input type="hidden" name="trid" value="'.$tr_to_w_id.'"/>
                              <input type="hidden" name="wgok" value="1"/>
-                            <span> &nbsp; &nbsp; Pesée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poid:<select name="wgc">';
+                            <span> &nbsp; &nbsp; Pesée pour la catégorie '.$cat_sn.' '.$cat_n.' '.$cat_gen.' poids:<select name="wgc">';
                                
                              echo getWeights($weight_cat, $age_cat_id,$w_to_confirm) ;   
                              echo '</select>';
                              if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
-                                echo' <input class="pgeBtn"  type="submit" value="Poid vérifié">';
+                                echo' <input class="pgeBtn"  type="submit" value="Poids vérifié">';
                             }
                             echo '</span>
                           </form></span>';
