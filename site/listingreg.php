@@ -4,7 +4,7 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsMainTable']!=1 && $_SESSION['_IsAdmin']!=1) {
+if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsWelcome']!=1 && $_SESSION['_IsMainTable']!=1) {
 	header('Location: ./index.php');
 }
 
@@ -49,9 +49,13 @@ echo '
                GESTION DES INSCRIPTIONS
             </span>
              <span class="btnBar"> 
-                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>';
+          if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsWelcome']!=1 && $_SESSION['_IsMainTable']!=1) {
+              echo'
                    <a class="pgeBtn" target="_blanck" href="Inscriptions.xltx" title="Fichier Club" >Fichier Club</a>
-                   <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>
+                   <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>';
+          }
+                   echo'
                </span>
             <span class="h_txt">
            
@@ -77,9 +81,14 @@ echo '
 	                </span>
 	             </form>
 	             
-	             <span class="btnBar"> 
-	               <a class="pgeBtn"  href="pays.php" title="Payements Groupés">Payements Groupés</a>
-	               <a class="pgeBtn"  href="regs.php" title="Inscriptions Groupées">Inscriptions Groupées</a>
+	             <span class="btnBar"> ';
+          if ($_SESSION['_IsRegistration']!=1 && $_SESSION['_IsWelcome']!=1 && $_SESSION['_IsMainTable']!=1) {
+              echo'
+                       <a class="pgeBtn"  href="pays.php" title="Payements Groupés">Payements Groupés</a>
+	               <a class="pgeBtn"  href="regs.php" title="Inscriptions Groupées">Inscriptions Groupées</a>';
+          }
+                   echo'
+	              
 	               <a class="pgeBtn"  href="reg.php?id=0" title="Nouvel Inscrit">Nouvel Inscrit</a>
 	               
 	             </span>

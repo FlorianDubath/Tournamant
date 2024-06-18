@@ -87,7 +87,7 @@ function writeBand() {
        </div>';
     }
     
-    if ($_SESSION['_IsRegistration']==1) {
+    if ($_SESSION['_IsRegistration']==1 || $_SESSION['_IsWelcome']==1 || $_SESSION['_IsMainTable']==1) {
        echo '
        <div class="m_b">
            <span class="m_b_t">INSCRIPTIONS</span>

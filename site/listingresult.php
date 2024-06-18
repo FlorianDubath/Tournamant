@@ -32,9 +32,13 @@ echo '
                RESULTATS
             </span>
              <span class="btnBar"> 
-                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>';
+                   
+                       if ( $_SESSION['_IsMainTable']==1) {
+                       echo'
                    <a class="pgeBtn" href="results.php" title="PDF Catégories" >PDF Catégories</a>
-                   <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>
+                   <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>';
+                   echo'
                </span>
            
      ';
