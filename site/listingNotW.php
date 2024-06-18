@@ -99,6 +99,7 @@ echo '
                <th >Payé</th>
                <th >Présent</th>
                <th >Pesé</th>
+               <th>Liens</th>
                </tr>';
             
         }
@@ -110,6 +111,7 @@ echo '
                <td >'.$payed.'</td>
                <td >'.$present.'</td>
                <td >'.$weighted.'</td>
+               <td ><a href="./card.php?sid='.$strId.'" class="gridButton" >Carte</a></td>
                </tr>';
         
         

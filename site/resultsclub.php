@@ -190,6 +190,15 @@ function makePDF(pdf_name) {
         echo "doc.text('".$agcat_name." - ".$rank."e : ".$surname." ".$name."', 30, ".$position.");";
        
         $position=$position + $step;
+        if ($position>270){
+               echo ' doc.addPage();';
+               echo ' add_title(doc);
+                      doc.setFontSize(18).setFont("helvetica", "bold");
+                      doc.text(\'Répicatulatif (suite) pour '.$club.'\', doc.internal.pageSize.width/2, 35, {align: \'center\'});
+                      doc.setFontSize(16).setFont("helvetica", "bold");'; 
+              $position= 55;
+        
+        }
      }
      $stmt->close();
               

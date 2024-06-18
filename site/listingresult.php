@@ -38,6 +38,7 @@ echo '
                        echo'
                    <a class="pgeBtn" href="results.php" title="PDF Catégories" >PDF Catégories</a>
                    <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>';
+                   }
                    echo'
                </span>
            
