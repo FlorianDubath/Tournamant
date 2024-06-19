@@ -101,7 +101,7 @@ echo'
        <div class="cont_l">
          <div class="h">'; 
 if ( ! empty($_SESSION['_UserId'])) {
-    if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1) {
+    if ($_SESSION['_IsWelcome']==1 || $_SESSION['_IsMainTable']==1 || $_SESSION['_IsMainTable']==1) {
        echo '<span class="item_action"><span class="h_title">ACCUEIL</span>';
        if (!empty($Id) && $Id>0) {
             
@@ -252,6 +252,7 @@ if ( ! empty($_SESSION['_UserId'])) {
     
  
     if (($_SESSION['_IsWeighting']==1 || $_SESSION['_IsMainTable']==1) && $Id>0 && $chin>0) {
+    
          if (!empty($_POST['wgok'])&&$_POST['wgok']==1 && !empty($_POST['wgc']) && !empty($_POST['trid'])) { 
               $stmt = $mysqli->prepare("UPDATE TournamentRegistration SET WeightChecked=1, CategoryId=?, WeightCheckedBy=? WHERE Id=?");
               $stmt->bind_param("iii", $_POST['wgc'], $_SESSION['_UserId'], $_POST['trid']);
@@ -337,6 +338,8 @@ if ( ! empty($_SESSION['_UserId'])) {
                              echo '</select>';
                              if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
                                 echo' <input class="pgeBtn"  type="submit" value="Poids vérifié">';
+                            } else {
+                                   echo' Pesée terminée! Contacter la table centrale.';
                             }
                             echo '</span>
                           </form></span>';

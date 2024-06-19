@@ -220,7 +220,7 @@ echo'
        
         echo $ac_name;
         
-if ($_SESSION['_IsMainTable']==1 || !empty($actual_cat_Id)) {
+if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
  echo'    
       <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_acat\'),\'pop_hide\');"></a>
 			    <span class="pop_back pop_hide" Id="pop_acat">

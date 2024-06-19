@@ -50,7 +50,7 @@ echo '
             </span>
              <span class="btnBar"> 
                    <a class="pgeBtn" href="index.php" title="Fermer" >Fermer</a>';
-          if ($_SESSION['_IsRegistration']==1 || $_SESSION['_IsWelcome']==1 || $_SESSION['_IsMainTable']==1) {
+          if ($_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1 || $_SESSION['_IsMainTable']==1) {
               echo'
                    <a class="pgeBtn" target="_blanck" href="Inscriptions.xltx" title="Fichier Club" >Fichier Club</a>
                    <a class="pgeBtn" href="cards.php" title="Cartes" >Générer les cartes</a>';
@@ -82,7 +82,7 @@ echo '
 	             </form>
 	             
 	             <span class="btnBar"> ';
-          if ($_SESSION['_IsRegistration']==1 || $_SESSION['_IsWelcome']==1 || $_SESSION['_IsMainTable']==1) {
+          if ($_SESSION['_IsRegistration']==1 || $_SESSION['_IsMainTable']==1 || $_SESSION['_IsMainTable']==1) {
               echo'
                        <a class="pgeBtn"  href="pays.php" title="Payements Groupés">Payements Groupés</a>
 	               <a class="pgeBtn"  href="regs.php" title="Inscriptions Groupées">Inscriptions Groupées</a>';
