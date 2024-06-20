@@ -62,7 +62,7 @@ writeBand();
           
           
          while( $stmt->fetch()){
-         echo'  <tr><td>'.$catName.'('.$catShortName.')</td><td>'.$gender.'</td><td>'. (date("Y", strtotime($RegistrationBegin))-$maxa).'-'.(date("Y", strtotime($RegistrationBegin))-$mina).' ('.$mina.'-'.$maxa.' ans)</td><td>'.$duration.' min</td><td>'.$adaptWeight.'</td><td>'.$RegistrationBegin.'</td><td>'.$RegistrationEnd.'</td><td><a class="grdBtn" href="configcat.php?id='.$Id.'">Modifier</a>
+         echo'  <tr><td>'.$catName.' ('.$catShortName.')</td><td>'.$gender.'</td><td>'. (date("Y", strtotime($RegistrationBegin))-$maxa).'-'.(date("Y", strtotime($RegistrationBegin))-$mina).' ('.$mina.'-'.$maxa.' ans)</td><td>'.$duration.' min</td><td>'.$adaptWeight.'</td><td>'.$RegistrationBegin.'</td><td>'.$RegistrationEnd.'</td><td><a class="grdBtn" href="configcat.php?id='.$Id.'">Modifier</a>
           <form action="./configcat.php" method="post">
              <input type="hidden" name="id" value="'.$Id.'"/>
              <input type="hidden" name="del" value="1"/>

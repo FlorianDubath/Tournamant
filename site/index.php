@@ -12,7 +12,7 @@ echo'
 <body>
     <div class="f_cont">';
     
-writeBand();
+writeBand(True);
 
 
 

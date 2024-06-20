@@ -4,7 +4,7 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if (empty($_SESSION['_UserId'])) {
+if ($_SESSION['_IsMainTable']!=1 && $_SESSION['_IsAdmin']!=1) {
 	header('Location: ./index.php');
 }
 
@@ -50,7 +50,7 @@ writeBand();
                echo'
                 </select>
         <input class="pgeBtn" type="submit" value="Générer">
-       </form>
+       </form> <br/>
        <span Id="progress"> </span>
         <span class="btnBar"> 
        <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>

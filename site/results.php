@@ -4,24 +4,65 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
-if (empty($_SESSION['_UserId'])) {
+if ($_SESSION['_IsMainTable']!=1 && $_SESSION['_IsAdmin']!=1) {
 	header('Location: ./index.php');
 }
 
 
+$acid = (int)$_GET['acid'];
+
 include '_commonBlock.php';
 writeHead();
 
+ include 'connectionFactory.php';
+
+$mysqli= ConnectionFactory::GetConnection(); 
 
 echo '
 <body>
     <div class="f_cont">
+       <div class="f_cont">';
+echo'        
+       <div class="cont_l">
+         <div class="h">'; 
+    
+    
+writeBand();
+    echo'
     
     <div>
-       Génération des résultats: 
-       <a href="" OnClick=""></a>
+        <span class="h_title">
+               GENERER LES RESULTATS PAR CATEGORIE
+            </span>
+      
+        <form action="./results.php" method="get">
+        <span class="label">Catégorie :</span>
+              <select name="acid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
+               $stmt = $mysqli->prepare(" SELECT 
+                           ActualCategory.Id, 
+                           ActualCategory.Name 
+               FROM ActualCategory 
+               INNER JOIN TournamentCategory ON TournamentCategory.Id = ActualCategory.CategoryId
+               INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
+               INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id
+               ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC");
+      	        $stmt->execute();
+               $stmt->bind_result($ccId,$ccname);
+               while ($stmt->fetch()){
+                  $sel ='';
+                  if ($ccId==$acid) { $sel=' selected ';}
+                  echo '<option value="'.$ccId.'" '.$sel.'>'.$ccname.'</option>';
+               }
+	           $stmt->close();
+               
+               echo'
+                </select>
+        <input class="pgeBtn" type="submit" value="Générer">
+       </form><br/>
        <span Id="progress"> </span>
+        <span class="btnBar"> 
        <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>
+       </span>
     </div>
 
     <div id="print" style="display:none;">
@@ -32,11 +73,11 @@ echo '
     </div>
     
     </div>
+    </div>
+    </div>
 ';
 
- include 'connectionFactory.php';
-
-$mysqli= ConnectionFactory::GetConnection(); 
+if (!empty($acid)) {
 
   
 $stmt = $mysqli->prepare("SELECT Name, TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1");
@@ -51,8 +92,8 @@ if ($TournamentStart!=$TournamentEnd) {
 }
 
 $where_clause='';
-if(!empty($_GET['acid']) ) {	
-     $where_clause=" WHERE ActualCategoryResult.ActualCategoryId=".(int)$_GET['acid']." ";
+if($acid>0 ) {	
+     $where_clause=" WHERE ActualCategoryResult.ActualCategoryId=".$acid." ";
 }
 
 echo'
@@ -177,7 +218,10 @@ function makePDF(pdf_name) {
 
  makePDF(\''.$pdf_name.'\');
 
-</script>
+</script>';
+
+}
+echo '
 </html>';
 
 ?>

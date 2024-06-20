@@ -80,7 +80,7 @@ echo'
 		            Etes-vous sur ? <br/> 
 		            Cette opération ne peut être annulée !
 		           </span> 
-		            Peut-être voulez-vous sauvegarder encore une fois <br/><a class="pgeBtn" href="results.php" target="_blanck">les résultats</a>? <br/><a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
+		            Peut-être voulez-vous sauvegarder encore une fois <br/><a class="pgeBtn" href="results.php?acat=-1" target="_blanck">les résultats</a>? <br/><a class="pgeBtn" href="resultsclub.php?cid=-1" target="_blanck">les résultats par clubs</a>?<br/><br/>
 		            
 		            
 		 	    <span class="btnBar"> 

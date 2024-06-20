@@ -33,11 +33,14 @@ function writeHead() {
 </head>';
 }
 
-function writeBand() {
+function writeBand($open=False) {
     $isLoged =  !empty($_SESSION['_UserId']);
     
     echo '<div id="band" class="band ';
-    echo 'b_closed';
+    if ($open && $isLoged) {
+    } else {
+        echo 'b_closed';
+    }
     echo'" >
              <div class="b_title" onclick="toggleClass(document.getElementById(\'band\'), \'b_closed\')"> 
                   <img id="logo" src="css/Logo_ACG_JJJ.png" height="30px"></img>
