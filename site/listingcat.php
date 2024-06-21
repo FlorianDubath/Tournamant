@@ -77,8 +77,8 @@ echo '
            if ( $current_end_time!=''){
                echo '</table></div></div>';
            } 
-               $w_end = new DateTime($weighting_end);
-               $now = new DateTime();
+               $w_end = new DateTime($weighting_end, new DateTimeZone('Europe/Zurich'));
+               $now = new DateTime("now",new DateTimeZone('Europe/Zurich'));
                $interval_end = $now->diff($w_end);
               
                echo ' <div class="wgt_tm_grp"> <span class="wgt_tm_grp_ttl">';

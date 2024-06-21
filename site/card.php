@@ -4,6 +4,8 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
+date_default_timezone_set('Europe/Zurich');
+        
 function wrap_res($rk){
   if ($rk==1){
   return $rk.'<span class="sup">re</span>';
@@ -336,7 +338,14 @@ if ( ! empty($_SESSION['_UserId'])) {
                                
                              echo getWeights($weight_cat, $age_cat_id,$w_to_confirm) ;   
                              echo '</select>';
-                             if (date($weighting_end) > date("Y-m-d H:i:s")  || $_SESSION['_IsMainTable']==1) {
+                             $w_end = new DateTime($weighting_end);
+                             $w_end->setTimezone(new DateTimeZone('Europe/Zurich'));
+                             
+                             $w_start = new DateTime($weighting_begin);
+                             $w_start->setTimezone(new DateTimeZone('Europe/Zurich'));             
+                             $now = new DateTime();
+                  
+                             if ($w_end > $now  || $_SESSION['_IsMainTable']==1) {
                                 echo' <input class="pgeBtn"  type="submit" value="Poids vérifié">';
                             } else {
                                    echo' Pesée terminée! Contacter la table centrale.';
@@ -461,9 +470,14 @@ echo'
                          <span class="c_p_element '.$pay_cls.'"> Payement </span>
                          <span class="c_p_element '.$acc_cls.'"> Annonce à l\'acceuil </span>';
                    
-                  $w_end = new DateTime($weighting_end);
-                  $w_start = new DateTime($weighting_begin);
-                  $now = new DateTime();
+                  $w_end = new DateTime($weighting_end, new DateTimeZone('Europe/Zurich'));
+                 
+                  $w_start = new DateTime($weighting_begin, new DateTimeZone('Europe/Zurich'));
+                  $now = new DateTime("now",new DateTimeZone('Europe/Zurich'));
+                  
+                //  var_dump($w_end);
+                //  var_dump($now);
+                  
                   $interval_start = $now->diff($w_start);
                   $interval_end = $now->diff($w_end);
                  
@@ -473,14 +487,14 @@ echo'
                        if ( $interval_start->days>0){
                            echo' <span class="c_p_element c_p_info"> La pesée ouvre dans '.$interval_start->days.' jour(s)</span>'; 
                        } else {
-                           echo' <span class="c_p_element c_p_info"> La pesée ouvre dans '.$interval_start->h.'h et '.$interval_start->m.' min</span>'; 
+                           echo' <span class="c_p_element c_p_info"> La pesée ouvre dans '.$interval_start->h.'h et '.$interval_start->i.' min</span>'; 
                        }
                        
                   } else {   // weighting already opened
                       if (!$weight_checked) {
                           if ($now < $w_end){
                               echo '<span class="c_p_element c_p_todo"> Pesée </span>';
-                              echo '<span class="c_p_element c_p_info"> Il vous reste '.$interval_end->h.'h et '.$interval_end->m.' min pour vous peser</span>'; 
+                              echo '<span class="c_p_element c_p_info"> Il vous reste '.$interval_end->h.'h et '.$interval_end->i.' min pour vous peser</span>'; 
                           } else {
                               echo '<span class="c_p_element c_p_missed"> Pesée </span>';
                               echo '<span class="c_p_element c_p_info"> Désolé vous avez raté la pesée...</span>';

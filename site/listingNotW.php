@@ -78,15 +78,15 @@ echo '
                if ( $current_end_time!=''){
                    echo '</table></div>';
                } 
-               $w_end = new DateTime($weighting_end);
-               $now = new DateTime();
+               $w_end = new DateTime($weighting_end,new DateTimeZone('Europe/Zurich'));
+               $now = new DateTime("now",new DateTimeZone('Europe/Zurich'));
                $interval_end = $now->diff($w_end);
               
                echo ' <div class="wgt_tm_grp"> <span class="wgt_tm_grp_ttl">';
                if ($now > $w_end) {
                     echo 'Pesée terminée ('.date('j/m H\hi', strtotime($weighting_end)).')';
                } else {
-                    echo date('j/m H\hi', strtotime($weighting_end)). ' ('.$interval_end->h.'h '.$interval_end->m.' min.)';
+                    echo date('j/m H\hi', strtotime($weighting_end)). ' ('.$interval_end->h.'h '.$interval_end->i.' min.)';
                }    
                echo'</span>';
                

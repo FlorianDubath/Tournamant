@@ -26,8 +26,8 @@ CREATE TABLE  TournamentSiteUser (
   IsMatTable TINYINT NOT NULL DEFAULT 0
 );
 
-INSERT TournamentSiteUser (EMail,Salt,Password,DisplayName,IsAdmin,IsRegistration,IsWelcome,IsWeighting,IsMainTable,IsMatTable)
-VALUES('florian@dubath.org','2015-12-11','tttttttttttttttttttttttttttttttt','Florian Dubath',1,1,1,1,1,1);
+INSERT INTO TournamentSiteUser(CreatedOn,EMail,Salt, Password, DisplayName, IsAdmin)
+ VALUES('2024-06-21 09:56:33', 'admin', '2024-06-21:07:06:33', 'bad7751919f019226e87a0722aa14343', 'Utilisateur Test', 1);
 
 CREATE TABLE TournamentGender(
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -274,19 +274,19 @@ CREATE TABLE TournamentRegistration(
 
 
 INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, System, Prize, Judge, Dressing, Contact, RegistrationEnd, TournamentStart, TournamentEnd) VALUES (
-     '49e Championnats Genevois Individuels de Judo',
+     '51e Championnats Genevois Individuels de Judo',
      'Centre Omnisport du Sapay, ch. le Sapay 3, 1212 Grand-Lancy',
      'Transports publics recommandés. Arrêt Tpg Lancy-Bachet ou gare CEVA Lancy-Bachet (10mn à pied). Accès et parking difficiles pour les voitures.',
      'ACGJJJ',
-     'Membre d\'un club de l\'association cantonale genevoise de judo et ju-jitsu Licence annuelle 2022 obligatoire. Ceux nés en 2012 ne sont pas autorisés à combattre.',
+     'Membre d\'un club de l\'association cantonale genevoise de judo et ju-jitsu Licence annuelle 2024 obligatoire. Ceux nés en 2014 ne sont pas autorisés à combattre.',
      'Compétitions individuelles. Pool jusqu\'à cinq combattants. Dès six combattants : pools au premier tour puis tableau sans repêchage.',
      'Une médaille pour les quatre premiers + le titre de « champion(ne) genevois(e) pour la première place.',
      'Assurés par les arbitres officiels de la Fédération Suisse de Judo.',
      'Judogi blanc uniquement. Cheveux longs attachés (chignon). T-shirt blanc pour les combattantes.',
      'info@acgjjj.ch, Alexandre Perles 079 260 79 67, Stéphane Fischer 077 421 15 67',
-     '2022-03-20',
-     '2022-03-27',
-     '2022-03-27'   
+     '2024-06-01',
+     '2024-06-04',
+     '2024-06-04'   
 );
 
 

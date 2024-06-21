@@ -44,7 +44,7 @@ writeHead();
           $stmt->close();
       } else {
           $stmt = $mysqli->prepare("INSERT  TournamentSiteUser (EMail,DisplayName, Salt,Password,IsAdmin,IsRegistration,IsWelcome,IsWeighting,IsMainTable,IsMatTable) VALUES (?,?,?,?,?,?,?,?,?,?)");
-          $stmt->bind_param("sssiiiiiii",$mail,$disp,$salt,$password_md5,$da,$dr,$dwc,$dwg,$dmt,$dtt);
+          $stmt->bind_param("ssssiiiiii",$mail,$disp,$salt,$password_md5,$da,$dr,$dwc,$dwg,$dmt,$dtt);
           $stmt->execute();
           $stmt->close();
       }

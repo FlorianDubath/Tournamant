@@ -118,11 +118,11 @@ function parseDate($ages, $year, $str) {
 }
 
 function parseWCat($wcats, $str) {
-    $cleaned = preg_replace('/(\'?-)/', '', $str);
+    $cleaned = preg_replace('/(\'?\s?-?)/', '', $str);
     if (array_key_exists($cleaned,$wcats)){
         return array("value"=>$wcats[$cleaned], "error"=>False);
     } else {
-        return array("value"=>-1, "error"=>True, "message"=>'"'.$str.'" N\'est pas un poid reconnu');
+        return array("value"=>-1, "error"=>True, "message"=>'"'.$str.'" ('. $cleaned.') N\'est pas un poid reconnu');
     }
 }
 
