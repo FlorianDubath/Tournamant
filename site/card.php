@@ -666,8 +666,8 @@ function getImgData(id) {
     return c.toDataURL();
 }
 
-
-qrcode.makeCode("http://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'");
+const current_card_url = "'.(empty($_SERVER['HTTPS']) ? 'http' : 'https') .'://'.$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH).'?sid='.$strId.'";
+qrcode.makeCode(current_card_url);
 
 function makePDF(pdf_name) {
   var doc = new jsPDF({format: \'a6\',orientation:\'l\'});
@@ -678,7 +678,7 @@ function makePDF(pdf_name) {
   var imgAddData = wrapImgData(document.getElementById("qrcode").getElementsByTagName("img")[0].src);
   doc.addImage(imgAddData, "PNG", 100, 25, 40, 40);
   //doc.setFontSize(6).setFont("helvetica", "normal");
-  //doc.textWithLink("https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'", 100, 70, {url: "https://'.$_SERVER['HTTP_HOST'].'/card.php&sid='.$strId.'"});
+  //doc.textWithLink(current_card_url, 100, 70, {url: current_card_url});
 
   doc.setFontSize(16).setFont("helvetica", "bold");
   ';

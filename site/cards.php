@@ -209,12 +209,12 @@ const trn_name ="'.$trName.'";
 const trn_date ="'.$date_txt.'";
 const data = '.json_encode($person_dict).';
 var current_index = 0;
-
+const current_card_url = "'.(empty($_SERVER['HTTPS']) ? 'http' : 'https') .'://'.$_SERVER['HTTP_HOST'].rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH),'s').'?sid=";
 function addPdfCard(doc, pdf_name){
       document.getElementById("progress").innerHTML=(current_index+1)+"/"+Object.keys(data).length;
       qrcode.clear();
       var curr_rec = data[Object.keys(data)[current_index]];
-      qrcode.makeCode("http://'.$_SERVER['HTTP_HOST'].'/card.php&sid=" + curr_rec.strId);
+      qrcode.makeCode(current_card_url + curr_rec.strId);
       
       intervall_id = setInterval(function () {
         if (document.getElementById("qrcode").getElementsByTagName("img")[0].src!=""){
