@@ -337,7 +337,11 @@ if ($_SESSION['_IsAdmin'] ==1){
               <input type="hidden" name="j3" value="-1"/>
               Tous remettre à zéro (y compris le mot de passe de l\'admin) - vous devrez vous identifier à nouveau avec les information originales
 	      <input class="pgeBtn"  type="submit" value="Remise à zéro des testes"> 
-	</form><br/><br/>
+	</form><br/><br/> 
+	<span class="h_title">Télécharger le mode d\'emplois</span>
+        <div style="display:block; width:100%;text-align:center;">
+        Fichier  pdf : <a class="pgeBtn" target="_blanck" href="ModeEmplois.pdf">Mode d\'emploi</a><br/><br/>
+        </div>
         <span class="h_title">Télécharger des données de test</span>
         <div style="display:block; width:100%;text-align:center;">
         Fichier  Excel : <a class="pgeBtn" target="_blanck" href="MaterielTest/Inscriptions_1.xlsx">Inscriptions 1 </a><br/><br/>
