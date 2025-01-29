@@ -1,0 +1,129 @@
+<head>
+   <style>
+        body {
+            background-color: black;
+        }
+        .title{
+           height:7%;
+           color:#DDFFDD; 
+           text-align:center;
+           font-size:40px;
+           margin-top:1%;
+        }
+        .blue {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: blue;
+            color:white;
+            text-align:center;
+            position:relative;
+        }
+        .white {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: white;
+            text-align:center;
+            position:relative;
+        }
+        .fighter {
+        margin-top:20px;
+        font-size:80px;
+        }
+        .score {
+        margin-top:40px;
+        font-size:200px;
+        letter-spacing: 20px;
+        }
+        
+        .timer {
+           height:240px;
+           color:#DDFFDD; 
+           text-align:center; 
+           font-size:200px;
+        }
+        .win {
+            position: absolute;
+            width:100%;
+            
+            font-size:100px;
+            color:#bf9b30;
+            right:0px;bottom:0px;
+        }
+    </style>
+</head>
+<body>
+<div id="title" class="title"></div>
+<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div></div>
+<div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div></div>
+<div class="timer">
+<span id="gs" style="display:none;" >GS&nbsp;</span>
+<span id="time"></span>
+<span id="running" style="display:none;">&#x23F2;</span>
+</div><br/>
+<div class="timer">
+<img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
+<span id="pd_time" style="display:none;"></span>
+<span id="pd_running" style="display:none;">&#x23F2;</span>
+</div>
+</body>
+<script>
+var running=false;
+var direction=-1;
+var start = Date.now();
+var current = 4*60000;  // 4min
+var display = current;
+var score_1=0;
+var score_2=0;
+var winner=0;
+
+
+function display_name(){
+    document.getElementById('name_1').innerHTML= localStorage.getItem("name_1");
+    document.getElementById('name_2').innerHTML= localStorage.getItem("name_2");
+
+}
+
+function display_title(){
+    document.getElementById('title').innerHTML=localStorage.getItem("title");
+}
+
+function displayTime(time_sec){
+    return""+Math.floor(time_sec/60)+"'"+ ("0" + time_sec%60).slice(-2)+'"';
+}
+
+function displayScore(){
+    document.getElementById('s_1').innerHTML = ("00" + score_1).slice(-3);
+    document.getElementById('s_2').innerHTML = ("00" + score_2).slice(-3);
+    
+    document.getElementById('win_1').style.display= winner==1?"inline-block":"none";  
+    document.getElementById('win_2').style.display= winner==2?"inline-block":"none";  
+
+}
+
+function display_pd(){
+    document.getElementById('pd_time').style.display=localStorage.getItem("pd_time")>0?"inline-block":"none";
+    document.getElementById('img_pd_time').style.display=(localStorage.getItem("pd_time")>0 || localStorage.getItem("pin_down")>0)?"inline-block":"none";
+    document.getElementById('pd_time').innerHTML=localStorage.getItem("pd_time")+'"';
+    document.getElementById('pd_running').style.display= localStorage.getItem("pin_down")>0?"inline-block":"none";
+}
+
+
+setInterval(function() {
+        const d_time = localStorage.getItem("time");
+        document.getElementById('time').innerHTML= d_time;
+        const running = localStorage.getItem("running")=='true';
+        document.getElementById('running').style.display = running?"inline-block":"none";
+        document.getElementById('gs').style.display = (localStorage.getItem("gs")=='true')?"inline-block":"none";
+        display_pd();
+        score_1 = localStorage.getItem("score_1");
+        score_2 = localStorage.getItem("score_2");
+        winner = localStorage.getItem("winner");
+        displayScore();
+        display_name();
+        display_title();
+        
+}, 100); 
+</script>
+</html>

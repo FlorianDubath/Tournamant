@@ -1,0 +1,412 @@
+<html>
+<head>
+   <style>
+        body {
+            background-color: black;
+        }
+        .title{
+           height:7%;
+           color:#DDFFDD; 
+           text-align:center;
+           font-size:40px;
+           margin-top:1%;
+        }
+        .blue {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: blue;
+            color:white;
+            text-align:center;
+            position:relative;
+        }
+        .white {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: white;
+            text-align:center;
+            position:relative;
+        }
+        .fighter {
+        margin-top:20px;
+        font-size:80px;
+        }
+        .score {
+        margin-top:40px;
+        font-size:200px;
+        letter-spacing: 20px;
+        }
+        
+        .timer {
+           height:240px;
+           color:#DDFFDD; 
+           text-align:center; 
+           font-size:200px;
+        }
+        
+        .win {
+            position: absolute;
+            width:100%;
+            
+            font-size:100px;
+            color:#bf9b30;
+            right:0px;bottom:0px;
+        }
+    </style>
+</head>
+<body>
+<div id="title" class="title"></div>
+<div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div></div>
+<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div></div>
+<div class="timer">
+<span id="gs" style="display:none;" >GS&nbsp;</span>
+<span id="time"></span>
+<span id="running" style="display:none;">&#x23F2;</span>
+</div><br/>
+<div class="timer">
+<img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
+<span id="pd_time" style="display:none;"></span>
+<span id="pd_running" style="display:none;">&#x23F2;</span>
+</div>
+</body>
+<script>
+var running=false;
+var pin_down=0;
+var direction=-1;
+var start = Date.now();
+var current = 4*60000;  // 4min
+var display = current;
+var score_1=0;
+var score_2=0;
+var winner=0;
+var pin_down_start = Date.now();
+var pd_time=0;
+var pd_score=0;
+var gs=false;
+
+
+
+document.addEventListener(
+  "keyup",
+  (event) => {
+    const keyName = event.key;
+
+    // As the user releases the Ctrl key, the key is no longer active,
+    // so event.ctrlKey is false.
+    if (keyName === " ") {
+      running = !running;
+      if (running){ 
+        reset_pin_down();
+        start = Date.now();
+      } else {
+         current = display;
+         stop_pin_down();
+      }
+      document.getElementById('running').style.display= running?"inline-block":"none";
+      localStorage.setItem("running", running);
+    } else if (keyName === "a"){
+        if (pin_down>0){
+           stop_pin_down();
+        } else {
+           reset_pin_down();
+           pin_down=1;
+           pin_down_start = Date.now();
+        }
+    }  else if (keyName === "l"){
+        if (pin_down>0){
+           stop_pin_down();
+        } else {
+           reset_pin_down();
+           pin_down=2;
+           pin_down_start = Date.now();
+        }
+    
+    } else if (keyName === "q"){
+        score_1+=100;
+        check_score();
+    } else if (keyName === "u"){
+        score_2+=100;
+        check_score();
+    } else if (keyName === "w"){
+        score_1+=10;
+        check_score();
+    } else if (keyName === "i"){
+        score_2+=10;
+        check_score();
+    } else if (keyName === "e"){ 
+        score_1+=1;
+        check_score();
+    } else if (keyName === "o"){
+        score_2+=1;
+        check_score();
+    } else if (keyName === "Q"){
+        score_1-=100;
+        winner=0;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    } else if (keyName === "U"){
+        score_2-=100;
+        winner=0;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    } else if (keyName === "W"){
+        score_1-=10;
+        winner=0;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    } else if (keyName === "I"){
+        score_2-=10;
+        winner=0;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    } else if (keyName === "E"){ 
+        score_1-=1;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    } else if (keyName === "O"){
+        score_2-=1;
+        document.getElementById('win_1').style.display= "none";
+        document.getElementById('win_2').style.display= "none";
+        check_score();
+    }
+    
+    
+  },
+  false,
+);
+
+function gong(){
+   // todo;
+}
+
+function display_pd(){
+    document.getElementById('pd_time').style.display= (pin_down>0 || pd_time>0)?"inline-block":"none";
+    document.getElementById('img_pd_time').style.display= pd_time>0?"inline-block":"none";
+    document.getElementById('pd_time').innerHTML=pd_time+'"';
+    document.getElementById('pd_running').style.display= pin_down>0?"inline-block":"none";
+    
+}
+
+function reset(){
+    score_1=0;
+    score_2=0;
+    winner=0;
+    running=false;
+    gs=false;
+    
+    document.getElementById('win_1').style.display= "none";
+    document.getElementById('win_2').style.display= "none";
+    
+   
+    localStorage.setItem("running", running);
+    localStorage.setItem("score_1", score_1);
+    localStorage.setItem("score_2", score_2);
+    localStorage.setItem("winner", winner);
+    localStorage.setItem("gs", gs);
+};
+
+function set_duration(minutes){
+    current = minutes*60000; 
+    direction=-1;
+    display = current; 
+    localStorage.setItem("time", displayTime(current/1000));
+    document.getElementById('time').innerHTML =  displayTime(current/1000);
+}
+
+function set_name(name_1,name_2){
+    document.getElementById('name_1').innerHTML=name_1;
+    document.getElementById('name_2').innerHTML=name_2;
+    localStorage.setItem("name_1", name_1);
+    localStorage.setItem("name_2", name_2);
+}
+
+function set_title(title){
+    document.getElementById('title').innerHTML=title;
+    localStorage.setItem("title", title);
+}
+
+function pauseTimer(){
+    running=false;
+    pin_down=0;
+    current = display;
+    document.getElementById('running').style.display= running?"inline-block":"none";
+    localStorage.setItem("running", running);
+    document.getElementById('pd_running').style.display= (pin_down>0)?"inline-block":"none";
+    localStorage.setItem("pin_down", pin_down);
+}
+
+function check_time(){
+   if (display<=0 && pin_down==0){
+      gong();
+      pauseTimer();
+      if (score_1>score_2){
+          winner=1;
+      } else if (score_2>score_1){
+          winner=2;
+      } else {
+        gs=true;
+        localStorage.setItem("gs", gs);
+        direction=1;
+        current = 0;  
+        display = 0;
+        localStorage.setItem("time", displayTime(0));
+        document.getElementById('time').innerHTML=  displayTime(0);
+        document.getElementById('gs').style.display = "inline-block";
+        
+      }
+      
+   }
+}
+
+function  check_pd_time() {
+  if (pin_down>0){
+      if (pd_time>=5 && pd_score<1){
+          pd_score=1;
+          if (pin_down==1){
+              score_1+=1;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=1;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();
+      } 
+      if (pd_time>=10 && pd_score<10){
+          pd_score=10;
+           if (pin_down==1){
+              score_1+=9;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=9;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();
+          
+      }
+      if (pd_time>=20 && pd_score<100){
+          pd_score=100;
+           if (pin_down==1){
+              score_1+=90;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=90;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();   
+      }
+   }
+}
+
+function check_score(){
+    
+    if (score_1>=20){
+        winner=1;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        
+        document.getElementById('win_1').style.display= "inline-block";  
+    }
+    if (score_2>=20){
+        winner=2;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        
+        document.getElementById('win_2').style.display= "inline-block";  
+    }
+    
+    if (gs && score_1>score_2){
+        winner=1;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        document.getElementById('win_1').style.display= "inline-block";  
+    }
+    
+    if (gs && score_1<score_2){
+        winner=2;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        document.getElementById('win_2').style.display= "inline-block";  
+    }
+    localStorage.setItem("score_1", score_1);
+    localStorage.setItem("score_2", score_2);
+    localStorage.setItem("winner", winner);
+    displayScore();
+}
+
+function displayScore(){
+    document.getElementById('s_1').innerHTML = ("00" + score_1).slice(-3);
+    document.getElementById('s_2').innerHTML = ("00" + score_2).slice(-3);
+    if (winner>0){
+       //Todo;
+    }
+}
+
+function displayTime(time_sec){
+    return""+Math.floor(time_sec/60)+"'"+ ("0" + time_sec%60).slice(-2)+'"';
+}
+
+function reset_pin_down(){
+    pin_down=0;
+    pd_time=0;
+    pd_score=0;
+    localStorage.setItem("pin_down", pin_down);
+    localStorage.setItem("pd_time", 0);
+    display_pd();
+}
+
+function stop_pin_down(){
+    pin_down=0;
+    pd_score=0;
+    localStorage.setItem("pin_down", pin_down);
+    display_pd();
+}
+
+
+     
+
+setInterval(function() {
+    if (running){
+        var delta = Date.now() - start; // milliseconds elapsed since start
+        display = current + direction* delta;
+        const d_time = displayTime(direction>0?Math.floor(display/1000):Math.ceil(display/1000));
+        localStorage.setItem("time", d_time);
+        document.getElementById('time').innerHTML= d_time;
+        check_time();
+        
+        if (pin_down>0){
+            delta = Date.now() - pin_down_start;
+            pd_time = Math.floor(delta/1000);
+            localStorage.setItem("pd_time", pd_time);
+            localStorage.setItem("pin_down", pin_down);
+            display_pd();
+            check_pd_time();
+        } 
+    }
+}, 100); 
+
+set_title("HM-81");
+set_name("Fighter 1","Fighter 2");
+set_duration(1);
+reset();
+reset_pin_down();
+displayScore();
+
+</script>
+</html>
