@@ -441,7 +441,16 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
-                       <!--
+                       
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="5" />
+                                 <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input  class="resbtn" type="submit" value="Yuko">
+                       </form>
+                       
                        <form action="figtRes.php" method="post">
                                  <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
@@ -450,8 +459,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input  class="resbtn" type="submit" value="Décision">
                        </form>
-                       --!>
-                       
+                      
                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
                       
                       </span></span>
@@ -485,7 +493,16 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
-                       <!--
+                       
+                       <form action="figtRes.php" method="post">
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" value="'.$f_id.'" />
+                                 <input type="hidden" name="pv1" value="0" />
+                                 <input type="hidden" name="pv2" value="5" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input class="resbtn" type="submit" value="Yuko ">
+                       </form>
+                 
                        <form action="figtRes.php" method="post">
                                  <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
@@ -494,7 +511,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Décision">
                        </form>
-                       --!>
+                  
                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
                       
                       </span></span>
