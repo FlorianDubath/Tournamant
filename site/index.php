@@ -18,7 +18,7 @@ writeBand(True);
 
  include 'connectionFactory.php';
     $mysqli= ConnectionFactory::GetConnection(); 
-  if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, System,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
+  if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, `System`,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
       	  }
           if (!($stmt->execute())){

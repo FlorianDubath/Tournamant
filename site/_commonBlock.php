@@ -67,7 +67,7 @@ function writeBand($open=False) {
 	             </span>
 	            ';
 	             
-	             if ($_GET["CR"]) {
+	             if (array_key_exists("CR",$_GET) &&  $_GET["CR"]) {
 	                echo ' <br/><span class="fitem"><span class="message">Vérifiez vos indentifiants</span><br/>' ;
 	             }
 	             

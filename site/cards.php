@@ -209,7 +209,8 @@ const trn_name ="'.$trName.'";
 const trn_date ="'.$date_txt.'";
 const data = '.json_encode($person_dict).';
 var current_index = 0;
-const current_card_url = "'.(empty($_SERVER['HTTPS']) ? 'http' : 'https') .'://'.$_SERVER['HTTP_HOST'].rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH),'s').'?sid=";
+const current_card_url = "'.(empty($_SERVER['HTTPS']) ? 'http' : 'https') .'://'.$_SERVER['HTTP_HOST'].rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH),'s.php').'.php?sid=";
+alert(current_card_url);
 function addPdfCard(doc, pdf_name){
       document.getElementById("progress").innerHTML=(current_index+1)+"/"+Object.keys(data).length;
       qrcode.clear();

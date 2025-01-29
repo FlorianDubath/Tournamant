@@ -20,10 +20,24 @@ $message="";
 
 if ($clubid>0 && $nb>0) {
     $stmt = $mysqli->prepare("
-         UPDATE TournamentRegistration R
+         SELECT R.Id 
+         FROM TournamentRegistration R
          INNER JOIN TournamentCompetitor C ON R.CompetitorId= C.Id AND R.Payed=0 AND C.ClubId=? 
-         SET R.Payed=1 LIMIT ?");
+         LIMIT ?");
     $stmt->bind_param('ii',$clubid,$nb);
+    $stmt->bind_result($rid);
+    $stmt->execute();
+    
+    $r_ids=array();
+    while ( $stmt->fetch()){
+       array_push($r_ids,$rid);
+    }
+    $stmt->close();
+
+
+    $stmt = $mysqli->prepare("
+         UPDATE TournamentRegistration R
+         SET R.Payed=1 WHERE ID in (".implode(',',$r_ids).")");
     $stmt->execute();
     $stmt->close();
     $message="Payement enregistré.";

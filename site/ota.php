@@ -58,13 +58,17 @@ echo'
         <div class="h">';
         
 writeBand();
+ 
+$pieces = explode("/", $_SERVER['PHP_SELF']);
+array_pop($pieces);
+$path = implode('/',$pieces);
 echo'
             <span class="h_title">ACCES UNIQUE POUR CHANGER DE MOT DE PASSE</span>
             <span style="text-align:center">
             <div>  Desiné à :'.$disp.'</div><br/>
             <div>Valide jusqu\'à :'. $date.'</div><br/><br/>
             <div style="width:250px;margin:10px auto 10px auto;"><div id="qrcode"></div></div>
-           <div class="url">https://'.$_SERVER['HTTP_HOST'].'/mdp.php?ota='.$new_otid.'</div>
+           <div class="url">https://'.$_SERVER['HTTP_HOST'].$path.'/mdp.php?ota='.$new_otid.'</div>
            </span>
          </div>     
         </div>  

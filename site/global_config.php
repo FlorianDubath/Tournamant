@@ -13,7 +13,7 @@ $mysqli= ConnectionFactory::GetConnection();
 $message='';
 if($_POST && !empty($_POST['id'])) {
 
-          $stmt = $mysqli->prepare("UPDATE TournamentVenue SET Name=?,Place=?,Transport=?,Organization=?, Admition=?, System=?,Prize=?, Judge=?,Dressing=?,Contact=?,RegistrationEnd=?,TournamentStart=?,TournamentEnd=? WHERE Id=?");
+          $stmt = $mysqli->prepare("UPDATE TournamentVenue SET Name=?,Place=?,Transport=?,Organization=?, Admition=?, `System`=?,Prize=?, Judge=?,Dressing=?,Contact=?,RegistrationEnd=?,TournamentStart=?,TournamentEnd=? WHERE Id=?");
       	  $stmt->bind_param("sssssssssssssi", $_POST['nme'], $_POST['plc'], $_POST['tsp'], $_POST['org'], $_POST['adm'], $_POST['sys'], $_POST['prz'], $_POST['jdg'], $_POST['drs'], $_POST['ctc'], $_POST['reg'], $_POST['ts'], $_POST['te'] , $_POST['id'] );
           $stmt->execute();
 	      $stmt->close();
@@ -99,7 +99,7 @@ echo'
          
          
 
-	     if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, System,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
+	     if (!($stmt = $mysqli->prepare("SELECT Id,Name,Place,Transport,Organization, Admition, `System`,Prize, Judge,Dressing,Contact,RegistrationEnd,TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1"))){
       	     echo '<span class="error">Prepare failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
       	  }
           if (!($stmt->execute())){
