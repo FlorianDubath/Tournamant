@@ -51,12 +51,57 @@
             color:#bf9b30;
             right:0px;bottom:0px;
         }
+         
+        .sh_1{
+          position: absolute; 
+          right:calc(50% - 250px);
+          top:200px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }  
+        .sh_2{
+         position: absolute; 
+          right:calc(50% - 267px);
+          top:217px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
+        .sh_3{
+         position: absolute; 
+          right:calc(50% - 284px);
+          top:234px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
+        .sh_4{
+         position: absolute; 
+          right:calc(50% - 300px);
+          top:250px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
     </style>
 </head>
 <body>
 <div id="title" class="title"></div>
-<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div></div>
-<div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div></div>
+<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_1" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_1" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_1" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_1" style="display:none;"></div></div>
+<div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_2" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_2" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_2" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_2" style="display:none;"></div></div>
 <div class="timer">
 <span id="gs" style="display:none;" >GS&nbsp;</span>
 <span id="time"></span>
@@ -64,6 +109,8 @@
 </div><br/>
 <div class="timer">
 <img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
+<img src="css/pin_down_blue.png"  id="img_pd_blue" style="display:none;"/>
+<img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
 <span id="pd_time" style="display:none;"></span>
 <span id="pd_running" style="display:none;">&#x23F2;</span>
 </div>
@@ -99,14 +146,23 @@ function displayScore(){
     
     document.getElementById('win_1').style.display= winner==1?"inline-block":"none";  
     document.getElementById('win_2').style.display= winner==2?"inline-block":"none";  
+    
+    //Todo display shido
 
 }
 
 function display_pd(){
-    document.getElementById('pd_time').style.display=localStorage.getItem("pd_time")>0?"inline-block":"none";
-    document.getElementById('img_pd_time').style.display=(localStorage.getItem("pd_time")>0 || localStorage.getItem("pin_down")>0)?"inline-block":"none";
-    document.getElementById('pd_time').innerHTML=localStorage.getItem("pd_time")+'"';
-    document.getElementById('pd_running').style.display= localStorage.getItem("pin_down")>0?"inline-block":"none";
+   const pd_time = localStorage.getItem("pd_time");
+   const pin_down = localStorage.getItem("pin_down"); document.getElementById('pd_time').style.display=pd_time>0?"inline-block":"none";
+    document.getElementById('img_pd_time').style.display=(pd_time>0 && pin_down==0)?"inline-block":"none";
+    
+    
+    document.getElementById('img_pd_blue').style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
+    document.getElementById('img_pd_white').style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
+    
+    
+    document.getElementById('pd_time').innerHTML=pd_time+'"';
+    document.getElementById('pd_running').style.display= pin_down>0?"inline-block":"none";
 }
 
 
