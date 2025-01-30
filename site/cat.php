@@ -198,23 +198,14 @@ echo'
         }  
         .sh_2{
          position: absolute; 
-          right:calc(50% - 267px);
-          top:217px;
+          right:calc(50% - 275px);
+          top:225px;
           width:60px;
           height:80px;
           background-color:yellow;
           border:solid grey 2px;
         }
         .sh_3{
-         position: absolute; 
-          right:calc(50% - 284px);
-          top:234px;
-          width:60px;
-          height:80px;
-          background-color:yellow;
-          border:solid grey 2px;
-        }
-        .sh_4{
          position: absolute; 
           right:calc(50% - 300px);
           top:250px;
@@ -223,6 +214,7 @@ echo'
           background-color:yellow;
           border:solid grey 2px;
         }
+      
        
         
         .key{
@@ -835,7 +827,6 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
     <div class="sh_1" id="sh_1_2" style="display:none;"></div>
     <div class="sh_2" id="sh_2_2" style="display:none;"></div>
     <div class="sh_3" id="sh_3_2" style="display:none;"></div>
-    <div class="sh_4" id="sh_4_2" style="display:none;"></div>
   
     <a class="bbtn pos_1" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a>
     <a class="bbtn pos_2" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a>
@@ -856,7 +847,6 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
     <div class="sh_1" id="sh_1_1" style="display:none;"></div>
     <div class="sh_2" id="sh_2_1" style="display:none;"></div>
     <div class="sh_3" id="sh_3_1" style="display:none;"></div>
-    <div class="sh_4" id="sh_4_1" style="display:none;"></div>
     
     <a class="bbtn pos_1" onclick=" AddScore(1,100)" >Ippon (<span id="t_100_1">q</span>)</a>
     <a class="bbtn pos_2" onclick=" AddScore(1,10)" >Waza-ari (<span id="t_10_1">w</span>)</a>
@@ -873,6 +863,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 </div>
 <div class="sbbb">
 <a class="bbtn" onclick="StartPauseTimer()" >&nbsp;&nbsp;&nbsp;&nbsp;&#x23EF (bare d\'espace)&nbsp;&nbsp;&nbsp;&nbsp;</a><a class="bbtn" onclick="addTime(1000)"  > Ajouter 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
+
+<a class="bbtn" onclick="gong()" >Gong (<span id="t_gong">1</span>)</a>
 </div>
 <div class="timer">
 <span id="gs" style="display:none;" >GS&nbsp;</span>
@@ -911,7 +903,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 		  Yuko combatant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
 		  Shido combatant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
 		  
-		  Décision combatant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/>
+		  Décision combatant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/><br/>
+		  
+		  Gong <input class="key" type="text" id="k_gong" maxlength="1"  value="1"/><br/><br/>
 		  
 
 		  
@@ -989,6 +983,7 @@ var char_m1_2="o";
 var char_dc_1="n";
 var char_dc_2="v";
 var f_id =-1;
+var char_gong='1';
 
 function setf_id(new_f_id){
  f_id=new_f_id;
@@ -1108,6 +1103,8 @@ document.addEventListener(
         decision(1);
     } else if (keyName === char_dc_2){
         decision(2);
+    } else if (keyName === char_gong){
+        gong();
     }
   },
   false,
@@ -1255,7 +1252,7 @@ function check_score(){
     if (shido_1>0){
        document.getElementById("sh_1_1").style.display= "inline-block";  
     }  else {
-        document.getElementById("sh_1_1").style.display= "none";  
+        document.getElementById("h_1_1").style.display= "none";  
     }
     if (shido_1>1){
        document.getElementById("sh_2_1").style.display= "inline-block";  
@@ -1263,15 +1260,14 @@ function check_score(){
         document.getElementById("sh_2_1").style.display= "none";  
     }
      if (shido_1>2){
-       document.getElementById("sh_3_1").style.display= "inline-block";  
+       document.getElementById("sh_3_1").style.display= "inline-block"; 
+       winner=1;  
+       pauseTimer();
     } else {
-        document.getElementById("sh_3_1").style.display= "none";  
+        document.getElementById("sh_3_1").style.display= "none"; 
+        
     }
-    if (shido_1>3){
-       document.getElementById("sh_4_1").style.display= "inline-block";  
-    } else {
-        document.getElementById("sh_4_1").style.display= "none";  
-    }
+   
     
    if (shido_2>0){
        document.getElementById("sh_1_2").style.display= "inline-block";  
@@ -1284,17 +1280,12 @@ function check_score(){
         document.getElementById("sh_2_2").style.display= "none";  
     }
      if (shido_2>2){
-       document.getElementById("sh_3_2").style.display= "inline-block";  
+       document.getElementById("sh_3_2").style.display= "inline-block"; 
+       winner=2; 
+       pauseTimer();
     } else {
         document.getElementById("sh_3_2").style.display= "none";  
     }
-    if (shido_2>3){
-       document.getElementById("sh_4_2").style.display= "inline-block";  
-    } else {
-        document.getElementById("sh_4_2").style.display= "none";  
-    }
-    
-    //TODO update score based on shido/
     
     if (score_1>=20){
         winner=1;
@@ -1344,9 +1335,18 @@ function check_score(){
         if (score_1_win>=20 && score_1_win<100) {
             score_1_win+=80;
         }
+        
         var score_2_win = score_2;
         if (score_2_win>=20 && score_2_win<100) {
             score_2_win+=80;
+        }
+        
+        if (shido_1>=3) {
+            score_1_win+=100;
+        }
+        
+        if (shido_2>=3) {
+            score_2_win+=100;
         }
         
         var res_name = "Décision";
@@ -1508,6 +1508,9 @@ function conf_key(){
     document.getElementById("t_1_2").innerHTML = char_1_2;
     char_m1_2 = document.getElementById("k_m1_2").value;
     document.getElementById("t_m1_2").innerHTML = char_m1_2;
+    
+    char_gong = document.getElementById("k_gong").value;
+    document.getElementById("t_gong").innerHTML = char_gong;
 }
 
 set_title("'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'");
