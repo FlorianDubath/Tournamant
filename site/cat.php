@@ -983,7 +983,7 @@ var char_m1_2="o";
 var char_dc_1="n";
 var char_dc_2="v";
 var f_id =-1;
-var char_gong='1';
+var char_gong="1";
 
 function setf_id(new_f_id){
  f_id=new_f_id;
