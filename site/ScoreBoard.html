@@ -123,6 +123,17 @@
             top:170px;
         }
         
+        .pos_s_d1{
+            position: absolute; 
+            right:20px;
+            bottom:20px;
+        }
+        .pos_s_d2{
+            position: absolute; 
+            left:20px;
+            bottom:20px;
+        }
+        
         .sh_1{
           position: absolute; 
           right:calc(50% - 250px);
@@ -159,6 +170,11 @@
           background-color:yellow;
           border:solid grey 2px;
         }
+       
+        
+        .key{
+           width:50px;
+        }
     </style>
 </head>
 <body>
@@ -168,6 +184,28 @@
  
 
 
+
+<div class="white" >
+    <div id="name_2" class="fighter"></div>
+    <div id="s_2" class="score"></div>
+    <div class="win" id="win_2" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_2" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_2" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_2" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_2" style="display:none;"></div>
+  
+    <a class="bbtn pos_1" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a>
+    <a class="bbtn pos_2" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a>
+    <a class="bbtn pos_3" onclick=" AddScore(2,1)" >Yuko (<span id="t_1_2">o</span>)</a>
+    <a class="bbtn pos_4" onclick=" AddShido(2,1)" >Shido (<span id="t_sh_2">p</span>)</a> 
+    <a class="bbtn  pos_s_1" onclick=" AddScore(2,-100)" > </span>&nbsp;(<span id="t_m100_2">U</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_2" onclick=" AddScore(2,-10)" > (<span id="t_m10_2">I</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_3" onclick=" AddScore(2,-1)" > (<span id="t_m1_2">O</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn pos_s_4" onclick=" AddShido(2,-1)" > (<span id="t_msh_2">P</span>)&nbsp;<span class="btn_sos"></span></a>
+    <div class="sbbb">
+<a class="bbtn " onclick="StartPausePin(2)" ><img src="css/pin_down_white.png" width="80px"/>(<span id="t_pd_2">l</span>)</a>
+</div>
+    <a class="bbtn pos_s_d2" onclick="decision(2)" >Décision (<span id="t_dc_2">v</span>)</a></div>
 <div class="blue" >
     <div id="name_1" class="fighter"></div>
     <div id="s_1" class="score"></div>
@@ -188,27 +226,8 @@
     <div class="sbbb">
         <a class="bbtn" onclick="StartPausePin(1)" ><img src="css/pin_down_blue.png" width="80px"/>(<span id="t_pd_1">a</span>)</a>
     </div>
+    <a class="bbtn  pos_s_d1" onclick="decision(1)" >Décision (<span id="t_dc_1">n</span>)</a>
 </div>
-<div class="white" >
-    <div id="name_2" class="fighter"></div>
-    <div id="s_2" class="score"></div>
-    <div class="win" id="win_2" style="display:none;">vainqueur</div>
-    <div class="sh_1" id="sh_1_2" style="display:none;"></div>
-    <div class="sh_2" id="sh_2_2" style="display:none;"></div>
-    <div class="sh_3" id="sh_3_2" style="display:none;"></div>
-    <div class="sh_4" id="sh_4_2" style="display:none;"></div>
-  
-    <a class="bbtn pos_1" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a>
-    <a class="bbtn pos_2" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a>
-    <a class="bbtn pos_3" onclick=" AddScore(2,1)" >Yuko (<span id="t_1_2">o</span>)</a>
-    <a class="bbtn pos_4" onclick=" AddShido(2,1)" >Shido (<span id="t_sh_2">p</span>)</a> 
-    <a class="bbtn  pos_s_1" onclick=" AddScore(2,-100)" > </span>&nbsp;(<span id="t_m100_2">U</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_2" onclick=" AddScore(2,-10)" > (<span id="t_m10_2">I</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_3" onclick=" AddScore(2,-1)" > (<span id="t_m1_2">O</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn pos_s_4" onclick=" AddShido(2,-1)" > (<span id="t_msh_2">P</span>)&nbsp;<span class="btn_sos"></span></a>
-    <div class="sbbb">
-<a class="bbtn" onclick="StartPausePin(2)" ><img src="css/pin_down_white.png" width="80px"/>(<span id="t_pd_2">l</span>)</a>
-</div></div>
 <div class="sbbb">
 <a class="bbtn" onclick="StartPauseTimer()" >&nbsp;&nbsp;&nbsp;&nbsp;&#x23EF (bare d'espace)&nbsp;&nbsp;&nbsp;&nbsp;</a><a class="bbtn" onclick="addTime(1000)"  > Ajouter 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
 </div>
@@ -233,25 +252,45 @@
 		  Combatant Bleu: <input type="text" id="fight_blue" value="Combatant 1"/><br/><br/>
 		  Combatant Blanc: <input type="text" id="fight_white" value="Combatant 2"/><br/><br/>
 		  
-		  Start/Stop imobilisation combatant bleu <input type="text" id="k_pd_1" maxlength="1"  value="a"/><br/><br/>
-		  Start/Stop imobilisation combatant blanc <input type="text" id="k_pd_2" maxlength="1"  value="l"/><br/><br/>
+		  Osaekomi/Toketa combatant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
+		  Osaekomi/Toketa combatant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
+		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/>
 		  
-		  Ipon combatant bleu <input type="text" id="k_100_1" maxlength="1"  value="q"/><br/><br/>
-		  Waza-ari combatant bleu <input type="text" id="k_10_1" maxlength="1"  value="w"/><br/><br/>
-		  Yuko combatant bleu <input type="text" id="k_1_1" maxlength="1"  value="e"/><br/><br/>
-		  Shido combatant bleu <input type="text" id="k_sh_1" maxlength="1"  value="r"/><br/><br/>
+		  Ipon combatant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
+		  Waza-ari combatant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
+		  Yuko combatant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
+		  Shido combatant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
 		  
-		  Ipon combatant blanc <input type="text" id="k_100_2" maxlength="1"  value="u"/><br/><br/>
-		  Waza-ari combatant blanc <input type="text" id="k_10_2" maxlength="1"  value="i"/><br/><br/>
-		  Yuko combatant blanc <input type="text" id="k_1_2" maxlength="1"  value="o"/><br/><br/>
-		  Shido combatant blanc <input type="text" id="k_sh_2" maxlength="1"  value="p"/><br/><br/>
+		  Décision combatant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
+		  
+		  Ipon combatant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
+		  Waza-ari combatant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
+		  Yuko combatant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
+		  Shido combatant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
+		  
+		  Décision combatant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/>
+		  
+
 		  
 		 
       <a class="bbtn" onclick="toggleClass(document.getElementById('pop_sbconf'),'pop_hide');
                                conf();conf_key();" >Appliquer</a></div>
       <a class="bbtn" onclick="toggleClass(document.getElementById('pop_sbconf'),'pop_hide');" >Annuler</a></div>
 		</span>
-</span>     
+</span>
+
+<span class="pop_back pop_hide" Id="pop_victory">
+		<span class="popcont">
+		      <span class="pop_tt">VICTOIRE DE <span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
+		      <span class="pop_tt">PAR <span id="vic_type"></span> (<span id="vic_score"></span>) </span> <br/><br/>
+		      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');
+                               sendvictory();" >Enregistrer</a></div>
+      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');" >Annuler</a></div>
+		</span>
+</span>
+
+
+ <audio controls src="gong-92707.mp3" id="gong" style="display:none;"></audio>     
 </body>
 <script>
 
@@ -279,8 +318,9 @@ var pin_down_start = Date.now();
 var pd_time=0;
 var pd_score=0;
 var gs=false;
-var char_pd_1='a';
-var char_pd_2='l';
+var char_pd_1='ArrowRight';
+var char_pd_2='ArrowLeft';
+var char_toketa='ArrowDown';
 var char_sh_1='r';
 var char_sh_2='p';
 var char_100_1='q';
@@ -289,6 +329,16 @@ var char_1_1='e';
 var char_100_2='u';
 var char_10_2='i';
 var char_1_2='o';
+var char_msh_1='r';
+var char_msh_2='p';
+var char_m100_1='q';
+var char_m10_1='w';
+var char_m1_1='e';
+var char_m100_2='u';
+var char_m10_2='i';
+var char_m1_2='o';
+var char_dc_1='n';
+var char_dc_2='v';
 
 function StartPauseTimer(){
   running = !running;
@@ -341,9 +391,23 @@ function AddShido(fighter_num, amount){
     check_score();
 }
 
+function decision(fighter_num){
+        if (fighter_num==1) {
+            winner=1;
+            document.getElementById('win_1').style.display= "inline-block"; 
+            document.getElementById('win_2').style.display= "none"; 
+            check_score();
+        } else if  (fighter_num==2) {
+            winner=2;
+            document.getElementById('win_2').style.display= "inline-block"; 
+            document.getElementById('win_1').style.display= "none"; 
+            check_score();
+        }
+}
+
 
 document.addEventListener(
-  "keyup",
+  "keydown",
   (event) => {
     const keyName = event.key;
     if (keyName === " ") {
@@ -352,13 +416,15 @@ document.addEventListener(
        StartPausePin(1);
     }  else if (keyName === char_pd_2){
        StartPausePin(2)
-    } else if (keyName === char_sh_1){
+    } else if (keyName === char_toketa){
+       stop_pin_down();
+    }else if (keyName === char_sh_1){
         AddShido(1,1);
-    } else if (keyName === char_sh_1.toUpperCase()){
+    } else if (keyName === char_msh_1){
         AddShido(1,-1);
     } else if (keyName === char_sh_2){
         AddShido(2,1);
-    } else if (keyName === char_sh_2.toUpperCase()){
+    } else if (keyName === char_msh_2){
         AddShido(2,-1);
     } else if (keyName === char_100_1){
         AddScore(1,100);
@@ -372,25 +438,29 @@ document.addEventListener(
         AddScore(1,1);
     } else if (keyName === char_1_2){
         AddScore(2,1);
-    } else if (keyName === char_100_1.toUpperCase()){
+    } else if (keyName === char_m100_1){
         AddScore(1,-100);
-    } else if (keyName === char_100_2.toUpperCase()){
+    } else if (keyName === char_m100_2){
         AddScore(2,-100);
-    } else if (keyName === char_10_1.toUpperCase()){
+    } else if (keyName === char_m10_1){
         AddScore(1,-10);
-    } else if (keyName === char_10_2.toUpperCase()){
+    } else if (keyName === char_m10_2){
         AddScore(2,-10);
-    } else if (keyName === char_1_1.toUpperCase()){ 
+    } else if (keyName === char_m1_1){ 
         AddScore(1,-1);
-    } else if (keyName === char_1_2.toUpperCase()){
+    } else if (keyName === char_m1_2){
         AddScore(2,-1);
+    } else if (keyName === char_dc_1){
+        decision(1);
+    } else if (keyName === char_dc_2){
+        decision(2);
     }
   },
   false,
 );
 
 function gong(){
-   // todo;
+  document.getElementById("gong").play();
 }
 
 function display_pd(){
@@ -613,6 +683,37 @@ function check_score(){
     localStorage.setItem("shido_2", shido_2);
     localStorage.setItem("winner", winner);
     displayScore();
+    
+    if (winner>0){
+        var score_1_win = score_1;
+        if (score_1_win>=20 && score_1_win<100) {
+            score_1_win+=80;
+        }
+        var score_2_win = score_2;
+        if (score_2_win>=20 && score_2_win<100) {
+            score_2_win+=80;
+        }
+        
+        var res_name = "Décision";
+        var pv=1;
+        if ( Math.abs(Math.floor(score_2_win/100)-Math.floor(score_1_win/100))==1){
+            res_name = "Ippon";
+            var pv=10;
+        } else if (Math.abs(Math.floor(score_2_win/10)-Math.floor(score_1_win/10))==1){
+            res_name = "Waza-ari";
+            var pv=7;
+        } else if (Math.abs(Math.floor(score_2_win)-Math.floor(score_1_win))>=1){
+            res_name = "Yuko";
+            var pv=5;
+        } 
+        
+    
+        document.getElementById('vic_name').innerHTML = document.getElementById('name_'+winner).innerHTML;
+        document.getElementById('vic_color').innerHTML = winner==1?"Bleu":"Blanc";
+        document.getElementById('vic_type').innerHTML = res_name;
+        document.getElementById('vic_score').innerHTML = ""+pv+"/10";
+        toggleClass(document.getElementById('pop_victory'),'pop_hide');
+    }
 }
 
 function displayScore(){
@@ -699,34 +800,53 @@ function conf_key(){
     document.getElementById("t_pd_1").innerHTML = char_pd_1;
     char_pd_2 = document.getElementById("k_pd_2").value;
     document.getElementById("t_pd_2").innerHTML = char_pd_2;
+    char_toketa = document.getElementById("k_toketa").value;
+    
+    
     char_100_1 = document.getElementById("k_100_1").value;
     document.getElementById("t_100_1").innerHTML = char_100_1;
-    document.getElementById("t_m100_1").innerHTML = char_100_1.toUpperCase();
+    char_m100_1 = document.getElementById("k_m100_1").value;
+    document.getElementById("t_m100_1").innerHTML = char_m100_1;
     char_10_1 = document.getElementById("k_10_1").value;
     document.getElementById("t_10_1").innerHTML = char_10_1;
-    document.getElementById("t_m10_1").innerHTML = char_1_1.toUpperCase();
+    char_m10_1 = document.getElementById("k_m10_1").value;
+    document.getElementById("t_m10_1").innerHTML = char_m10_1;
     char_1_1 = document.getElementById("k_1_1").value;
     document.getElementById("t_1_1").innerHTML = char_1_1;
-    document.getElementById("t_m1_1").innerHTML = char_1_1.toUpperCase();
+    char_m1_1 = document.getElementById("k_m1_1").value;
+    document.getElementById("t_m1_1").innerHTML = char_m1_1;
     
     
     char_sh_1 = document.getElementById("k_sh_1").value;
     document.getElementById("t_sh_1").innerHTML = char_sh_1;
-    document.getElementById("t_msh_1").innerHTML = char_sh_1.toUpperCase();
+    char_msh_1 = document.getElementById("k_msh_1").value;
+    document.getElementById("t_msh_1").innerHTML = char_msh_1;
+    
+    
+    char_dc_1 = document.getElementById("k_dc_1").value;
+    document.getElementById("t_dc_1").innerHTML = char_dc_1;
+    
+    char_dc_2 = document.getElementById("k_dc_2").value;
+    document.getElementById("t_dc_2").innerHTML = char_dc_2;
+    
     
     char_sh_2 = document.getElementById("k_sh_2").value;
     document.getElementById("t_sh_2").innerHTML = char_sh_2;
-    document.getElementById("t_msh_2").innerHTML = char_sh_2.toUpperCase();
+    char_msh_2 = document.getElementById("k_msh_2").value;
+    document.getElementById("t_msh_2").innerHTML = char_msh_2;
     
     char_100_2 = document.getElementById("k_100_2").value;
     document.getElementById("t_100_2").innerHTML = char_100_2;
-    document.getElementById("t_m100_2").innerHTML = char_100_2.toUpperCase();
+    char_m100_2 = document.getElementById("k_m100_2").value;
+    document.getElementById("t_m100_2").innerHTML = char_m100_2;
     char_10_2 = document.getElementById("k_10_2").value;
     document.getElementById("t_10_2").innerHTML = char_10_2;
-    document.getElementById("t_m10_2").innerHTML = char_10_2.toUpperCase();
+    char_m10_2 = document.getElementById("k_m10_2").value;
+    document.getElementById("t_m10_2").innerHTML = char_m10_2;
     char_1_2 = document.getElementById("k_1_2").value;
     document.getElementById("t_1_2").innerHTML = char_1_2;
-    document.getElementById("t_m1_2").innerHTML = char_1_2.toUpperCase();
+    char_m1_2 = document.getElementById("k_m1_2").value;
+    document.getElementById("t_m1_2").innerHTML = char_m1_2;
 }
 
 set_title("Catégorie");
@@ -735,6 +855,7 @@ set_duration(1);
 reset();
 reset_pin_down();
 displayScore();
+conf_key();
 
 </script>
 </html>

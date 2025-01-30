@@ -92,16 +92,17 @@
 </head>
 <body>
 <div id="title" class="title"></div>
-<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div>
-    <div class="sh_1" id="sh_1_1" style="display:none;"></div>
-    <div class="sh_2" id="sh_2_1" style="display:none;"></div>
-    <div class="sh_3" id="sh_3_1" style="display:none;"></div>
-    <div class="sh_4" id="sh_4_1" style="display:none;"></div></div>
 <div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div>
     <div class="sh_1" id="sh_1_2" style="display:none;"></div>
     <div class="sh_2" id="sh_2_2" style="display:none;"></div>
     <div class="sh_3" id="sh_3_2" style="display:none;"></div>
     <div class="sh_4" id="sh_4_2" style="display:none;"></div></div>
+<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_1" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_1" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_1" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_1" style="display:none;"></div></div>
+
 <div class="timer">
 <span id="gs" style="display:none;" >GS&nbsp;</span>
 <span id="time"></span>
@@ -147,7 +148,49 @@ function displayScore(){
     document.getElementById('win_1').style.display= winner==1?"inline-block":"none";  
     document.getElementById('win_2').style.display= winner==2?"inline-block":"none";  
     
-    //Todo display shido
+    const shido_1 = localStorage.getItem("shido_1");
+    const shido_2 = localStorage.getItem("shido_2");
+    if (shido_1>0){
+       document.getElementById('sh_1_1').style.display= "inline-block";  
+    }  else {
+        document.getElementById('sh_1_1').style.display= "none";  
+    }
+    if (shido_1>1){
+       document.getElementById('sh_2_1').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_2_1').style.display= "none";  
+    }
+     if (shido_1>2){
+       document.getElementById('sh_3_1').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_3_1').style.display= "none";  
+    }
+    if (shido_1>3){
+       document.getElementById('sh_4_1').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_4_1').style.display= "none";  
+    }
+    
+   if (shido_2>0){
+       document.getElementById('sh_1_2').style.display= "inline-block";  
+    }  else {
+        document.getElementById('sh_1_2').style.display= "none";  
+    }
+    if (shido_2>1){
+       document.getElementById('sh_2_2').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_2_2').style.display= "none";  
+    }
+     if (shido_2>2){
+       document.getElementById('sh_3_2').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_3_2').style.display= "none";  
+    }
+    if (shido_2>3){
+       document.getElementById('sh_4_2').style.display= "inline-block";  
+    } else {
+        document.getElementById('sh_4_2').style.display= "none";  
+    }
 
 }
 
