@@ -282,7 +282,7 @@
 <span class="pop_back pop_hide" Id="pop_victory">
 		<span class="popcont">
 		      <span class="pop_tt">VICTOIRE DE <span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
-		      <span class="pop_tt">PAR <span id="vic_type"></span> (<span id="vic_score"></span>) </span> <br/><br/>
+		      <span class="pop_tt">PAR <span id="vic_type"></span> - <span id="vic_score"></span> </span> <br/><br/>
 		      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');
                                sendvictory();" >Enregistrer</a></div>
       <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');" >Annuler</a></div>
@@ -711,7 +711,7 @@ function check_score(){
         document.getElementById('vic_name').innerHTML = document.getElementById('name_'+winner).innerHTML;
         document.getElementById('vic_color').innerHTML = winner==1?"Bleu":"Blanc";
         document.getElementById('vic_type').innerHTML = res_name;
-        document.getElementById('vic_score').innerHTML = ""+pv+"/10";
+        document.getElementById('vic_score').innerHTML = "2("+pv+")";
         toggleClass(document.getElementById('pop_victory'),'pop_hide');
     }
 }

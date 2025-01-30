@@ -49,6 +49,186 @@ include '_commonBlock.php';
 writeHead();
 
 echo'
+ <style>
+        .pop_sb{
+        width:100%;
+        height:100%;
+        position:fixed;
+        background-color:black;
+        top:0px;
+        left:0px;
+        }
+        .title{
+           height:7%;
+           color:#DDFFDD; 
+           text-align:center;
+           font-size:40px;
+           margin-top:1%;
+           margin-left:auto; 
+           margin-right:auto;
+           width:calc(100% - 320px);
+           display:inline-block;
+        }
+        .blue {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: blue;
+            color:white;
+            text-align:center;
+            position:relative;
+        }
+        .white {
+            height:440px;
+            display:inline-block;
+            width:calc(50% - 3px);
+            background-color: white;
+            text-align:center;
+            position:relative;
+        }
+        .fighter {
+        margin-top:20px;
+        font-size:80px;
+        }
+        .score {
+        margin-top:40px;
+        font-size:200px;
+        letter-spacing: 20px;
+        }
+        
+        .timer {
+           height:170px;
+           color:#DDFFDD; 
+           text-align:center; 
+           font-size:170px;
+        }
+        
+        .win {
+            position: absolute;
+            width:100%;
+            
+            font-size:100px;
+            color:#bf9b30;
+            right:0px;bottom:0px;
+        }
+        
+        .bbtn {
+           display:inline-block;
+           padding:5px; 
+           text-decoration:none;
+           color:black;
+           background-color:grey;
+           border:solid 2px lightgrey;
+           border-radius:5px;
+           margin-right:5px;
+           font-size:16;
+        }
+        .sbbb{
+           display:inline-block;
+           padding-top:5px;
+           text-align:center;
+           vertical-align:center;
+           width:100%;
+        }
+        .pos_1{
+            position: absolute;
+            left:calc(50% - 200px);
+            top:120px;
+            font-size:18;
+            
+        }
+        .pos_s_1{
+            position: absolute;
+            left:calc(50% - 200px);
+            top:170px;
+        }
+         .pos_2{
+            position: absolute;
+            left:calc(50% - 50px);
+            top:120px;
+            font-size:18;
+        }
+         .pos_s_2{
+            position: absolute; 
+            left:calc(50% - 50px);
+            top:170px;
+        }
+         .pos_3{
+            position: absolute;
+            right:calc(50% - 180px);
+            top:120px;
+            font-size:18;
+        }
+          .pos_s_3{
+            position: absolute; 
+            right:calc(50% - 180px);
+            top:170px;
+        }  
+        .pos_4{
+            position: absolute;
+            right:calc(50% - 300px);
+            top:120px;
+            font-size:18;
+        }
+          .pos_s_4{
+            position: absolute; 
+            right:calc(50% - 300px);
+            top:170px;
+        }
+        
+        .pos_s_d1{
+            position: absolute; 
+            right:20px;
+            bottom:20px;
+        }
+        .pos_s_d2{
+            position: absolute; 
+            left:20px;
+            bottom:20px;
+        }
+        
+        .sh_1{
+          position: absolute; 
+          right:calc(50% - 250px);
+          top:200px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }  
+        .sh_2{
+         position: absolute; 
+          right:calc(50% - 267px);
+          top:217px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
+        .sh_3{
+         position: absolute; 
+          right:calc(50% - 284px);
+          top:234px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
+        .sh_4{
+         position: absolute; 
+          right:calc(50% - 300px);
+          top:250px;
+          width:60px;
+          height:80px;
+          background-color:yellow;
+          border:solid grey 2px;
+        }
+       
+        
+        .key{
+           width:50px;
+        }
+    </style>
 <body>
     <div class="f_cont">';
 
@@ -469,7 +649,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                   $row_value = $row_value.'
                  </td>
                   <td>'.$Surname1.' '.$Name1.'</td>
-                  <td>V.S.</td>
+                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.$Surname1.' '.$Name1.'\',\''.$Surname2.' '.$Name2.'\');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
@@ -637,7 +817,709 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
            </span>    
            </div>     
         </div>   
-     </div>
+     </div>';
+ echo'    
+ <div id="pop_VS" class="pop_hide pop_sb" >    
+<div style="width:100%">
+<a class="bbtn" href="MirorScoreBoard.html" target="_new">Tableau des scores</a><span id="title" class="title"></span> 
+<a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');" >Configuration</a>
+<a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');" >Fermer</a></div>
+ 
+
+
+
+<div class="white" >
+    <div id="name_2" class="fighter"></div>
+    <div id="s_2" class="score"></div>
+    <div class="win" id="win_2" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_2" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_2" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_2" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_2" style="display:none;"></div>
+  
+    <a class="bbtn pos_1" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a>
+    <a class="bbtn pos_2" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a>
+    <a class="bbtn pos_3" onclick=" AddScore(2,1)" >Yuko (<span id="t_1_2">o</span>)</a>
+    <a class="bbtn pos_4" onclick=" AddShido(2,1)" >Shido (<span id="t_sh_2">p</span>)</a> 
+    <a class="bbtn  pos_s_1" onclick=" AddScore(2,-100)" > </span>&nbsp;(<span id="t_m100_2">U</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_2" onclick=" AddScore(2,-10)" > (<span id="t_m10_2">I</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_3" onclick=" AddScore(2,-1)" > (<span id="t_m1_2">O</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn pos_s_4" onclick=" AddShido(2,-1)" > (<span id="t_msh_2">P</span>)&nbsp;<span class="btn_sos"></span></a>
+    <div class="sbbb">
+<a class="bbtn " onclick="StartPausePin(2)" ><img src="css/pin_down_white.png" width="80px"/>(<span id="t_pd_2">l</span>)</a>
+</div>
+    <a class="bbtn pos_s_d2" onclick="decision(2)" >Décision (<span id="t_dc_2">v</span>)</a></div>
+<div class="blue" >
+    <div id="name_1" class="fighter"></div>
+    <div id="s_1" class="score"></div>
+    <div class="win" id="win_1" style="display:none;">vainqueur</div>
+    <div class="sh_1" id="sh_1_1" style="display:none;"></div>
+    <div class="sh_2" id="sh_2_1" style="display:none;"></div>
+    <div class="sh_3" id="sh_3_1" style="display:none;"></div>
+    <div class="sh_4" id="sh_4_1" style="display:none;"></div>
+    
+    <a class="bbtn pos_1" onclick=" AddScore(1,100)" >Ippon (<span id="t_100_1">q</span>)</a>
+    <a class="bbtn pos_2" onclick=" AddScore(1,10)" >Waza-ari (<span id="t_10_1">w</span>)</a>
+    <a class="bbtn pos_3" onclick=" AddScore(1,1)" >Yuko (<span id="t_1_1">e</span>)</a> 
+    <a class="bbtn pos_4" onclick=" AddShido(1,1)" >Shido (<span id="t_sh_1">r</span>)</a> 
+    <a class="bbtn  pos_s_1" onclick=" AddScore(1,-100)" > (<span id="t_m100_1">Q</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_2" onclick=" AddScore(1,-10)" > (<span id="t_m10_1">W</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn  pos_s_3" onclick=" AddScore(1,-1)" > (<span id="t_m1_1">E</span>)&nbsp;<span class="btn_sos"></span></a>
+    <a class="bbtn pos_s_4" onclick=" AddShido(1,-1)" > (<span id="t_msh_1">R</span>)&nbsp;<span class="btn_sos"></span></a>
+    <div class="sbbb">
+        <a class="bbtn" onclick="StartPausePin(1)" ><img src="css/pin_down_blue.png" width="80px"/>(<span id="t_pd_1">a</span>)</a>
+    </div>
+    <a class="bbtn  pos_s_d1" onclick="decision(1)" >Décision (<span id="t_dc_1">n</span>)</a>
+</div>
+<div class="sbbb">
+<a class="bbtn" onclick="StartPauseTimer()" >&nbsp;&nbsp;&nbsp;&nbsp;&#x23EF (bare d\'espace)&nbsp;&nbsp;&nbsp;&nbsp;</a><a class="bbtn" onclick="addTime(1000)"  > Ajouter 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
+</div>
+<div class="timer">
+<span id="gs" style="display:none;" >GS&nbsp;</span>
+<span id="time"></span>
+<span id="running" style="display:none;">&#x23F2;</span>
+</div><br/>
+<div class="timer">
+<img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
+<img src="css/pin_down_blue.png"  id="img_pd_blue" style="display:none;"/>
+<img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
+<span id="pd_time" style="display:none;"></span>
+<span id="pd_running" style="display:none;">&#x23F2;</span>
+</div>
+
+<span class="pop_back pop_hide" Id="pop_sbconf">
+		<span class="popcont">
+		 <span class="pop_tt">CONFIGURATION </span> <br/><br/>
+		 <!-- Catégorie: <input type="text" id="cat_name" value="'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'"/><br/><br/>
+		  Durée du combat: <input type="number" id="cat_dur" min="1" value="'.$cat_dur.'"/>min<br/><br/>
+		  Combatant Bleu: <input type="text" id="fight_blue" value="Combatant 1"/><br/><br/>
+		  Combatant Blanc: <input type="text" id="fight_white" value="Combatant 2"/><br/><br/> -->
+		  
+		  Osaekomi combatant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
+		  Osaekomi combatant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
+		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/><br/>
+		  
+		  Ipon combatant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
+		  Waza-ari combatant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
+		  Yuko combatant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
+		  Shido combatant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
+		  
+		  Décision combatant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
+		  
+		  Ipon combatant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
+		  Waza-ari combatant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
+		  Yuko combatant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
+		  Shido combatant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
+		  
+		  Décision combatant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/>
+		  
+
+		  
+		 
+      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');
+                              /* conf();*/conf_key();" >Appliquer</a>
+      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_victory">
+		<span class="popcont">
+		      <span class="pop_tt">VICTOIRE DE </span> <br/><br/>
+		      <span class="pop_tt"><span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
+		      <span class="pop_tt">PAR  </span> <br/><br/>
+		      <span class="pop_tt"><span id="vic_type"></span> - <span id="vic_score"></span> </span> <br/><br/>
+		      
+		      <form action="figtRes.php" method="post">
+		        
+                                 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+                                 <input type="hidden" name="fid" id="fid" value="-1" />
+                                 <input type="hidden" name="pv1" id="pv1" value="0" />
+                                 <input type="hidden" name="pv2" id="pv2" value="0" />
+                                 <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input class="bbtn" type="submit" value="Enregistrer "/>
+      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_victory\'),\'pop_hide\');" >Annuler</a></div>
+               </form>
+		</span>
+</span>
+
+
+ <audio controls src="gong-92707.mp3" id="gong" style="display:none;"></audio>     
+     
+    </div>
+     
 </body>
+
+<script>
+
+      
+var running=false;
+var pin_down=0;
+var direction=-1;
+var start = Date.now();
+var current = 4*60000;  // 4min
+var display = current;
+var shido_1=0;
+var shido_2=0;
+var score_1=0;
+var score_2=0;
+var winner=0;
+var pin_down_start = Date.now();
+var pd_time=0;
+var pd_score=0;
+var gs=false;
+var char_pd_1="ArrowRight";
+var char_pd_2="ArrowLeft";
+var char_toketa="ArrowDown";
+var char_sh_1="r";
+var char_sh_2="p";
+var char_100_1="q";
+var char_10_1="w";
+var char_1_1="e";
+var char_100_2="u";
+var char_10_2="i";
+var char_1_2="o";
+var char_msh_1="r";
+var char_msh_2="p";
+var char_m100_1="q";
+var char_m10_1="w";
+var char_m1_1="e";
+var char_m100_2="u";
+var char_m10_2="i";
+var char_m1_2="o";
+var char_dc_1="n";
+var char_dc_2="v";
+var f_id =-1;
+
+function setf_id(new_f_id){
+ f_id=new_f_id;
+}
+
+function StartPauseTimer(){
+  running = !running;
+      if (running){ 
+        reset_pin_down();
+        start = Date.now();
+      } else {
+         current = display;
+         stop_pin_down();
+      }
+      document.getElementById("running").style.display= running?"inline-block":"none";
+      localStorage.setItem("running", running);
+}
+
+function StartPausePin(num){
+        if (pin_down>0){
+           stop_pin_down();
+        } else {
+           reset_pin_down();
+           pin_down=num;
+           pin_down_start = Date.now();
+        }
+}
+
+function AddScore(fighter_num, amount){
+    if (fighter_num==1 &&  score_1+amount>=0){
+       score_1+=amount;
+    } else if (fighter_num==2 &&  score_2+amount>=0){
+       score_2+=amount;
+    }
+    if (amount<0){
+        winner=0;
+        document.getElementById("win_1").style.display= "none";
+        document.getElementById("win_2").style.display= "none";
+    }
+    check_score();
+}
+
+function AddShido(fighter_num, amount){
+    if (fighter_num==1 &&  shido_1+amount>=0){
+       shido_1+=amount;
+    } else if (fighter_num==2 &&  shido_2+amount>=0){
+       shido_2+=amount;
+    }
+    if (amount<0){
+        winner=0;
+        document.getElementById("win_1").style.display= "none";
+        document.getElementById("win_2").style.display= "none";
+    }
+    check_score();
+}
+
+function decision(fighter_num){
+        if (fighter_num==1) {
+            winner=1;
+            document.getElementById("win_1").style.display= "inline-block"; 
+            document.getElementById("win_2").style.display= "none"; 
+            check_score();
+        } else if  (fighter_num==2) {
+            winner=2;
+            document.getElementById("win_2").style.display= "inline-block"; 
+            document.getElementById("win_1").style.display= "none"; 
+            check_score();
+        }
+}
+
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    const keyName = event.key;
+    if (keyName === " ") {
+       StartPauseTimer();
+    } else if (keyName === char_pd_1){
+       StartPausePin(1);
+    }  else if (keyName === char_pd_2){
+       StartPausePin(2)
+    } else if (keyName === char_toketa){
+       stop_pin_down();
+    }else if (keyName === char_sh_1){
+        AddShido(1,1);
+    } else if (keyName === char_msh_1){
+        AddShido(1,-1);
+    } else if (keyName === char_sh_2){
+        AddShido(2,1);
+    } else if (keyName === char_msh_2){
+        AddShido(2,-1);
+    } else if (keyName === char_100_1){
+        AddScore(1,100);
+    } else if (keyName === char_100_2){
+        AddScore(2,100);
+    } else if (keyName === char_10_1){
+        AddScore(1,10);
+    } else if (keyName === char_10_2){
+        AddScore(2,10);
+    } else if (keyName === char_1_1){ 
+        AddScore(1,1);
+    } else if (keyName === char_1_2){
+        AddScore(2,1);
+    } else if (keyName === char_m100_1){
+        AddScore(1,-100);
+    } else if (keyName === char_m100_2){
+        AddScore(2,-100);
+    } else if (keyName === char_m10_1){
+        AddScore(1,-10);
+    } else if (keyName === char_m10_2){
+        AddScore(2,-10);
+    } else if (keyName === char_m1_1){ 
+        AddScore(1,-1);
+    } else if (keyName === char_m1_2){
+        AddScore(2,-1);
+    } else if (keyName === char_dc_1){
+        decision(1);
+    } else if (keyName === char_dc_2){
+        decision(2);
+    }
+  },
+  false,
+);
+
+function gong(){
+  document.getElementById("gong").play();
+}
+
+function display_pd(){
+    document.getElementById("pd_time").style.display= (pin_down>0 || pd_time>0)?"inline-block":"none";
+    document.getElementById("img_pd_time").style.display= (pd_time>0 && pin_down==0)?"inline-block":"none";
+    document.getElementById("img_pd_blue").style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
+    document.getElementById("img_pd_white").style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
+    
+    document.getElementById("pd_time").innerHTML=pd_time+"\"";
+    document.getElementById("pd_running").style.display= pin_down>0?"inline-block":"none";
+    
+}
+
+function reset(){
+    f_id=-1;
+    score_1=0;
+    score_2=0;
+    shido_1=0;
+    shido_2=0;
+    winner=0;
+    running=false;
+    gs=false;
+    
+    document.getElementById("win_1").style.display= "none";
+    document.getElementById("win_2").style.display= "none";
+    
+   
+    localStorage.setItem("running", running);
+    localStorage.setItem("score_1", score_1);
+    localStorage.setItem("shido_1", shido_1);
+    localStorage.setItem("score_2", score_2);
+    localStorage.setItem("shido_2", shido_2);
+    localStorage.setItem("winner", winner);
+    localStorage.setItem("gs", gs);
+};
+
+function set_duration(minutes){
+    current = minutes*60000; 
+    direction=-1;
+    display = current; 
+    localStorage.setItem("time", displayTime(current/1000));
+    document.getElementById("time").innerHTML =  displayTime(current/1000);
+}
+
+function set_name(name_1,name_2){
+    document.getElementById("name_1").innerHTML=name_1;
+    document.getElementById("name_2").innerHTML=name_2;
+    localStorage.setItem("name_1", name_1);
+    localStorage.setItem("name_2", name_2);
+}
+
+function set_title(title){
+    document.getElementById("title").innerHTML=title;
+    localStorage.setItem("title", title);
+}
+
+function pauseTimer(){
+    running=false;
+    pin_down=0;
+    current = display;
+    document.getElementById("running").style.display= running?"inline-block":"none";
+    localStorage.setItem("running", running);
+    document.getElementById("pd_running").style.display= (pin_down>0)?"inline-block":"none";
+    localStorage.setItem("pin_down", pin_down);
+}
+
+function check_time(){
+   if (display<=0 && pin_down==0){
+      gong();
+      pauseTimer();
+      if (score_1>score_2){
+          winner=1;
+          document.getElementById("win_1").style.display= "inline-block"; 
+          check_score();
+      } else if (score_2>score_1){
+          winner=2;
+          document.getElementById("win_2").style.display= "inline-block"; 
+          check_score();
+      } else {
+        gs=true;
+        localStorage.setItem("gs", gs);
+        direction=1;
+        current = 0;  
+        display = 0;
+        localStorage.setItem("time", displayTime(0));
+        document.getElementById("time").innerHTML=  displayTime(0);
+        document.getElementById("gs").style.display = "inline-block";
+        
+      }
+      
+   }
+}
+
+function  check_pd_time() {
+  if (pin_down>0){
+      if (pd_time>=5 && pd_score<1){
+          pd_score=1;
+          if (pin_down==1){
+              score_1+=1;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=1;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();
+      } 
+      if (pd_time>=10 && pd_score<10){
+          pd_score=10;
+           if (pin_down==1){
+              score_1+=9;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=9;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();
+          
+      }
+      if (pd_time>=20 && pd_score<100){
+          pd_score=100;
+           if (pin_down==1){
+              score_1+=90;
+              localStorage.setItem("score_1", score_1);
+          } else  if (pin_down==2){
+              score_2+=90;
+              localStorage.setItem("score_2", score_2);
+          }
+          displayScore();
+          check_score();   
+      }
+   }
+}
+
+function check_score(){
+
+    if (shido_1>0){
+       document.getElementById("sh_1_1").style.display= "inline-block";  
+    }  else {
+        document.getElementById("sh_1_1").style.display= "none";  
+    }
+    if (shido_1>1){
+       document.getElementById("sh_2_1").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_2_1").style.display= "none";  
+    }
+     if (shido_1>2){
+       document.getElementById("sh_3_1").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_3_1").style.display= "none";  
+    }
+    if (shido_1>3){
+       document.getElementById("sh_4_1").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_4_1").style.display= "none";  
+    }
+    
+   if (shido_2>0){
+       document.getElementById("sh_1_2").style.display= "inline-block";  
+    }  else {
+        document.getElementById("sh_1_2").style.display= "none";  
+    }
+    if (shido_2>1){
+       document.getElementById("sh_2_2").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_2_2").style.display= "none";  
+    }
+     if (shido_2>2){
+       document.getElementById("sh_3_2").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_3_2").style.display= "none";  
+    }
+    if (shido_2>3){
+       document.getElementById("sh_4_2").style.display= "inline-block";  
+    } else {
+        document.getElementById("sh_4_2").style.display= "none";  
+    }
+    
+    //TODO update score based on shido/
+    
+    if (score_1>=20){
+        winner=1;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        
+        document.getElementById("win_1").style.display= "inline-block";  
+    }
+    if (score_2>=20){
+        winner=2;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        
+        document.getElementById("win_2").style.display= "inline-block";  
+    }
+    
+    if (gs && score_1>score_2){
+        winner=1;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        document.getElementById("win_1").style.display= "inline-block";  
+    }
+    
+    if (gs && score_1<score_2){
+        winner=2;
+        if (pin_down>0){
+            gong();
+        }
+        pauseTimer();
+        document.getElementById("win_2").style.display= "inline-block";  
+    }
+    localStorage.setItem("score_1", score_1);
+    localStorage.setItem("score_2", score_2);
+    localStorage.setItem("shido_1", shido_1);
+    localStorage.setItem("shido_2", shido_2);
+    localStorage.setItem("winner", winner);
+    displayScore();
+    
+    if (winner>0){
+        var score_1_win = score_1;
+        if (score_1_win>=20 && score_1_win<100) {
+            score_1_win+=80;
+        }
+        var score_2_win = score_2;
+        if (score_2_win>=20 && score_2_win<100) {
+            score_2_win+=80;
+        }
+        
+        var res_name = "Décision";
+        var pv=1;
+        if ( Math.abs(Math.floor(score_2_win/100)-Math.floor(score_1_win/100))==1){
+            res_name = "Ippon";
+            var pv=10;
+        } else if (Math.abs(Math.floor(score_2_win/10)-Math.floor(score_1_win/10))==1){
+            res_name = "Waza-ari";
+            var pv=7;
+        } else if (Math.abs(Math.floor(score_2_win)-Math.floor(score_1_win))>=1){
+            res_name = "Yuko";
+            var pv=5;
+        } 
+        
+    
+        document.getElementById("vic_name").innerHTML = document.getElementById("name_"+winner).innerHTML;
+        document.getElementById("vic_color").innerHTML = winner==1?"Bleu":"Blanc";
+        document.getElementById("vic_type").innerHTML = res_name;
+        document.getElementById("vic_score").innerHTML = "2("+pv+")";
+           
+        document.getElementById("fid").value = f_id;
+        document.getElementById("pv1").value = winner==1 ? pv : 0;
+        document.getElementById("pv2").value = winner==2 ? pv : 0;
+        
+        
+        toggleClass(document.getElementById("pop_victory"),"pop_hide");
+    }
+}
+
+function displayScore(){
+    document.getElementById("s_1").innerHTML = ("00" + score_1).slice(-3);
+    document.getElementById("s_2").innerHTML = ("00" + score_2).slice(-3);
+}
+
+function displayTime(time_sec){
+    var sign="";
+    if (time_sec<0){
+        sign="-";
+        time_sec= -time_sec;
+    }
+    return sign+Math.floor(time_sec/60)+"\'"+ ("0" + time_sec%60).slice(-2)+"\"";
+}
+
+function reset_pin_down(){
+    pin_down=0;
+    pd_time=0;
+    pd_score=0;
+    localStorage.setItem("pin_down", pin_down);
+    localStorage.setItem("pd_time", 0);
+    display_pd();
+}
+
+function stop_pin_down(){
+    pin_down=0;
+    pd_score=0;
+    localStorage.setItem("pin_down", pin_down);
+    display_pd();
+    check_time();
+}
+
+function addTime(durration){
+ if (! running){
+   current -= direction *durration;
+   display=current;
+   winner=0;
+   document.getElementById("win_1").style.display= "none";
+   document.getElementById("win_2").style.display= "none";
+   const d_time = displayTime(direction>0?Math.floor(display/1000):Math.ceil(display/1000));
+   localStorage.setItem("time", d_time);
+   document.getElementById("time").innerHTML= d_time;
+   check_time();
+   check_score();  
+ }  
+}
+
+
+     
+
+setInterval(function() {
+    if (running){
+        var delta = Date.now() - start; // milliseconds elapsed since start
+        display = current + direction* delta;
+        const d_time = displayTime(direction>0?Math.floor(display/1000):Math.ceil(display/1000));
+        localStorage.setItem("time", d_time);
+        document.getElementById("time").innerHTML= d_time;
+        check_time();
+        
+        if (pin_down>0){
+            delta = Date.now() - pin_down_start;
+            pd_time = Math.floor(delta/1000);
+            localStorage.setItem("pd_time", pd_time);
+            localStorage.setItem("pin_down", pin_down);
+            display_pd();
+            check_pd_time();
+        } 
+    }
+}, 100); 
+
+
+function conf(){
+  set_title(document.getElementById("cat_name").value);
+  set_name(document.getElementById("fight_blue").value,document.getElementById("fight_white").value);
+  set_duration(document.getElementById("cat_dur").value);
+  reset();
+  reset_pin_down();
+  displayScore();
+}
+
+function conf_key(){
+    char_pd_1 = document.getElementById("k_pd_1").value;
+    document.getElementById("t_pd_1").innerHTML = char_pd_1;
+    char_pd_2 = document.getElementById("k_pd_2").value;
+    document.getElementById("t_pd_2").innerHTML = char_pd_2;
+    char_toketa = document.getElementById("k_toketa").value;
+    
+    
+    char_100_1 = document.getElementById("k_100_1").value;
+    document.getElementById("t_100_1").innerHTML = char_100_1;
+    char_m100_1 = document.getElementById("k_m100_1").value;
+    document.getElementById("t_m100_1").innerHTML = char_m100_1;
+    char_10_1 = document.getElementById("k_10_1").value;
+    document.getElementById("t_10_1").innerHTML = char_10_1;
+    char_m10_1 = document.getElementById("k_m10_1").value;
+    document.getElementById("t_m10_1").innerHTML = char_m10_1;
+    char_1_1 = document.getElementById("k_1_1").value;
+    document.getElementById("t_1_1").innerHTML = char_1_1;
+    char_m1_1 = document.getElementById("k_m1_1").value;
+    document.getElementById("t_m1_1").innerHTML = char_m1_1;
+    
+    
+    char_sh_1 = document.getElementById("k_sh_1").value;
+    document.getElementById("t_sh_1").innerHTML = char_sh_1;
+    char_msh_1 = document.getElementById("k_msh_1").value;
+    document.getElementById("t_msh_1").innerHTML = char_msh_1;
+    
+    
+    char_dc_1 = document.getElementById("k_dc_1").value;
+    document.getElementById("t_dc_1").innerHTML = char_dc_1;
+    
+    char_dc_2 = document.getElementById("k_dc_2").value;
+    document.getElementById("t_dc_2").innerHTML = char_dc_2;
+    
+    
+    char_sh_2 = document.getElementById("k_sh_2").value;
+    document.getElementById("t_sh_2").innerHTML = char_sh_2;
+    char_msh_2 = document.getElementById("k_msh_2").value;
+    document.getElementById("t_msh_2").innerHTML = char_msh_2;
+    
+    char_100_2 = document.getElementById("k_100_2").value;
+    document.getElementById("t_100_2").innerHTML = char_100_2;
+    char_m100_2 = document.getElementById("k_m100_2").value;
+    document.getElementById("t_m100_2").innerHTML = char_m100_2;
+    char_10_2 = document.getElementById("k_10_2").value;
+    document.getElementById("t_10_2").innerHTML = char_10_2;
+    char_m10_2 = document.getElementById("k_m10_2").value;
+    document.getElementById("t_m10_2").innerHTML = char_m10_2;
+    char_1_2 = document.getElementById("k_1_2").value;
+    document.getElementById("t_1_2").innerHTML = char_1_2;
+    char_m1_2 = document.getElementById("k_m1_2").value;
+    document.getElementById("t_m1_2").innerHTML = char_m1_2;
+}
+
+set_title("'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'");
+set_name("Combatant 1","Combatant 2");
+set_duration('.$cat_dur.');
+reset();
+reset_pin_down();
+displayScore();
+conf_key();
+
+</script>
+
+
 </html>';
 ?>
