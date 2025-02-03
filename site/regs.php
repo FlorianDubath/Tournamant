@@ -128,7 +128,7 @@ function parseWCat($wcats, $str) {
 
 function parseLicence($str) {
     $i_l = (int)$str;
-    if ($i_l>=100000 && $i_l<1000000) {
+    if ($i_l>=1000 && $i_l<10000000) {
         return array("value"=>$i_l, "error"=>False);
     } else {
         return array("value"=>-1, "error"=>True, "message"=>'"'.$str.'" N\'est pas un numéro de licence reconnu');
@@ -229,6 +229,7 @@ if ((int)$_POST['cid'] && (int)$_POST['agcatid'] && $_POST['bulk']) {
     $gender = loadGender($agecatid);
 
     $lines = preg_split('/\r\n|[\r\n]/', $_POST['bulk']);
+
     echo '<span class="ftitle"> DONNEES TRAITEES :</span>
           <table class="wt t4">
 	     <tr class="tblHeader">
@@ -238,8 +239,9 @@ if ((int)$_POST['cid'] && (int)$_POST['agcatid'] && $_POST['bulk']) {
 	     </tr>';
     foreach($lines as $line){
         if (strlen(trim($line))>0) {
-            $words = str_getcsv($line, "\t",  "", $escape = "\\");
+            $words = str_getcsv($line, "\t",  "\"", $escape = "\\");
             $parsed=array();
+          
             if ($isOpen && count($words)==5){
                 $parsed['surname'] = parseName($words[0]);
                 $parsed['name']  = parseName($words[1]);
@@ -256,6 +258,8 @@ if ((int)$_POST['cid'] && (int)$_POST['agcatid'] && $_POST['bulk']) {
                 $parsed['licence'] = parseLicence($words[4]);
                 $parsed['cat'] = parseWCat($w_cats, $words[5]);
             } 
+            
+          
             
             if (count($parsed)!=6) {
                 echo '<tr class="dta_inv"><td colspan="3">La ligne "'.$line.'" n\'as pas le bon nombre de champs, elle a été ignorée.</td></tr>';

@@ -55,6 +55,7 @@ echo'
         height:100%;
         position:fixed;
         background-color:black;
+        font-family:sans;
         top:0px;
         left:0px;
         }
@@ -91,7 +92,7 @@ echo'
         font-size:80px;
         }
         .score {
-        margin-top:40px;
+       // margin-top:40px;
         font-size:200px;
         letter-spacing: 20px;
         }
@@ -211,7 +212,7 @@ echo'
           top:250px;
           width:60px;
           height:80px;
-          background-color:yellow;
+          background-color:red;
           border:solid grey 2px;
         }
       
