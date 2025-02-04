@@ -1253,7 +1253,7 @@ function check_score(){
     if (shido_1>0){
        document.getElementById("sh_1_1").style.display= "inline-block";  
     }  else {
-        document.getElementById("h_1_1").style.display= "none";  
+        document.getElementById("sh_1_1").style.display= "none";  
     }
     if (shido_1>1){
        document.getElementById("sh_2_1").style.display= "inline-block";  
