@@ -63,10 +63,12 @@ if($_POST && !empty($_POST['id'])) {
              $stmt = $mysqli->prepare("DELETE FROM TournamentRegistration WHERE CompetitorId=?");
              $stmt->bind_param("i", $_POST['id'] );
              $stmt->execute();
+	         $stmt->close();
 
              $stmt = $mysqli->prepare("DELETE FROM TournamentCompetitor WHERE Id=?");
              $stmt->bind_param("i", $_POST['id'] );
              $stmt->execute();
+	         $stmt->close();
 	         header('Location: ./listingreg.php');
      } else {
          if (!empty($_POST['trid']) && ((int)$_POST['trid'])>0) {
