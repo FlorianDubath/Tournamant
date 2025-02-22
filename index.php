@@ -30,6 +30,7 @@ if ($_SESSION['_IsAdmin'] ==1){
            $mysqli->begin_transaction();
             try {
                 $mysqli->query("DELETE FROM ActualCategoryResult;");
+              
                 $mysqli->query("DELETE FROM Fight;");
                 $mysqli->query("DELETE FROM StepLinking;");
                 $mysqli->query("DELETE FROM CategoryStep;");
@@ -37,14 +38,14 @@ if ($_SESSION['_IsAdmin'] ==1){
                 $mysqli->query("DELETE FROM TournamentRegistration;");
                 $mysqli->query("DELETE FROM TournamentCompetitor;");
                 
-                
+                 
                 $mysqli->query("DELETE FROM TournamentDoubleSatrt;");
                 $mysqli->query("DELETE FROM TournamentWeighting;");
                 $mysqli->query("DELETE FROM TournamentVenue;");
-                
+      
                 $mysqli->query("
-INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, System, Prize, Judge, Dressing, Contact, RegistrationEnd, TournamentStart, TournamentEnd) VALUES (
-     '51e Championnats Genevois Individuels de Judo',
+INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, `System`, Prize, Judge, Dressing, Contact, RegistrationEnd, TournamentStart, TournamentEnd) VALUES (
+     '52e Championnats Genevois Individuels de Judo',
      'Centre Omnisport du Sapay, ch. le Sapay 3, 1212 Grand-Lancy',
      'Transports publics recommandés. Arrêt Tpg Lancy-Bachet ou gare CEVA Lancy-Bachet (10mn à pied). Accès et parking difficiles pour les voitures.',
      'ACGJJJ',
@@ -57,7 +58,7 @@ INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, Syst
      '2024-06-01',
      '2024-06-04',
      '2024-06-04'   
-)");
+)");  
                 $mysqli->query("INSERT INTO TournamentDoubleSatrt (MainAgeCategoryId, AcceptedAgeCategoryId)
 SELECT TCA_1.Id, TCA_2.Id FROM TournamentAgeCategory TCA_1
 INNER JOIN TournamentAgeCategory TCA_2 ON TCA_2.ShortName='FE'
@@ -113,8 +114,7 @@ WHERE TCA_1.ShortName='M21'");
                 
 // P@ssW0rd_test_Admin
 
-                
-                
+  
                 $mysqli->commit();
                 header('Location: site/identification.php');
                 
