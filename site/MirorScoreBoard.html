@@ -11,7 +11,7 @@
            font-size:40px;
            margin-top:1%;
         }
-        .blue {
+           .blue, .nblue {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
@@ -19,14 +19,44 @@
             color:white;
             text-align:center;
             position:relative;
-        }
-        .white {
+        }   
+       
+        .white, .nwhite {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: white;
             text-align:center;
             position:relative;
+        }
+        .nf {
+           width:100%;
+           background-color:#ffffcc;
+           position:absolute;
+           bottom:0px;
+           left:0px;
+    
+       }
+       .ntitle{
+          
+           color:black; 
+           text-align:center;
+           font-size:40px;
+           margin-top:20px;
+           margin-left:auto; 
+           margin-right:auto;
+           margin-bottom:10px;
+           width:100%;
+           display:inline-block;
+        }
+        .nblue {
+            color:#999999;
+            background-color: #000055;
+            height:unset;
+            }
+         .nwhite {
+            background-color: #777777;
+            height:unset;
         }
         .fighter {
         margin-top:20px;
@@ -105,6 +135,16 @@
 <span id="pd_time" style="display:none;"></span>
 <span id="pd_running" style="display:none;">&#x23F2;</span>
 </div>
+<span id="next_fight" class="nf" style="display:none">
+   <span  class="ntitle" >Prochain Combat</span>
+   <div class="nblue" >
+   <span id="next_name_1"  class="fighter" style="font-size:60px;"></span>
+   </div>
+    <div class="nwhite" >
+   <span id="next_name_2"  class="fighter" style="font-size:60px;"></span>
+   </div>
+   
+</span>
 </body>
 <script>
 var running=false;
@@ -120,8 +160,21 @@ var winner=0;
 function display_name(){
     document.getElementById('name_1').innerHTML= localStorage.getItem("name_1");
     document.getElementById('name_2').innerHTML= localStorage.getItem("name_2");
-
+    
+    var next_name_1 = localStorage.getItem("next_name_1");
+    var next_name_2 = localStorage.getItem("next_name_2");
+    document.getElementById('next_name_1').innerHTML=next_name_1;
+    document.getElementById('next_name_2').innerHTML=next_name_2;
+    if (next_name_1 !== null && next_name_2 !== null && next_name_1!="" && next_name_2!=""){
+       document.getElementById('next_fight').style.display = "inline-block";
+    } else {
+       document.getElementById('next_fight').style.display = "none";
+    }
 }
+
+
+
+
 
 function display_title(){
     document.getElementById('title').innerHTML=localStorage.getItem("title");

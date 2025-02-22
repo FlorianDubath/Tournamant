@@ -17,7 +17,9 @@
            width:calc(100% - 290px);
            display:inline-block;
         }
-        .blue {
+        
+     
+        .blue, .nblue {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
@@ -25,14 +27,44 @@
             color:white;
             text-align:center;
             position:relative;
-        }
-        .white {
+        }   
+       
+        .white, .nwhite {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: white;
             text-align:center;
             position:relative;
+        }
+        .nf {
+           width:100%;
+           background-color:#ffffcc;
+           position:absolute;
+           bottom:0px;
+           left:0px;
+    
+       }
+       .ntitle{
+          
+           color:black; 
+           text-align:center;
+           font-size:40px;
+           margin-top:20px;
+           margin-left:auto; 
+           margin-right:auto;
+           margin-bottom:10px;
+           width:100%;
+           display:inline-block;
+        }
+        .nblue {
+            color:#999999;
+            background-color: #000055;
+            height:unset;
+            }
+         .nwhite {
+            background-color: #777777;
+            height:unset;
         }
         .fighter {
         margin-top:20px;
@@ -234,7 +266,18 @@
 <img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
 <span id="pd_time" style="display:none;"></span>
 <span id="pd_running" style="display:none;">&#x23F2;</span>
+
+
 </div>
+<span id="next_fight" class="nf" style="display:none">
+   <span  class="ntitle" >Prochain Combat</span>
+    <div class="nwhite" >
+   <span id="next_name_2"  class="fighter" style="font-size:60px;"></span>
+   </div>
+   <div class="nblue" >
+   <span id="next_name_1"  class="fighter" style="font-size:60px;"></span>
+   </div>
+</span>
 
 <span class="pop_back pop_hide" Id="pop_sbconf">
 		<span class="popcont">
@@ -243,6 +286,10 @@
 		  Durée du combat: <input type="number" id="cat_dur" min="1" value="3"/>min<br/><br/>
 		  Combatant Bleu: <input type="text" id="fight_blue" value="Combatant 1"/><br/><br/>
 		  Combatant Blanc: <input type="text" id="fight_white" value="Combatant 2"/><br/><br/>
+		  Prochain combat: <br/>
+		  Combatant Bleu: <input type="text" id="next_fight_blue" value=""/><br/>
+		  Combatant Blanc: <input type="text" id="next_fight_white" value=""/><br/>
+		  
 		  
 		  Osaekomi/Toketa combatant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
 		  Osaekomi/Toketa combatant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
@@ -506,6 +553,17 @@ function set_name(name_1,name_2){
     document.getElementById('name_2').innerHTML=name_2;
     localStorage.setItem("name_1", name_1);
     localStorage.setItem("name_2", name_2);
+}
+function set_next_name(name_1,name_2){
+    document.getElementById('next_name_1').innerHTML=name_1;
+    document.getElementById('next_name_2').innerHTML=name_2;
+    localStorage.setItem("next_name_1", name_1);
+    localStorage.setItem("next_name_2", name_2);
+    if (name_1!="" && name_2!=""){
+       document.getElementById('next_fight').style.display = "inline-block";
+    } else {
+       document.getElementById('next_fight').style.display = "none";
+    }
 }
 
 function set_title(title){
@@ -790,6 +848,7 @@ setInterval(function() {
 function conf(){
   set_title(document.getElementById("cat_name").value);
   set_name(document.getElementById("fight_blue").value,document.getElementById("fight_white").value);
+  set_next_name(document.getElementById("next_fight_blue").value,document.getElementById("next_fight_white").value);
   set_duration(document.getElementById("cat_dur").value);
   reset();
   reset_pin_down();
@@ -855,6 +914,7 @@ function conf_key(){
 
 set_title("Catégorie");
 set_name("Combatant 1","Combatant 2");
+set_next_name("Prochain Combatant 1","Prochain Combatant 2");
 set_duration(1);
 reset();
 reset_pin_down();

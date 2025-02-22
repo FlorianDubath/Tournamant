@@ -70,7 +70,7 @@ echo'
            width:calc(100% - 320px);
            display:inline-block;
         }
-        .blue {
+          .blue, .nblue {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
@@ -78,14 +78,45 @@ echo'
             color:white;
             text-align:center;
             position:relative;
+  
+       
         }
-        .white {
+        .white, .nwhite {
             height:440px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: white;
             text-align:center;
             position:relative;
+        }
+        .nf {
+           width:100%;
+           background-color:#ffffcc;
+           position:absolute;
+           bottom:0px;
+           left:0px;
+    
+       }
+       .ntitle{
+          
+           color:black; 
+           text-align:center;
+           font-size:40px;
+           margin-top:20px;
+           margin-left:auto; 
+           margin-right:auto;
+           margin-bottom:10px;
+           width:100%;
+           display:inline-block;
+        }
+        .nblue {
+            color:#999999;
+            background-color: #000055;
+            height:unset;
+         }
+         .nwhite {
+            background-color: #777777;
+            height:unset;
         }
         .fighter {
         margin-top:20px;
@@ -637,12 +668,13 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                       
                       </span></span>
                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a>
+                      <span style="display:none;" Id="nc_1_'.$pop_counter.'">'.$Surname1.' '.$Name1.'</span>
                       ';
                   }
                   $row_value = $row_value.'
                  </td>
                   <td>'.$Surname1.' '.$Name1.'</td>
-                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.$Surname1.' '.$Name1.'\',\''.$Surname2.' '.$Name2.'\');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
+                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.$Surname1.' '.$Name1.'\',\''.$Surname2.' '.$Name2.'\');set_next_name('.$pop_counter.');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
@@ -688,7 +720,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
                       
                       </span></span>
-                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>';
+                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>
+                      <span style="display:none;" Id="nc_2_'.$pop_counter.'">'.$Surname2.' '.$Name2.'</span>';
                   }
                   $row_value = $row_value.'</td>
                   </tr>';
@@ -879,6 +912,15 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 <span id="pd_time" style="display:none;"></span>
 <span id="pd_running" style="display:none;">&#x23F2;</span>
 </div>
+<span id="next_fight" class="nf" style="display:none">
+   <span  class="ntitle" >Prochain Combat</span>
+    <div class="nwhite" >
+   <span id="next_name_2"  class="fighter" style="font-size:60px;"></span>
+   </div>
+   <div class="nblue" >
+   <span id="next_name_1"  class="fighter" style="font-size:60px;"></span>
+   </div>
+</span>
 
 <span class="pop_back pop_hide" Id="pop_sbconf">
 		<span class="popcont">
@@ -1162,6 +1204,23 @@ function set_name(name_1,name_2){
     document.getElementById("name_2").innerHTML=name_2;
     localStorage.setItem("name_1", name_1);
     localStorage.setItem("name_2", name_2);
+}
+
+function set_next_name(counter){
+    var span_name_1 = document.getElementById("nc_1_"+(counter+1));
+    name_1 = span_name_1?span_name_1.innerHTML:"";
+    var span_name_2 = document.getElementById("nc_2_"+(counter+1));
+    name_2 = span_name_2?span_name_2.innerHTML:"";
+
+    document.getElementById("next_name_1").innerHTML=name_1;
+    document.getElementById("next_name_2").innerHTML=name_2;
+    localStorage.setItem("next_name_1", name_1);
+    localStorage.setItem("next_name_2", name_2);
+    if (name_1!="" && name_2!=""){
+       document.getElementById("next_fight").style.display = "inline-block";
+    } else {
+       document.getElementById("next_fight").style.display = "none";
+    }
 }
 
 function set_title(title){
@@ -1451,6 +1510,7 @@ setInterval(function() {
 function conf(){
   set_title(document.getElementById("cat_name").value);
   set_name(document.getElementById("fight_blue").value,document.getElementById("fight_white").value);
+  set_name(document.getElementById("next_fight_blue").value,document.getElementById("next_fight_white").value);
   set_duration(document.getElementById("cat_dur").value);
   reset();
   reset_pin_down();
