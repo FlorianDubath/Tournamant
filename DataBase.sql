@@ -335,6 +335,8 @@ INSERT CategoryStepsType (Id,Name) VALUES (3,'Pool_3');
 INSERT CategoryStepsType (Id,Name) VALUES (4,'Pool_4');
 INSERT CategoryStepsType (Id,Name) VALUES (5,'Pool_5');
 
+
+
 CREATE TABLE CategoryStep( 
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     Name VARCHAR( 255 ) NOT NULL,
@@ -479,3 +481,4 @@ INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) S
 
 
 
+INSERT CategoryStepsType (Id,Name) VALUES (10,'Best_of_2');

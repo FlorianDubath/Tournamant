@@ -812,9 +812,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
      while ($stmt->fetch()) {
          if ($step_1_id<0 && $step_id_type==1) {
              $step_1_id = $step_id;
-         }
-         
-         if ($step_id_type>1) {
+         } else if ($step_id_type<10) {
              $step_pool_ids[$step_id]=$stp_name;
          }
          

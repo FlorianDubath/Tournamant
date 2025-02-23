@@ -53,10 +53,15 @@ function update_step_direct($step_id, $user_id_1, $user_id_2){
 function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2, $name){
     $mysqli= ConnectionFactory::GetConnection(); 
     
-    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,1,?)");
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,10,?)");
     $stmt->bind_param("is", $ActualCategory_id, $name);         
     $stmt->execute();
     $step_id = $mysqli->insert_id;
+    $stmt->close();
+    
+    $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id) VALUES (?,?,?,?)");
+    $stmt->bind_param("iiii", $ActualCategory_id, $step_id, $user_id_1, $user_id_2);         
+    $stmt->execute();
     $stmt->close();
     
     $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id) VALUES (?,?,?,?)");
@@ -446,7 +451,7 @@ function get_step_results($step_id){
         } else {
                 return array("ordered"=>NULL,"full"=>NULL);
         }
-    } else {
+    } else if ($step_type<10) {
         // pool step  
         $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1,TournamentCompetitor2Id,pv2, TieBreakFight FROM Fight WHERE step_id=?");
         $stmt->bind_param("i", $step_id);         
@@ -504,6 +509,38 @@ function get_step_results($step_id){
         }
         
         return array("ordered"=>$res,"full"=>$results,"tie"=>$tie);
+    } else {
+        // 2 fighter category
+        $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1,TournamentCompetitor2Id,pv2 FROM Fight WHERE step_id=?");
+        $stmt->bind_param("i", $step_id);         
+        $stmt->bind_result($TournamentCompetitor1Id, $pv1, $TournamentCompetitor2Id, $pv2);     
+        $stmt->execute();  
+        $results = array();
+        // victory and PV
+        while ($stmt->fetch()) {
+            if (empty($pv1) && empty($pv2)){
+                return array("ordered"=>NULL,"full"=>NULL);
+            }
+            if (!array_key_exists($TournamentCompetitor1Id, $results)){
+                $results[$TournamentCompetitor1Id]=0;
+            }
+            
+            if (!array_key_exists($TournamentCompetitor2Id, $results)){
+                $results[$TournamentCompetitor2Id]=0;
+            }
+            $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0)+10*$pv1;
+            $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0)+10*$pv2;
+        }
+        $stmt->close();
+        arsort($results, SORT_NUMERIC);
+        $res= array();
+        $idx=1;
+        foreach ($results as $cmp => $point) {
+            $res[$idx]=$cmp;
+            $idx+=1;
+        }
+        
+        return array("ordered"=>$res,"full"=>$results);
     }
 }
 
@@ -511,68 +548,92 @@ function get_step_results($step_id){
 function check_for_tie($ActualCategoryId) {
 
     $mysqli= ConnectionFactory::GetConnection(); 
-    
-    $stmt = $mysqli->prepare("SELECT out_step_id, in_step_1_id, rank_in_step_1, in_step_2_id, rank_in_step_2 FROM StepLinking WHERE ActualCategoryId=?");
+    // check for 2-fighter cat
+    $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=? AND CategoryStepsTypeId=10");
     $stmt->bind_param("i", $ActualCategoryId);         
-    $stmt->bind_result($out_step,$in_step_1,$rank_1,$in_step_2,$rank_2);     
+    $stmt->bind_result($step_2f_id);     
     $stmt->execute();
-    $linked=array();  
-    while ($stmt->fetch()){
-         if (!array_key_exists($in_step_1, $linked)) {
-             $linked[$in_step_1]=array();
-         } 
-         $linked[$in_step_1][count($linked[$in_step_1])]=$rank_1;
-         if (!array_key_exists($in_step_2, $linked)) {
-             $linked[$in_step_2]=array();
-         } 
-         $linked[$in_step_2][count($linked[$in_step_2])]=$rank_2;
-    }
+    $stmt->fetch();
+    $stmt->close(); 
     
-    foreach ( $linked as $step_id=>$rank_list){
-        $step_res = get_step_results($step_id);
-        $ranks = array_values($rank_list);
-        if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {  
-         /// WE assume that 
-         ///                due to pool structure ties are between 3 fighters 
-         ///                if 2nd or 3rd is requested so is lower ranks (1rst (2nd))
-         ///                no tiebreak needed in isolated pool
-            $comp_list=array();
-            // 1rst
-            if (in_array(1,$ranks) &&  $step_res["full"][$step_res["ordered"][1]] == $step_res["full"][$step_res["ordered"][2]]){
-                   array_push($comp_list, $step_res["ordered"][1]);
-                   array_push($comp_list, $step_res["ordered"][2]);
-                   array_push($comp_list, $step_res["ordered"][3]);
-            }
-            // not 1rst but second
-            else if (in_array(2,$ranks) &&  $step_res["full"][$step_res["ordered"][2]] == $step_res["full"][$step_res["ordered"][3]]){
-                   array_push($comp_list, $step_res["ordered"][2]);
-                   array_push($comp_list, $step_res["ordered"][3]);
-                   array_push($comp_list, $step_res["ordered"][4]);
-            }
-            
-             // 3rd and bellow
-            else if (in_array(3,$ranks) &&  $step_res["full"][$step_res["ordered"][3]] == $step_res["full"][$step_res["ordered"][4]]){
-            
-                   array_push($comp_list, $step_res["ordered"][3]);
-                   array_push($comp_list, $step_res["ordered"][4]);
-                   array_push($comp_list, $step_res["ordered"][5]);
-            }
+    if (isset($step_2f_id) && $step_2f_id>0) {
+        // check if a 3rd fight is needed
+        $stmt = $mysqli->prepare("select count(Id), sum(pv1>pv2), sum(pv2>pv1), TournamentCompetitor1Id, TournamentCompetitor2Id from Fight WHERE step_id=?");
+        $stmt->bind_param("i", $step_2f_id);         
+        $stmt->bind_result($tot_f,$win_1,$win_2, $user_id_1, $user_id_2);     
+        $stmt->execute();  
+        $stmt->fetch();
+        $stmt->close(); 
+        if ($tot_f==2 && $win_1==1 && $win_2==1) {
+           $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id) VALUES (?,?,?,?)");
+           $stmt->bind_param("iiii", $ActualCategoryId, $step_2f_id, $user_id_1, $user_id_2);         
+           $stmt->execute();
+           $stmt->close();
+        }
+    } else {
+        // check tie in pool
+        $stmt = $mysqli->prepare("SELECT out_step_id, in_step_1_id, rank_in_step_1, in_step_2_id, rank_in_step_2 FROM StepLinking WHERE ActualCategoryId=?");
+        $stmt->bind_param("i", $ActualCategoryId);         
+        $stmt->bind_result($out_step,$in_step_1,$rank_1,$in_step_2,$rank_2);     
+        $stmt->execute();
+        $linked=array();  
+        while ($stmt->fetch()){
+             if (!array_key_exists($in_step_1, $linked)) {
+                 $linked[$in_step_1]=array();
+             } 
+             $linked[$in_step_1][count($linked[$in_step_1])]=$rank_1;
+             if (!array_key_exists($in_step_2, $linked)) {
+                 $linked[$in_step_2]=array();
+             } 
+             $linked[$in_step_2][count($linked[$in_step_2])]=$rank_2;
+        }
+        
+        foreach ( $linked as $step_id=>$rank_list){
+            $step_res = get_step_results($step_id);
+            $ranks = array_values($rank_list);
+            if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {  
+             /// WE assume that 
+             ///                due to pool structure ties are between 3 fighters 
+             ///                if 2nd or 3rd is requested so is lower ranks (1rst (2nd))
+             ///                no tiebreak needed in isolated pool
+                $comp_list=array();
+                // 1rst
+                if (in_array(1,$ranks) &&  $step_res["full"][$step_res["ordered"][1]] == $step_res["full"][$step_res["ordered"][2]]){
+                       array_push($comp_list, $step_res["ordered"][1]);
+                       array_push($comp_list, $step_res["ordered"][2]);
+                       array_push($comp_list, $step_res["ordered"][3]);
+                }
+                // not 1rst but second
+                else if (in_array(2,$ranks) &&  $step_res["full"][$step_res["ordered"][2]] == $step_res["full"][$step_res["ordered"][3]]){
+                       array_push($comp_list, $step_res["ordered"][2]);
+                       array_push($comp_list, $step_res["ordered"][3]);
+                       array_push($comp_list, $step_res["ordered"][4]);
+                }
+                
+                 // 3rd and bellow
+                else if (in_array(3,$ranks) &&  $step_res["full"][$step_res["ordered"][3]] == $step_res["full"][$step_res["ordered"][4]]){
+                
+                       array_push($comp_list, $step_res["ordered"][3]);
+                       array_push($comp_list, $step_res["ordered"][4]);
+                       array_push($comp_list, $step_res["ordered"][5]);
+                }
 
-            
-            if (count($comp_list)>0){
-            // Add tiebreak fights
-                   $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
-		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[1]);         
-		   $stmt->execute();
-		   $stmt->close();
-	           $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
-		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[2]);         
-		   $stmt->execute();
-		   $stmt->close();
-		   $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
-		   $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[1],  $comp_list[2]);         
-		   $stmt->execute();
-		   $stmt->close();
+                
+                if (count($comp_list)>0){
+                // Add tiebreak fights
+                       $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		       $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[1]);         
+		       $stmt->execute();
+		       $stmt->close();
+	               $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		       $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[0], $comp_list[2]);         
+		       $stmt->execute();
+		       $stmt->close();
+		       $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,1)");
+		       $stmt->bind_param("iiii", $ActualCategoryId, $step_id, $comp_list[1],  $comp_list[2]);         
+		       $stmt->execute();
+		       $stmt->close();
+                }
             }
         }
     }
@@ -719,6 +780,7 @@ function get_full_result($ActualCategoryId){
         
         return $result; 
     }  
+
 }
 
 function promote_Unique($tc_id_1){
