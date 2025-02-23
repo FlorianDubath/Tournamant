@@ -629,11 +629,11 @@ echo'
            if ($fight_number>0) {
                echo $fight_result;
                if ($GradeCollectVP) {
-                   echo 'Nombre de combat(s) :'.$fight_number.'<br/>';
-                   echo 'Nombre de combat(s) contre des 1Kyu et Dan :'.$fight_nb_pv.'<br/>';
-                   echo 'Nombre de victoire(s) :'.$fight_win.'<br/>';
-                   echo 'Nombre de victoire(s) contre des 1Kyu et Dan :'.$fight_win_pv.'<br/>';
-                   echo 'Nombre de points valeurs collectés :'.$fight_pv.'<br/>';
+                   echo '<span class="res_lbl">Nombre de combat(s) :</span><span class="res_val">'.$fight_number.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de combat(s) contre des 1Kyu et Dan :</span><span class="res_val">'.$fight_nb_pv.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de victoire(s) :</span><span class="res_val">'.$fight_win.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de victoire(s) contre des 1Kyu et Dan :</span><span class="res_val">'.$fight_win_pv.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de points valeurs collectés :</span><span class="res_val">'.$fight_pv.'</span><br/>';
                } 
            }
            

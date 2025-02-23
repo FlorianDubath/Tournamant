@@ -153,7 +153,7 @@ echo'
            border:solid 2px lightgrey;
            border-radius:5px;
            margin-right:5px;
-           font-size:16;
+           font-size:16px;
         }
         .sbbb{
            display:inline-block;
@@ -904,13 +904,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 <span id="gs" style="display:none;" >GS&nbsp;</span>
 <span id="time"></span>
 <span id="running" style="display:none;">&#x23F2;</span>
+
 </div><br/>
 <div class="timer">
 <img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
 <img src="css/pin_down_blue.png"  id="img_pd_blue" style="display:none;"/>
 <img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
 <span id="pd_time" style="display:none;"></span>
-<span id="pd_running" style="display:none;">&#x23F2;</span>
+<span id="pd_running" style="display:none;">&#x23F2;<a class="bbtn" onclick="stop_pin_down()" >Toketa (<span id="t_toketa">ArrowDown</span>)</a></span>
 </div>
 <span id="next_fight" class="nf" style="display:none">
    <span  class="ntitle" >Prochain Combat</span>
@@ -1047,7 +1048,19 @@ function StartPauseTimer(){
 
 function StartPausePin(num){
         if (pin_down>0){
-           stop_pin_down();
+           if (num==pin_down){
+           // same key pressed again: nothing to do
+           } else {
+           // other key switch side pin down and possible scoring
+              pin_down=num;
+              score_1+=(num==1)?pd_score:-pd_score;
+              score_2+=(num==1)?-pd_score:pd_score;
+              localStorage.setItem("score_1", score_1);
+              localStorage.setItem("score_2", score_2);
+              displayScore();
+              check_score();  
+              localStorage.setItem("pin_down",pin_down);
+          } 
         } else {
            reset_pin_down();
            pin_down=num;
@@ -1321,7 +1334,7 @@ function check_score(){
     }
      if (shido_1>2){
        document.getElementById("sh_3_1").style.display= "inline-block"; 
-       winner=1;  
+       winner=2;  
        pauseTimer();
     } else {
         document.getElementById("sh_3_1").style.display= "none"; 
@@ -1341,7 +1354,7 @@ function check_score(){
     }
      if (shido_2>2){
        document.getElementById("sh_3_2").style.display= "inline-block"; 
-       winner=2; 
+       winner=1; 
        pauseTimer();
     } else {
         document.getElementById("sh_3_2").style.display= "none";  
@@ -1523,6 +1536,7 @@ function conf_key(){
     char_pd_2 = document.getElementById("k_pd_2").value;
     document.getElementById("t_pd_2").innerHTML = char_pd_2;
     char_toketa = document.getElementById("k_toketa").value;
+    document.getElementById("t_toketa").innerHTML = char_toketa;
     
     
     char_100_1 = document.getElementById("k_100_1").value;

@@ -403,3 +403,15 @@ background-color:#FFBBBB;
  .result_3{
  background-color:#cd7f32;
  }
+ 
+ 
+ .res_lbl{
+   display:inline-block;
+   width:310px;
+   text-align:right;
+   margin-right:5px;
+ }
+ 
+ .res_val{
+ 
+ }
