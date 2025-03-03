@@ -478,7 +478,13 @@ INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) S
 INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 15:15:00', '2024-06-04 15:45:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='FO';
 INSERT INTO TournamentWeighting (AgeCategoryId, WeightingBegin, WeightingEnd ) SELECT TCA_1.Id, '2024-06-04 15:15:00', '2024-06-04 15:45:00' FROM TournamentAgeCategory TCA_1 WHERE TCA_1.ShortName='MO';
 
+-----------------------------------------
 
 
 
 INSERT CategoryStepsType (Id,Name) VALUES (10,'Best_of_2');
+
+
+INSERT CategoryStepsType (Id,Name) VALUES (30,'Resolve_3');
+ALTER TABLE CategoryStep  ADD COLUMN Data VARCHAR( 255 ) NULL;
+
