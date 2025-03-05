@@ -55,9 +55,9 @@ INSERT INTO TournamentVenue(Name, Place, Transport, Organization, Admition, `Sys
      'Assurés par les arbitres officiels de la Fédération Suisse de Judo.',
      'Judogi blanc uniquement. Cheveux longs attachés (chignon). T-shirt blanc pour les combattantes.',
      'info@acgjjj.ch, Alexandre Perles 079 260 79 67, Stéphane Fischer 077 421 15 67',
-     '2024-06-01',
-     '2024-06-04',
-     '2024-06-04'   
+     '2025-03-06',
+     '2025-03-16',
+     '2025-03-16'   
 )");  
                 $mysqli->query("INSERT INTO TournamentDoubleSatrt (MainAgeCategoryId, AcceptedAgeCategoryId)
 SELECT TCA_1.Id, TCA_2.Id FROM TournamentAgeCategory TCA_1
@@ -85,25 +85,27 @@ WHERE TCA_1.ShortName='M21'");
                 $mysqli->query("DELETE FROM TournamentClub;");
                 $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(1, 'BUDO SCHOOLS ASHITA');");
                 $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(2, 'DOJO LANCY–PALETTES');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(3, 'ECOLE DE JUDO DE COLLONGE-BELLERIVE');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(4, 'GOSHINJUTSU-KWAI DARDAGNY');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(5, 'JU-JITSU JUDO CLUB COMPESIÈRES');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(6, 'JUDO CLUB BUDOKAN VERNIER');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(7, 'JUDO CLUB CAROUGE');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(8, 'JUDO CLUB DES EAUX-VIVES');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(9, 'JUDO CLUB GENEVE');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(10, 'JUDO CLUB GRAND-SACONNEX');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(11, 'JUDO CLUB LE SAMOURAI BERNEX');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(12, 'JUDO CLUB LEMANIQUE');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(13, 'JUDO CLUB MEYRIN');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(14, 'JUDO CLUB SATIGNY');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(15, 'JUDO CLUB TROIS-CHÊNES');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(16, 'JUDO CLUB VERSOIX');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(17, 'JUDO KWAI LANCY');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(18, 'JUDO PREGNY-CHAMBESY');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(19, 'SHINBUDO JUDO');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(20, 'SHINBUDO-ONEX');");
-                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHUNG DO KWAN BUDO');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(3, 'Dojo Association Genève');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(4, 'ECOLE DE JUDO DE COLLONGE-BELLERIVE');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(5, 'GOSHINJUTSU-KWAI DARDAGNY');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(6, 'JU-JITSU JUDO CLUB COMPESIÈRES');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(7, 'JUDO CLUB BUDOKAN VERNIER');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(8, 'JUDO CLUB CAROUGE');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(9, ' Judo Club Champel');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(10, 'JUDO CLUB DES EAUX-VIVES');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(11, 'JUDO CLUB GENEVE');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(12, 'JUDO CLUB GRAND-SACONNEX');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(13, 'JUDO CLUB LE SAMOURAI BERNEX');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(14, 'JUDO CLUB LEMANIQUE');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(15, 'JUDO CLUB MEYRIN');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(16, 'JUDO CLUB SATIGNY');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(17, 'JUDO CLUB TROIS-CHÊNES');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(18, 'JUDO CLUB VERSOIX');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(19, 'JUDO KWAI LANCY');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(20, 'JUDO PREGNY-CHAMBESY');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(21, 'SHINBUDO JUDO');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(22, 'SHINBUDO-ONEX');");
+                $mysqli->query("INSERT INTO TournamentClub (Id ,Name) VALUES(23, 'SHUNG DO KWAN BUDO');");
                 
                 
                 $mysqli->query("DELETE FROM OTA;");
