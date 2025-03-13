@@ -44,10 +44,20 @@ if($_POST && !empty($_POST['id'])) {
                $StrId = $_REQUEST['sid'];
          }
          
-         $stmt = $mysqli->prepare("INSERT INTO TournamentCompetitor  (StrId, Name, Surname, Birth, GenderId, LicenceNumber, GradeId, ClubId) VALUES (?,?,?,?,?,?,?,?)");
-         $stmt->bind_param("ssssisii", $StrId, $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid']);
-         $stmt->execute();
-         $stmt->close();
+        
+         if (isset($_POST['lc']) && intval($_POST['lc'])>0){
+             $stmt = $mysqli->prepare("INSERT INTO TournamentCompetitor  (StrId, Name, Surname, Birth, GenderId, LicenceNumber, GradeId, ClubId) VALUES (?,?,?,?,?,?,?,?)");
+             $stmt->bind_param("ssssisii", $StrId, $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['lc'], $_POST['grid'], $_POST['cid']);
+             $stmt->execute();
+             $stmt->close();
+         } else {
+             $stmt = $mysqli->prepare("INSERT INTO TournamentCompetitor  (StrId, Name, Surname, Birth, GenderId, GradeId, ClubId) VALUES (?,?,?,?,?,?,?)");
+             $stmt->bind_param("ssssiii", $StrId, $_POST['nm'], $_POST['sm'], $_POST['bt'], $_POST['gid'], $_POST['grid'], $_POST['cid']);
+             $stmt->execute();
+             $stmt->close();
+         }
+         
+        
          
          $stmt = $mysqli->prepare("SELECT Id FROM TournamentCompetitor WHERE StrId=?");
          $stmt->bind_param("s", $StrId);
@@ -216,7 +226,7 @@ echo             '    </span>
 	        
 	        <span class="fitem">
                <span class="label">Numéro de licence :</span>
-               <input class="inputDate"  type="number" name="lc" maxlength="6" min="100000"  max="999999" required value="'.$licence.'"  form="F1"/><br/>
+               <input class="inputDate"  type="number" name="lc" maxlength="6" min="100000"  max="999999" value="'.$licence.'"  form="F1"/><br/>
 	        </span>';
 	        
 	        if ($Id>0) {

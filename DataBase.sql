@@ -488,3 +488,6 @@ INSERT CategoryStepsType (Id,Name) VALUES (10,'Best_of_2');
 INSERT CategoryStepsType (Id,Name) VALUES (30,'Resolve_3');
 ALTER TABLE CategoryStep  ADD COLUMN Data VARCHAR( 255 ) NULL;
 
+
+ALTER TABLE TournamentCompetitor MODIFY LicenceNumber INT NULL;
+
