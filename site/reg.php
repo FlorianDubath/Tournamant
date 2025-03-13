@@ -324,7 +324,7 @@ echo             '    </span>
 	                                     left outer join TournamentDoubleSatrt on AcceptedAgeCategoryId=TAC_1.Id
 	                                     LEFT OUTER JOIN TournamentAgeCategory TAC_2 ON MainAgeCategoryId = TAC_2.Id 
 	                                     
-	                                     WHERE ((IFNULL(TAC_1.MaxAge,1000)>? AND IFNULL(TAC_1.MinAge,0)<?) OR (TAC_2.Id IS NOT NULL AND IFNULL(TAC_2.MaxAge,1000)>? AND IFNULL(TAC_2.MinAge,0)<?)) AND TAC_1.GenderId=? AND V_Age_Reg.AgeCategoryId IS NULL
+	                                     WHERE ((IFNULL(TAC_1.MaxAge,1000)>? AND IFNULL(TAC_1.MinAge,0)<=?) OR (TAC_2.Id IS NOT NULL AND IFNULL(TAC_2.MaxAge,1000)>? AND IFNULL(TAC_2.MinAge,0)<=?)) AND TAC_1.GenderId=? AND V_Age_Reg.AgeCategoryId IS NULL
 	                                     ORDER BY IFNULL(TAC_1.MinAge,IFNULL(TAC_1.MaxAge,1000)),IFNULL(-Cat.MaxWeight, IFNULL(Cat.MinWeight,'OPEN'))");       
 	           
                $stmt->bind_param("iiiiii", $Id, $ag,$ag, $ag,$ag,$gid);         

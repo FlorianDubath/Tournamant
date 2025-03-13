@@ -125,7 +125,7 @@ writeBand(True);
          $curr_w_e=0;
          $accumulation='';
          while ($stmt->fetch()) {    
-           $age = (date('Y') - $MaxAge).' - '.(date('Y') - $MinAge);
+           $age = (date('Y',  strtotime($day_date)) - $MaxAge).' - '.(date('Y',  strtotime($day_date)) - $MinAge);
            if ($MaxAge==99) {
               $age = '≤'.( date("Y",  strtotime($day_date)) -  $MinAge);
            }
