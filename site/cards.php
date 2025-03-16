@@ -22,7 +22,7 @@ echo '
        <a href="" OnClick=""></a>
        <span Id="progress"> </span>
        <form action="./cards.php" method="get">
-         Génération de <input type="number"  name="empty" min="1" max="16" step="1" value="1"/>  cartes vierges: <input class="pgeBtn" type="submit" value="Générer">
+         Génération de <input type="number"  name="empty" min="1" max="100" step="1" value="1"/>  cartes vierges: <input class="pgeBtn" type="submit" value="Générer">
              <a class="pgeBtn" href="listingreg.php" title="Fermer" >Fermer</a>
        </form>
     </div>

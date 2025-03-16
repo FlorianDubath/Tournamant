@@ -85,7 +85,7 @@ echo '
                if ($now > $w_end) {
                     echo 'Pesée terminée ('.date('j/m H\hi', strtotime($weighting_end)).')';
                } else {
-                    echo date('j/m H\hi', strtotime($weighting_end)). ' ('.$interval_end->h.'h '.$interval_end->m.' min.)';
+                    echo date('j/m H\hi', strtotime($weighting_end)). ' ('.$interval_end->h.'h '.$interval_end->i.' min.)';
                }    
                echo'</span>';
             
