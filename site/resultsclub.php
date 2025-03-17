@@ -135,7 +135,7 @@ function makePDF(pdf_name) {
   var imgSilver = wrapImgData(getImgData("silver"));
   var imgBronze = wrapImgData(getImgData("bronze"));';
   
-     $stmt = $mysqli->prepare("select
+     $stmt = $mysqli->prepare("select distinct
                                  ActualCategory.Id,
                                  ActualCategory.Name,
                                  ActualCategoryResult.RankId,

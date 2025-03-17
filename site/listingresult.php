@@ -43,7 +43,7 @@ echo '
                </span>
            
      ';
-     $stmt = $mysqli->prepare("select
+     $stmt = $mysqli->prepare("select distinct
                                  ActualCategory.Id,
                                  ActualCategory.Name,
                                  ActualCategoryResult.RankId,
