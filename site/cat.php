@@ -928,26 +928,26 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 		 <span class="pop_tt">CONFIGURATION </span> <br/><br/>
 		 <!-- Catégorie: <input type="text" id="cat_name" value="'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'"/><br/><br/>
 		  Durée du combat: <input type="number" id="cat_dur" min="1" value="'.$cat_dur.'"/>min<br/><br/>
-		  Combatant Bleu: <input type="text" id="fight_blue" value="Combatant 1"/><br/><br/>
-		  Combatant Blanc: <input type="text" id="fight_white" value="Combatant 2"/><br/><br/> -->
+		  Combattant Bleu: <input type="text" id="fight_blue" value="Combattant 1"/><br/><br/>
+		  Combattant Blanc: <input type="text" id="fight_white" value="Combattant 2"/><br/><br/> -->
 		  
-		  Osaekomi combatant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
-		  Osaekomi combatant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
+		  Osaekomi combattant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
+		  Osaekomi combattant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
 		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/><br/>
 		  
-		  Ipon combatant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
-		  Waza-ari combatant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
-		  Yuko combatant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
-		  Shido combatant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
+		  Ipon combattant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
+		  Waza-ari combattant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
+		  Yuko combattant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
+		  Shido combattant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
 		  
-		  Décision combatant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
+		  Décision combattant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
 		  
-		  Ipon combatant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
-		  Waza-ari combatant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
-		  Yuko combatant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
-		  Shido combatant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
+		  Ipon combattant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
+		  Waza-ari combattant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
+		  Yuko combattant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
+		  Shido combattant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
 		  
-		  Décision combatant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/><br/>
+		  Décision combattant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/><br/>
 		  
 		  Gong <input class="key" type="text" id="k_gong" maxlength="1"  value="1"/><br/><br/>
 		  
@@ -1589,7 +1589,7 @@ function conf_key(){
 }
 
 set_title("'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'");
-set_name("Combatant 1","Combatant 2");
+set_name("Combattant 1","Combattant 2");
 set_duration('.$cat_dur.');
 reset();
 reset_pin_down();

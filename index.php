@@ -351,12 +351,12 @@ if ($_SESSION['_IsAdmin'] ==1){
         Fichier  Excel : <a class="pgeBtn" target="_blanck" fref="MaterielTest/Inscriptions_3.xlsx">Inscriptions 3 </a><br/><br/>
         </div>
         <span class="h_title">Changer la date/horaires pour...</span>
-        tester les inscriptions groupées, la générations des cartes de combatants, ... :
+        tester les inscriptions groupées, la générations des cartes de combattants, ... :
         <form action="./index.php" method="post"  style="text-align:center;">
               <input type="hidden" name="j3" value="1"/>
 	      <input class="pgeBtn"  type="submit" value="3 jours avant le tournoi"> 
 	</form><br/><br/>
-	 tester l\'accueil, remise de la carte de combatant, l\'inscription depuis une carte vierge, ... :
+	 tester l\'accueil, remise de la carte de combattant, l\'inscription depuis une carte vierge, ... :
 	<form action="./index.php" method="post"  style="text-align:center;">
               <input type="hidden" name="j3" value="2"/>
 	      <input class="pgeBtn"  type="submit" value="1h avnt la pesée des élite M"> 

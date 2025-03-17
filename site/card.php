@@ -199,7 +199,7 @@ if ( ! empty($_SESSION['_UserId'])) {
             
             echo'
             
-            <span class="fsubtitle">Présence et carte de combatant:</span>';
+            <span class="fsubtitle">Présence et carte de combattant:</span>';
             
             
             if ( $chin==0) {
