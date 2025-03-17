@@ -226,7 +226,7 @@ echo             '    </span>
 	        
 	        <span class="fitem">
                <span class="label">Numéro de licence :</span>
-               <input class="inputDate"  type="number" name="lc" maxlength="6" min="100000"  max="999999" value="'.$licence.'"  form="F1"/><br/>
+               <input class="inputDate"  type="number" name="lc" maxlength="6"  value="'.$licence.'"  form="F1"/><br/>
 	        </span>';
 	        
 	        if ($Id>0) {
