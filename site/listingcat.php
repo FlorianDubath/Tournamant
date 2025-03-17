@@ -36,7 +36,7 @@ echo '
                
    ';
       $mysqli= ConnectionFactory::GetConnection(); 
-     $stmt = $mysqli->prepare("select
+     $stmt = $mysqli->prepare("select distinct 
                                  TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
                                  TournamentAgeCategory.ShortName,
@@ -53,7 +53,7 @@ echo '
                              INNER JOIN TournamentWeighting on TournamentAgeCategory.Id = TournamentWeighting.AgeCategoryId
                              LEFT OUTER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
                              LEFT OUTER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
-                             LEFT OUTER JOIN ActualCategory ON TournamentCategory.Id=ActualCategory.CategoryId OR TournamentCategory.Id=ActualCategory.Category2Id
+                             LEFT OUTER JOIN ActualCategory ON TournamentCategory.Id=ActualCategory.CategoryId 
                              
                              GROUP BY TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
