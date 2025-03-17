@@ -674,7 +674,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                   $row_value = $row_value.'
                  </td>
                   <td>'.$Surname1.' '.$Name1.'</td>
-                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.$Surname1.' '.$Name1.'\',\''.$Surname2.' '.$Name2.'\');set_next_name('.$pop_counter.');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
+                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.str_replace("'", "\\'", $Surname1).' '.str_replace("'", "\\'", $Name1).'\',\''.str_replace("'", "\\'", $Surname2).' '.str_replace("'", "\\'", $Name2).'\');set_next_name('.$pop_counter.');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
