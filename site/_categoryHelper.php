@@ -345,12 +345,21 @@ function create_steps_11($ActualCategoryId, $user_ids) {
     $pool_1=create_step_pool_4($ActualCategoryId, $user_ids[0], $user_ids[3], $user_ids[6], $user_ids[9], 'Groupe A');
     $pool_2=create_step_pool_4($ActualCategoryId, $user_ids[1], $user_ids[4], $user_ids[7], $user_ids[10], 'Groupe B');
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[5], $user_ids[8], 'Groupe C');
-
+    
+    
+    $resolve_3 = create_resolver_3($ActualCategoryId,'Sorting');
+    create_link($ActualCategoryId, $resolve_3, $pool_1, 1, $pool_1, 2);
+    create_link($ActualCategoryId, $resolve_3, $pool_2, 1, $pool_2, 2);
+    create_link($ActualCategoryId, $resolve_3, $pool_3, 1, $pool_3, 2);
+    
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $resolve_3, 1, $resolve_3, 3);
+    
+    $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
+    create_link($ActualCategoryId, $half_2, $resolve_3, 2, $resolve_3, 4);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
-    create_link($ActualCategoryId, $final, $half_1, 1, $pool_2, 1);
+    create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_12($ActualCategoryId, $user_ids) {
