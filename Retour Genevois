@@ -1,0 +1,67 @@
+Changé et testé:
+----------------
+
+- Liste des catégorie catégorie avec 1 participant promu 1er: affichage double
+	modified + Tested:   site/listingcat.php
+	
+- affichage multiple des vaincoeurs	
+    modified + Tested:   site/listingresult.php
+	modified + Tested:   site/results.php
+	modified + Tested:   site/resultsclub.php
+   
+- enregistrement carte : n° liscence pas obligatoire
+	modified + Tested:   site/reg.php
+
+- "combatants" =>  "combattants"
+    modified + Tested:   site/ScoreBoard.html
+	modified + Tested:   site/card.php
+	modified + Tested:   site/cards.php
+	modified:   site/cat.php
+	
+- affichage c@tegori (mettre l'encoding dans le Scoreboard.html)
+	modified + Tested:   site/MirorScoreBoard.html
+	modified + Tested:   site/ScoreBoard.html	
+	
+Changé (à tester):
+------------------
+- Permettre la pesée en avance
+    c'est déjà le cas
+    
+- bug vs quand il y a un ' espace dans le nom 
+    modified:   site/cat.php
+    
+
+A faire :
+---------
+- carte afficher pour les arbitre 2 15/1
+
+- exporter un pdf de la catégorie
+
+- nom des combattant pour Prochain combats pas juste
+
+- limit au Golden Score 
+
+- Scoreboard:
+  - Plus gras / plus lisible vertical et horizontal
+  - durée et osaekomi sur la même ligne
+  - sonomama => reprise sans clearer le timer oseakomi
+  - configurer + afficher un Numéro tatamis
+  ------
+  - Zoom différentiel
+  - timer pour les pause
+  - resset du temps
+  - (10 yuko affichage venant devant le ippon)
+
+- intégrer plusieurs systèmes (open)
+
+A évaluer /discuter:
+--------------------
+- Revoir et Modifier les systèmes de combats. 
+
+- delais entre l'heure annoncée de fin de la pesée et la fin effective
+
+- affichages des catégories (écran supplémentaire) (liste catégorie + liste combats de chaque catégorie en cours)
+
+- 2 forfaits après le début des combats
+
+
