@@ -22,6 +22,10 @@ Changé et testé:
 	modified + Tested:   site/MirorScoreBoard.html
 	modified + Tested:   site/ScoreBoard.html	
 	
+- carte afficher pour les arbitre 2 15/1
+   modified + Tested:   site/css/test.css
+   modified + Tested:   site/card.php
+   
 Changé (à tester):
 ------------------
 - Permettre la pesée en avance
@@ -33,7 +37,6 @@ Changé (à tester):
 
 A faire :
 ---------
-- carte afficher pour les arbitre 2 15/1
 
 - exporter un pdf de la catégorie
 
@@ -49,8 +52,8 @@ A faire :
   - sonomama => reprise sans clearer le timer oseakomi
   - configurer + afficher un Numéro tatamis
   - timer pour les pause
+  - Zoom différentiel (pour les TV HDready et FullHD)
   ------
-  - Zoom différentiel
   - resset du temps
   - (10 yuko affichage venant devant le ippon)
 

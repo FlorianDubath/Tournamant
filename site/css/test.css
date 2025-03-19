@@ -407,11 +407,21 @@ background-color:#FFBBBB;
  
  .res_lbl{
    display:inline-block;
-   width:310px;
-   text-align:right;
+
    margin-right:5px;
  }
  
  .res_val{
  
  }
+ 
+ .frac {
+margin-left:5px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align:center;
+    }
+    
+    .res_val_num{
+      border-bottom:solid 1px black;
+    }

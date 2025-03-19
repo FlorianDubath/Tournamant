@@ -420,7 +420,7 @@ echo'
 	           </span>';
 
 	              
-	           $stmt = $mysqli->prepare("SELECT 
+	           $stmt = $mysqli->prepare("SELECT distinct
 	                                            TournamentRegistration.Id, 
 	                                            TournamentAgeCategory.Name,
 	                                            TournamentAgeCategory.ShortName,
@@ -559,6 +559,7 @@ echo'
            $fight_win=0;
            $fight_win_pv=0;
            $fight_pv=0;
+           $fight_ipon=0;
            $cur_cat='';
            while ($stmt->fetch()){
                if ($cur_cat!=$cat_nm) {
@@ -595,6 +596,9 @@ echo'
                      $fight_win += 1;
                      if ($ppv==2) {
                          $fight_pv += $pv1;
+                         if ($pv1==10){
+                            $fight_ipon+=1;
+                         }
                          $fight_win_pv+=1;
                          $pv_c = $pv1;
                      } else {
@@ -612,6 +616,9 @@ echo'
                      $fight_win+=1; 
                      if ($ppv==2) {
                          $fight_pv += $pv2;
+                         if ($pv2==10){
+                            $fight_ipon+=1;
+                         }
                          $fight_win_pv+=1;
                          $pv_c = $pv2;
                      } else {
@@ -624,16 +631,20 @@ echo'
                $fight_result =  $fight_result.'<tr><td>'.$vic.'</td><td>'.$op.'</td><td>'.$blt.'</td><td>'. $pv_c.'</td></tr>';
            }
            $stmt->close();
-            $fight_result =  $fight_result.'</table>';
+            $fight_result =  $fight_result.'</table><br/><br/>';
            
            if ($fight_number>0) {
                echo $fight_result;
+               echo '<span class="res_lbl">Nombre de combat(s) :</span><span class="res_val">'.$fight_number.'</span><br/>';
+               echo '<span class="res_lbl">Nombre de victoire(s) :</span><span class="res_val">'.$fight_win.'</span><br/><br/>';
                if ($GradeCollectVP) {
-                   echo '<span class="res_lbl">Nombre de combat(s) :</span><span class="res_val">'.$fight_number.'</span><br/>';
-                   echo '<span class="res_lbl">Nombre de combat(s) contre des 1Kyu et Dan :</span><span class="res_val">'.$fight_nb_pv.'</span><br/>';
-                   echo '<span class="res_lbl">Nombre de victoire(s) :</span><span class="res_val">'.$fight_win.'</span><br/>';
-                   echo '<span class="res_lbl">Nombre de victoire(s) contre des 1Kyu et Dan :</span><span class="res_val">'.$fight_win_pv.'</span><br/>';
-                   echo '<span class="res_lbl">Nombre de points valeurs collectés :</span><span class="res_val">'.$fight_pv.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de combat(s) contre 1Kyu et Dan :</span><span class="res_val">'.$fight_nb_pv.'</span><br/>';
+                   echo '<span class="res_lbl">Nombre de victoire(s) contre 1Kyu et Dan :</span><span class="res_val">'.$fight_win_pv.'</span><br/>';
+                   if ($fight_pv>0){
+                   echo '<br/><span class="res_lbl">Points valeurs collectés :</span>
+                   <span class="res_val">'.$fight_number.'</span><span class="frac"><span class="res_val_num">'.$fight_pv.'</span><br/> <span class="res_val">'.$fight_ipon.'</span>
+                   </span><br/><br/>';
+                   }
                } 
            }
            
