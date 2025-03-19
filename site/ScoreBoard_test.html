@@ -81,8 +81,8 @@
         overflow:hidden;
         }
         .score {
-        margin-top:40px;
-        font-size:200px;
+        margin-top:20px;
+        font-size:250px;
         letter-spacing: 20px;
         font-weight:900;
         }
@@ -90,12 +90,12 @@
       
         
         .timer_3 {
-           width:calc(33% - 3px);
+            width:calc(33% - 3px);
            display:inline-block;
-           height:170px;
+           height:240px;
            color:#FFFFDD; 
            text-align:center; 
-           font-size:170px;
+           font-size:240px;
            font-weight:900;
         }
         .paused {
@@ -109,7 +109,8 @@
            font-weight:900;
             font-size:100px;
             color:#bf9b30;
-            right:0px;bottom:0px;
+            right:0px;
+            bottom:240px;
         }
         
         .bbtn {
@@ -130,93 +131,32 @@
            vertical-align:center;
            width:100%;
         }
-        .pos_1{
-            position: absolute;
-            left:calc(50% - 200px);
-            top:150px;
-            font-size:24px;
-            
-        }
-        .pos_s_1{
-            position: absolute;
-            left:calc(50% - 200px);
-            top:200px;
-            font-size:24px;
-        }
-         .pos_2{
-            position: absolute;
-            left:calc(50% - 80px);
-            top:150px;
-            font-size:24px;
-        }
-         .pos_s_2{
-            position: absolute; 
-            left:calc(50% - 50px);
-            top:200px;
-            font-size:24px;
-        }
-         .pos_3{
-            position: absolute;
-            right:calc(50% - 180px);
-            top:150px;
-            font-size:24px;
-        }
-          .pos_s_3{
-            position: absolute; 
-            right:calc(50% - 180px);
-            top:200px;
-            font-size:24px;
-        }  
-        .pos_4{
-            position: absolute;
-            right:calc(50% - 300px);
-            top:150px;
-            font-size:24px;
-        }
-          .pos_s_4{
-            position: absolute; 
-            right:calc(50% - 300px);
-            top:200px;
-            font-size:24px;
-        }
-        
-        .pos_s_d1{
-            position: absolute; 
-            right:20px;
-            bottom:20px;
-            font-size:24px;
-        }
-        .pos_s_d2{
-            position: absolute; 
-            left:20px;
-            bottom:20px;
-            font-size:24px;
-        }
+       
         
         .sh_1{
           position: absolute; 
-          right:calc(50% - 250px);
+          right:calc(50% - 300px);
           top:260px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
           border:solid grey 2px;
         }  
         .sh_2{
          position: absolute; 
-          right:calc(50% - 275px);
-          top:285px;
+          right:calc(50% - 325px);
+          top:290px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
-          border:solid grey 2px;
+          border:solid grey 3px;
         }
         .sh_3{
          position: absolute; 
-          right:calc(50% - 300px);
-          top:310px;
+          right:calc(50% - 350px);
+          top:320px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:red;
           border:solid grey 2px;
         }
@@ -271,6 +211,45 @@
            max-height:calc(100% - 200px);
            overflow-y:scroll;
         }
+        
+         .break{
+           margin:0px;
+           position:absolute;
+           max-width:100%;
+           width:100%;
+           top:300px;
+           height:calc(100% - 300px);
+           padding:100px;
+           background-color:#EEEEEE;
+         }
+         .break>span{
+           text-align:center; 
+           font-size:170px;
+           font-weight:900;
+         }
+         
+         .popconf{
+           max-width:800px;
+           font-size:24px;
+         }
+         
+         .popconf input{
+           font-size:24px;
+         }
+         
+         .hide{
+           display:none!important;
+        }
+
+        #time{
+          text-decoration:underline;
+        }
+        .run{
+          text-decoration:none !important;
+        }
+        
+    
+        
     </style>
 </head>
 <body>
@@ -301,14 +280,14 @@
 
    
 <div class="timer_3" id="pd_white">
-    <span id="pd_time_white" style="display:none;"></span>
     <span id="pd_running_white" style="display:none;"><img src="css/pin_down_white.png"  id="img_pd_white" /> </span>
+    <span id="pd_time_white" style="display:none;"></span>
+    
 </div>
 
 <div class="timer_3">
     <span id="gs" style="display:none;" >GS&nbsp;</span>
     <span id="time"></span>
-    <span id="running" style="display:none;">&#x23F2;</span>
 </div>
 
 <div class="timer_3" id="pd_blue">
@@ -367,9 +346,9 @@
 
     
 <span class="ctrl_top">
-<a class="bbtn" onclick="toggleClass(document.getElementById('pop_other'),'pop_hide');" >Autres situations</a>
+<a class="bbtn" onclick="open_pop('pop_other');" >Autres situations</a>
 <a class="bbtn" style="float:right;" href="MirorScoreBoard.html" target="_blanck">Tableau des scores</a> 
-<a class="bbtn" style="float:right;" onclick="toggleClass(document.getElementById('pop_sbconf'),'pop_hide');" >Configuration</a>
+<a class="bbtn" style="float:right;" onclick="open_pop('pop_sbconf');" >Configuration</a>
 
 
  </div>
@@ -382,53 +361,58 @@
 
 
 <span class="pop_back pop_hide" Id="pop_sbconf">
-		<span class="popcont">
-		 <span class="pop_tt">CONFIGURATION </span> <br/><br/>
-		  Numéro Tatami: <input type="number" min="1" id="tatami_num" value="1"/><br/><br/>
-		  Catégorie: <input type="text" id="cat_name" value="Catégorie"/><br/><br/>
+		<span class="popcont popconf">
+		 <span class="pop_tt">Configureation Tatami et catégorie:</span> <br/>
+		  Numéro Tatami: <input type="number" min="1" id="tatami_num" value="1"/><br/>
+		  Catégorie: <input type="text" id="cat_name" value="Catégorie"/><br/>
 		  Durée du combat: <input type="number" id="cat_dur" min="1" value="3"/>min<br/><br/>
-		  Combattant Bleu: <input type="text" id="fight_blue" value="Combattant 1"/><br/><br/>
+		  
+		  
+		  <span class="pop_tt">Combattants: </span><br/>
+		  Combattant Bleu: <input type="text" id="fight_blue" value="Combattant 1"/><br/>
 		  Combattant Blanc: <input type="text" id="fight_white" value="Combattant 2"/><br/><br/>
-		  Prochain combat: <br/>
+		  <span class="pop_tt">Prochain combat:  </span><br/>
 		  Combattant Bleu: <input type="text" id="next_fight_blue" value=""/><br/>
-		  Combattant Blanc: <input type="text" id="next_fight_white" value=""/><br/>
+		  Combattant Blanc: <input type="text" id="next_fight_white" value=""/><br/><br/>
 		  
 		  
-		  Osaekomi/Toketa combattant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
-		  Osaekomi/Toketa combattant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
+		  <span class="bbtn"  id="btn_conf_key" onclick="toggleClass(document.getElementById('conf_key'),'hide');">Configuration clavier</span><br/><br/>
+		  <span class="hide" id="conf_key" >
+		  Osaekomi/Toketa combattant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/>
+		  Osaekomi/Toketa combattant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/>
 		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/>
 		  
-		  Ipon combattant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
-		  Waza-ari combattant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
-		  Yuko combattant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
-		  Shido combattant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
+		  Ipon combattant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/>
+		  Waza-ari combattant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/>
+		  Yuko combattant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/>
+		  Shido combattant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/>
 		  
 		  Décision combattant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
 		  
-		  Ipon combattant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
-		  Waza-ari combattant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
-		  Yuko combattant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
-		  Shido combattant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
+		  Ipon combattant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/>
+		  Waza-ari combattant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/>
+		  Yuko combattant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/>
+		  Shido combattant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/>
 		  
 		  Décision combattant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/><br/>
 		  
 		  Gong <input class="key" type="text" id="k_gong" maxlength="1"  value="1"/><br/><br/>
-		  
+		  </span>
 
 		  
 		 
-      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_sbconf'),'pop_hide');
-                               conf();conf_key();" >Appliquer</a>
-      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_sbconf'),'pop_hide');" >Annuler</a></div>
+      <a class="bbtn" onclick="close_pop('pop_sbconf');conf();conf_key();" >Appliquer</a>
+      <a class="bbtn" onclick="close_pop('pop_sbconf');" >Annuler</a></div>
 		</span>
 </span>
 
 <span class="pop_back pop_hide" Id="pop_other">
 		<span class="popcont">
 		      <span class="pop_tt">Autres situations </span>  <br/><br/>
-              <a class="bbtn" onclick="yoshi();toggleClass(document.getElementById('pop_other'),'pop_hide');" >"Yoshi" après un "Sono-mama" avec Osaekomi</a></div> <br/><br/>
+		       <a class="bbtn" onclick="close_pop('pop_other');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+              <a class="bbtn" onclick="close_pop('pop_other');yoshi();" >"Yoshi" après un "Sono-mama" avec Osaekomi</a></div> <br/><br/>
 		     
-              <a class="bbtn" onclick="toggleClass(document.getElementById('pop_other'),'pop_hide');" >Annuler</a></div>
+              <a class="bbtn" onclick="close_pop('pop_other');" >Annuler</a></div>
 		</span>
 </span>
 
@@ -436,9 +420,17 @@
 		<span class="popcont">
 		      <span class="pop_tt">VICTOIRE DE <span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
 		      <span class="pop_tt">PAR <span id="vic_type"></span> - <span id="vic_score"></span> </span> <br/><br/>
-		      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');
-                               sendvictory();" >OK</a></div>
-      <a class="bbtn" onclick="toggleClass(document.getElementById('pop_victory'),'pop_hide');" >Annuler</a></div>
+		      <a class="bbtn" onclick="close_pop('pop_victory'); open_pop('pop_sbconf');" >OK</a></div>
+      <a class="bbtn" onclick="close_pop('pop_victory');" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_break">
+		<span class="popcont break">
+		      <span class="pop_tt">PAUSE </span> <br/><br/>
+		      <span id="break_time"></span> <br/><br/>
+		      
+             <a class="bbtn" onclick="end_break();" >Terminer</a></div>
 		</span>
 </span>
 
@@ -456,6 +448,11 @@
                 element.className += " "+class_name;
             }
         }
+        
+        
+var use_key=true;        
+        
+        
 var running=false;
 var pin_down=0;
 var previous_pin_down=0;
@@ -497,6 +494,37 @@ var char_dc_1='n';
 var char_dc_2='v';
 var char_gong='1';
 
+
+var break_start = Date.now();
+var break_running=false;
+localStorage.setItem("break_running", false);
+var breakTime=0;
+
+function start_break() {
+    break_start = Date.now();
+    break_running=true;
+    localStorage.setItem("break_running", true);
+    open_pop('pop_break');
+    breakTime = document.getElementById("cat_dur").value*60000;
+    localStorage.setItem("breakTime", displayTime(breakTime/1000));
+}
+function end_break() {
+    break_running=false;
+    localStorage.setItem("break_running", false);
+    close_pop('pop_break')
+}
+
+function open_pop(pop_id){
+   toggleClass(document.getElementById(pop_id),'pop_hide');
+   use_key=false;
+}
+function close_pop(pop_id){
+    toggleClass(document.getElementById(pop_id),'pop_hide');
+    use_key=true;
+}
+
+
+
 function StartPauseTimer(){
   running = !running;
       if (running){ 
@@ -509,7 +537,11 @@ function StartPauseTimer(){
          current = display;
          stop_pin_down();
       }
-      document.getElementById('running').style.display= running?"inline-block":"none";
+      if (running){
+        document.getElementById('time').classList.add("run");
+        } else {
+         document.getElementById('time').classList.remove("run");
+        }
       localStorage.setItem("running", running);
 }
 
@@ -602,54 +634,55 @@ function decision(fighter_num){
 
 document.addEventListener(
   "keydown",
-  (event) => {
-    const keyName = event.key;
-    if (keyName === " ") {
-       StartPauseTimer();
-    } else if (keyName === char_pd_1){
-       StartPausePin(1);
-    }  else if (keyName === char_pd_2){
-       StartPausePin(2)
-    } else if (keyName === char_toketa){
-       stop_pin_down();
-    }else if (keyName === char_sh_1){
-        AddShido(1,1);
-    } else if (keyName === char_msh_1){
-        AddShido(1,-1);
-    } else if (keyName === char_sh_2){
-        AddShido(2,1);
-    } else if (keyName === char_msh_2){
-        AddShido(2,-1);
-    } else if (keyName === char_100_1){
-        AddScore(1,100);
-    } else if (keyName === char_100_2){
-        AddScore(2,100);
-    } else if (keyName === char_10_1){
-        AddScore(1,10);
-    } else if (keyName === char_10_2){
-        AddScore(2,10);
-    } else if (keyName === char_1_1){ 
-        AddScore(1,1);
-    } else if (keyName === char_1_2){
-        AddScore(2,1);
-    } else if (keyName === char_m100_1){
-        AddScore(1,-100);
-    } else if (keyName === char_m100_2){
-        AddScore(2,-100);
-    } else if (keyName === char_m10_1){
-        AddScore(1,-10);
-    } else if (keyName === char_m10_2){
-        AddScore(2,-10);
-    } else if (keyName === char_m1_1){ 
-        AddScore(1,-1);
-    } else if (keyName === char_m1_2){
-        AddScore(2,-1);
-    } else if (keyName === char_dc_1){
-        decision(1);
-    } else if (keyName === char_dc_2){
-        decision(2);
-    } else if (keyName === char_gong){
-        gong();
+  (event) => { if (use_key){
+        const keyName = event.key;
+        if (keyName === " ") {
+           StartPauseTimer();
+        } else if (keyName === char_pd_1){
+           StartPausePin(1);
+        }  else if (keyName === char_pd_2){
+           StartPausePin(2)
+        } else if (keyName === char_toketa){
+           stop_pin_down();
+        }else if (keyName === char_sh_1){
+            AddShido(1,1);
+        } else if (keyName === char_msh_1){
+            AddShido(1,-1);
+        } else if (keyName === char_sh_2){
+            AddShido(2,1);
+        } else if (keyName === char_msh_2){
+            AddShido(2,-1);
+        } else if (keyName === char_100_1){
+            AddScore(1,100);
+        } else if (keyName === char_100_2){
+            AddScore(2,100);
+        } else if (keyName === char_10_1){
+            AddScore(1,10);
+        } else if (keyName === char_10_2){
+            AddScore(2,10);
+        } else if (keyName === char_1_1){ 
+            AddScore(1,1);
+        } else if (keyName === char_1_2){
+            AddScore(2,1);
+        } else if (keyName === char_m100_1){
+            AddScore(1,-100);
+        } else if (keyName === char_m100_2){
+            AddScore(2,-100);
+        } else if (keyName === char_m10_1){
+            AddScore(1,-10);
+        } else if (keyName === char_m10_2){
+            AddScore(2,-10);
+        } else if (keyName === char_m1_1){ 
+            AddScore(1,-1);
+        } else if (keyName === char_m1_2){
+            AddScore(2,-1);
+        } else if (keyName === char_dc_1){
+            decision(1);
+        } else if (keyName === char_dc_2){
+            decision(2);
+        } else if (keyName === char_gong){
+            gong();
+        }
     }
   },
   false,
@@ -735,7 +768,8 @@ function pauseTimer(){
     running=false;
     pin_down=0;
     current = display;
-    document.getElementById('running').style.display= "none";
+    document.getElementById('time').classList.remove("run");
+    
     localStorage.setItem("running", running);
 
     document.getElementById('pd_running_blue').style.display= "none";
@@ -933,7 +967,7 @@ function check_score(){
         document.getElementById('vic_color').innerHTML = winner==1?"Bleu":"Blanc";
         document.getElementById('vic_type').innerHTML = res_name;
         document.getElementById('vic_score').innerHTML = "2("+pv+")";
-        toggleClass(document.getElementById('pop_victory'),'pop_hide');
+        open_pop('pop_victory');
     }
 }
 
@@ -1007,6 +1041,15 @@ setInterval(function() {
             display_pd();
             check_pd_time();
         } 
+    } else if (break_running){
+        let break_delta = Date.now() - break_start;
+        let break_sisplay = breakTime - break_delta;
+        const dd_bt = displayTime(Math.ceil(break_sisplay/1000));
+        localStorage.setItem("breakTime", dd_bt);
+        document.getElementById('break_time').innerHTML= dd_bt;
+        if (break_sisplay<0){
+            end_break();
+        }
     }
 }, 100); 
 
