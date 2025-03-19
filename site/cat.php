@@ -478,7 +478,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       $mysqli= ConnectionFactory::GetConnection(); 
       
       
-      $stmt = $mysqli->prepare("select
+      $stmt = $mysqli->prepare("select distinct
                                  RankId,
                                  Medal,
                                  TournamentCompetitor.Surname,
