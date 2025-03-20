@@ -491,3 +491,9 @@ ALTER TABLE CategoryStep  ADD COLUMN Data VARCHAR( 255 ) NULL;
 
 ALTER TABLE TournamentCompetitor MODIFY LicenceNumber INT NULL;
 
+-----------------------------------------
+
+ALTER TABLE TournamentAgeCategory ADD COLUMN GS INT NULL DEFAULT -1;
+
+UPDATE TournamentAgeCategory set GS=3 WHERE ShortName IN ('F9','M9','F11','M11','F13','M13');
+

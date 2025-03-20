@@ -31,6 +31,7 @@ writeBand();
 	                                            TournamentAgeCategory.MinAge,
 	                                            TournamentAgeCategory.MaxAge,
 	                                            TournamentAgeCategory.Duration,
+	                                            TournamentAgeCategory.GS,
 	                                            WeightCategoryBasedOnAttendence,
 	                                            WeightingBegin,
 	                                            WeightingEnd
@@ -46,7 +47,7 @@ writeBand();
              echo '<span class="error">Execute failed: (' . $mysqli->errno . ') ' . $mysqli->error.'</span>';
           }
 
-          $stmt->bind_result( $Id,$catName,$catShortName,$gender,$mina, $maxa, $duration,$adaptWeight, $RegistrationBegin,$RegistrationEnd);
+          $stmt->bind_result( $Id,$catName,$catShortName,$gender,$mina, $maxa, $duration,$gs,$adaptWeight, $RegistrationBegin,$RegistrationEnd);
           
           echo '            <span class="h_title">
                GESTION DES CATEGORIES / HEURES DE PESEE
@@ -58,11 +59,16 @@ writeBand();
 	               <a class="pgeBtn" href="configcat.php?id=-1">Ajouter</a>
 	          </span>
 	               <table class="wt t4">
-          <tr class="tblHeader"><th>Nom</th><th>Genre</th><th>Ages</th><th>Durée</th><th>Catégories adaptées</th><th>Début Pesée</th><th>Fin Pesée</th><th>Action</th></tr>';
+          <tr class="tblHeader"><th>Nom</th><th>Genre</th><th>Ages</th><th>Durée</th><th>Golden Score</th><th>Catégories adaptées</th><th>Début Pesée</th><th>Fin Pesée</th><th>Action</th></tr>';
           
           
          while( $stmt->fetch()){
-         echo'  <tr><td>'.$catName.' ('.$catShortName.')</td><td>'.$gender.'</td><td>'. (date("Y", strtotime($RegistrationBegin))-$maxa).'-'.(date("Y", strtotime($RegistrationBegin))-$mina).' ('.$mina.'-'.$maxa.' ans)</td><td>'.$duration.' min</td><td>'.$adaptWeight.'</td><td>'.$RegistrationBegin.'</td><td>'.$RegistrationEnd.'</td><td><a class="grdBtn" href="configcat.php?id='.$Id.'">Modifier</a>
+         
+         $gss = '&infin;';
+         if ($gs>0){
+            $gss = $gs .' min';
+         }
+         echo'  <tr><td>'.$catName.' ('.$catShortName.')</td><td>'.$gender.'</td><td>'. (date("Y", strtotime($RegistrationBegin))-$maxa).'-'.(date("Y", strtotime($RegistrationBegin))-$mina).' ('.$mina.'-'.$maxa.' ans)</td><td>'.$duration.' min</td><td>'.$gss.'</td><td>'.$adaptWeight.'</td><td>'.$RegistrationBegin.'</td><td>'.$RegistrationEnd.'</td><td><a class="grdBtn" href="configcat.php?id='.$Id.'">Modifier</a>
           <form action="./configcat.php" method="post">
              <input type="hidden" name="id" value="'.$Id.'"/>
              <input type="hidden" name="del" value="1"/>

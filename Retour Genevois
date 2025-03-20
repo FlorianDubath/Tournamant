@@ -26,37 +26,45 @@ Changé et testé:
    modified + Tested:   site/css/test.css
    modified + Tested:   site/card.php
    
+ - bug vs quand il y a un ' espace dans le nom 
+    modified + Tested:   site/cat.php
+    
+ - limit au Golden Score 
+    modified + Tested: DB
+    modified + Tested: cat_config.php
+    modified + Tested: ScoreBoard_test.html
+    modified + Tested: cat.php
+    
+    
+ - Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
+   - Plus gras / plus lisible 
+   - durée et osaekomi sur la même ligne
+   - sonomama => reprise sans clearer le timer oseakomi
+   - configurer + afficher un Numéro tatamis
+   - timer pour les pause
+   - Zoom différentiel (pour les TV HDready et FullHD)
+   
+   
+- nom des combattant pour Prochain combats pas juste
+    modified + Tested: cat.php
+   
 Changé (à tester):
 ------------------
 - Permettre la pesée en avance
     c'est déjà le cas
     
-- bug vs quand il y a un ' espace dans le nom 
-    modified:   site/cat.php
-    
+
 
 A faire :
 ---------
 
-- exporter un pdf de la catégorie
+- rang des participants au dela de 1,2,3  (cat +res +pdf)
 
-- nom des combattant pour Prochain combats pas juste
-
-- limit au Golden Score 
-
-- rang des participants au delas de 1,2,3
-
-- Scoreboard:
-  - Plus gras / plus lisible vertical et horizontal
-  - durée et osaekomi sur la même ligne
-  - sonomama => reprise sans clearer le timer oseakomi
-  - configurer + afficher un Numéro tatamis
-  - timer pour les pause
-  - Zoom différentiel (pour les TV HDready et FullHD)
-  ------
+- Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
   - resset du temps
   - (10 yuko affichage venant devant le ippon)
 
+- exporter un pdf de la catégorie
 - intégrer plusieurs systèmes (open)
 
 A évaluer /discuter:

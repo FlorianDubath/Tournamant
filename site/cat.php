@@ -59,7 +59,7 @@ echo'
         top:0px;
         left:0px;
         }
-        .title{
+      .title{
            height:7%;
            color:#DDFFDD; 
            text-align:center;
@@ -67,22 +67,24 @@ echo'
            margin-top:1%;
            margin-left:auto; 
            margin-right:auto;
-           width:calc(100% - 320px);
+           width:100%;
            display:inline-block;
+           font-weight:900;
         }
-          .blue, .nblue {
-            height:440px;
+        
+     
+        .blue, .nblue {
+            height:480px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: blue;
             color:white;
             text-align:center;
             position:relative;
-  
+        }   
        
-        }
         .white, .nwhite {
-            height:440px;
+            height:480px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: white;
@@ -108,40 +110,63 @@ echo'
            margin-bottom:10px;
            width:100%;
            display:inline-block;
+        font-weight:900;
         }
         .nblue {
             color:#999999;
             background-color: #000055;
             height:unset;
-         }
+        font-weight:900;
+           margin-bottom:30px;
+            }
          .nwhite {
             background-color: #777777;
             height:unset;
+        font-weight:900;
+           margin-bottom:30px;
         }
         .fighter {
         margin-top:20px;
-        font-size:80px;
+        font-size:100px;
+        font-weight:900;
+        text-align:center;
+        overflow:hidden;
         }
         .score {
-       // margin-top:40px;
-        font-size:200px;
+        margin-top:20px;
+        font-size:250px;
         letter-spacing: 20px;
+        font-weight:900;
         }
         
-        .timer {
-           height:170px;
-           color:#DDFFDD; 
+      
+        
+        .timer_3 {
+            width:calc(33% - 3px);
+           display:inline-block;
+           height:240px;
+           color:#FFFFDD; 
            text-align:center; 
-           font-size:170px;
+           font-size:240px;
+           font-weight:900;
+        }
+        .timer_gs {
+           color:#bf9b30;
+        }
+        
+        .paused {
+           color:#DDFFDD;
         }
         
         .win {
             position: absolute;
             width:100%;
             
+           font-weight:900;
             font-size:100px;
             color:#bf9b30;
-            right:0px;bottom:0px;
+            right:0px;
+            bottom:240px;
         }
         
         .bbtn {
@@ -153,7 +178,7 @@ echo'
            border:solid 2px lightgrey;
            border-radius:5px;
            margin-right:5px;
-           font-size:16px;
+           font-size:24px;
         }
         .sbbb{
            display:inline-block;
@@ -162,96 +187,124 @@ echo'
            vertical-align:center;
            width:100%;
         }
-        .pos_1{
-            position: absolute;
-            left:calc(50% - 200px);
-            top:120px;
-            font-size:18;
-            
-        }
-        .pos_s_1{
-            position: absolute;
-            left:calc(50% - 200px);
-            top:170px;
-        }
-         .pos_2{
-            position: absolute;
-            left:calc(50% - 50px);
-            top:120px;
-            font-size:18;
-        }
-         .pos_s_2{
-            position: absolute; 
-            left:calc(50% - 50px);
-            top:170px;
-        }
-         .pos_3{
-            position: absolute;
-            right:calc(50% - 180px);
-            top:120px;
-            font-size:18;
-        }
-          .pos_s_3{
-            position: absolute; 
-            right:calc(50% - 180px);
-            top:170px;
-        }  
-        .pos_4{
-            position: absolute;
-            right:calc(50% - 300px);
-            top:120px;
-            font-size:18;
-        }
-          .pos_s_4{
-            position: absolute; 
-            right:calc(50% - 300px);
-            top:170px;
-        }
-        
-        .pos_s_d1{
-            position: absolute; 
-            right:20px;
-            bottom:20px;
-        }
-        .pos_s_d2{
-            position: absolute; 
-            left:20px;
-            bottom:20px;
-        }
+       
         
         .sh_1{
           position: absolute; 
-          right:calc(50% - 250px);
-          top:200px;
+          right:calc(50% - 300px);
+          top:260px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
           border:solid grey 2px;
         }  
         .sh_2{
          position: absolute; 
-          right:calc(50% - 275px);
-          top:225px;
+          right:calc(50% - 325px);
+          top:290px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
-          border:solid grey 2px;
+          border:solid grey 3px;
         }
         .sh_3{
          position: absolute; 
-          right:calc(50% - 300px);
-          top:250px;
+          right:calc(50% - 350px);
+          top:320px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:red;
           border:solid grey 2px;
         }
       
-       
-        
         .key{
            width:50px;
         }
+        
+        .ctrl_left {
+            position: absolute;
+            top: 250px;
+            left:10px;
+        }
+        .ctrl_left>div{
+           margin-bottom:20px;
+        }
+        
+        .ctrl_right {
+            position: absolute;
+            top: 250px;
+            right:10px;
+            text-align:right;
+        }
+        .ctrl_right>div{
+           margin-bottom:20px;
+           text-align:right;
+        }
+        
+        .ctrl_center {
+            position: absolute;
+            top: 250px;
+            width:1000px;
+            left:calc(50% - 492px);
+            text-align:center;
+        }
+        .ctrl_center>div{
+           margin-bottom:20px;
+         }
+        .osaekomi>.bbtn {
+            vertical-align:top;
+            height:3em;
+        }
+        
+        .ctrl_top{
+            position: absolute;
+            top: 10px;
+            width:100%;
+            left:0;
+        }
+           
+        .popcont {
+           max-height:calc(100% - 200px);
+           overflow-y:scroll;
+        }
+        
+         .break{
+           margin:0px;
+           position:absolute;
+           max-width:100%;
+           width:100%;
+           top:300px;
+           height:calc(100% - 300px);
+           padding:100px;
+           background-color:#EEEEEE;
+         }
+         .break>span{
+           text-align:center; 
+           font-size:170px;
+           font-weight:900;
+         }
+         
+         .popconf{
+           max-width:800px;
+           font-size:24px;
+         }
+         
+         .popconf input{
+           font-size:24px;
+         }
+         
+         .hide{
+           display:none!important;
+        }
+
+        #time{
+          text-decoration:underline;
+        }
+        
+        .run{
+          text-decoration:none !important;
+        }
+        
     </style>
 <body>
     <div class="f_cont">';
@@ -268,6 +321,7 @@ $mysqli= ConnectionFactory::GetConnection();
                                  TournamentAgeCategory.Name,
                                  TournamentAgeCategory.ShortName,
                                  TournamentAgeCategory.Duration,
+                                 TournamentAgeCategory.GS,
                                  TournamentGender.Name,
                                  IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
                                  TournamentWeighting.WeightingEnd, 
@@ -291,7 +345,7 @@ $mysqli= ConnectionFactory::GetConnection();
                            ");
                              
      $stmt->bind_param("i", $curr_c_id );
-     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_dur,$cat_gen,$weight, $weighting_end, $total, $weighted);
+     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_dur,$cat_gs,$cat_gen,$weight, $weighting_end, $total, $weighted);
      $stmt->execute();
      $stmt->fetch();
      $stmt->close();         
@@ -603,7 +657,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
      $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
      $stmt->execute();
      
-     $pop_counter=1;
+    
      $rows = array();
      while ($stmt->fetch()){
          $tb_s='';
@@ -626,7 +680,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                   if($is_table){
                        $row_value = $row_value.'
                       
-                      <span class="pop_back pop_hide" Id="pop_1_'.$pop_counter.'"><span class="popcont">
+                      <span class="pop_back pop_hide" Id="pop_1_'."__pop_nb__".'"><span class="popcont">
                          Victoire de '.$Surname1.' '.$Name1.' (Rouge) par:
                        <form action="figtRes.php" method="post">
                                  <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
@@ -664,22 +718,22 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input  class="resbtn" type="submit" value="Décision">
                        </form>
                       
-                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'."__pop_nb__".'\'),\'pop_hide\');">Annuler</a>
                       
                       </span></span>
-                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a>
-                      <span style="display:none;" Id="nc_1_'.$pop_counter.'">'.$Surname1.' '.$Name1.'</span>
+                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_1_'."__pop_nb__".'\'),\'pop_hide\');">Victoire</a>
+                      <span style="display:none;" Id="nc_1_'."__pop_nb__".'">'.$Surname1.' '.$Name1.'</span>
                       ';
                   }
                   $row_value = $row_value.'
                  </td>
                   <td>'.$Surname1.' '.$Name1.'</td>
-                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.str_replace("'", "\\'", $Surname1).' '.str_replace("'", "\\'", $Name1).'\',\''.str_replace("'", "\\'", $Surname2).' '.str_replace("'", "\\'", $Name2).'\');set_next_name('.$pop_counter.');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
+                  <td><a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');set_name(\''.str_replace("'", "\\'", $Surname1).' '.str_replace("'", "\\'", $Name1).'\',\''.str_replace("'", "\\'", $Surname2).' '.str_replace("'", "\\'", $Name2).'\');set_next_name('."__pop_nb__".');reset();reset_pin_down();displayScore();setf_id('.$f_id.')">V.S.</a></td>
                   <td>'.$Surname2.' '.$Name2.'</td>
                   <td> ';
                   if($is_table){
                       $row_value = $row_value.'
-                      <span class="pop_back pop_hide" Id="pop_2_'.$pop_counter.'"><span class="popcont">
+                      <span class="pop_back pop_hide" Id="pop_2_'."__pop_nb__".'"><span class="popcont">
                          Victoire de '.$Surname2.' '.$Name2.' (Blanc) par:
                        <form action="figtRes.php" method="post">
                                  <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
@@ -717,15 +771,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input class="resbtn" type="submit" value="Décision">
                        </form>
                   
-                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Annuler</a>
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'."__pop_nb__".'\'),\'pop_hide\');">Annuler</a>
                       
                       </span></span>
-                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'.$pop_counter.'\'),\'pop_hide\');">Victoire</a></td>
-                      <span style="display:none;" Id="nc_2_'.$pop_counter.'">'.$Surname2.' '.$Name2.'</span>';
+                      <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_2_'."__pop_nb__".'\'),\'pop_hide\');">Victoire</a></td>
+                      <span style="display:none;" Id="nc_2_'."__pop_nb__".'">'.$Surname2.' '.$Name2.'</span>';
                   }
                   $row_value = $row_value.'</td>
                   </tr>';
-                  $pop_counter+=1;
          } else { 
            $cl_1="VIC";
            $cl_2="LOS";
@@ -783,9 +836,10 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
      
      $k_order = order_fight(array_keys($rows));
      
-     
+     $pop_number =1;
      foreach($k_order as $key){
-         echo  $rows[$key];
+         echo  str_replace("__pop_nb__", $pop_number, $rows[$key]);
+         $pop_number += 1;
      }
      echo '</table>';
      
@@ -845,13 +899,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
  echo'    
  <div id="pop_VS" class="pop_hide pop_sb" >    
 <div style="width:100%">
-<a class="bbtn" href="MirorScoreBoard.html" target="_new">Tableau des scores</a><span id="title" class="title"></span> 
-<a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');" >Configuration</a>
-<a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_VS\'),\'pop_hide\');" >Fermer</a></div>
- 
-
-
-
+<span id="title" class="title" width="100%"></span> <br/>
 <div class="white" >
     <div id="name_2" class="fighter"></div>
     <div id="s_2" class="score"></div>
@@ -860,18 +908,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
     <div class="sh_2" id="sh_2_2" style="display:none;"></div>
     <div class="sh_3" id="sh_3_2" style="display:none;"></div>
   
-    <a class="bbtn pos_1" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a>
-    <a class="bbtn pos_2" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a>
-    <a class="bbtn pos_3" onclick=" AddScore(2,1)" >Yuko (<span id="t_1_2">o</span>)</a>
-    <a class="bbtn pos_4" onclick=" AddShido(2,1)" >Shido (<span id="t_sh_2">p</span>)</a> 
-    <a class="bbtn  pos_s_1" onclick=" AddScore(2,-100)" > </span>&nbsp;(<span id="t_m100_2">U</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_2" onclick=" AddScore(2,-10)" > (<span id="t_m10_2">I</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_3" onclick=" AddScore(2,-1)" > (<span id="t_m1_2">O</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn pos_s_4" onclick=" AddShido(2,-1)" > (<span id="t_msh_2">P</span>)&nbsp;<span class="btn_sos"></span></a>
-    <div class="sbbb">
-<a class="bbtn " onclick="StartPausePin(2)" ><img src="css/pin_down_white.png" width="80px"/>(<span id="t_pd_2">l</span>)</a>
 </div>
-    <a class="bbtn pos_s_d2" onclick="decision(2)" >Décision (<span id="t_dc_2">v</span>)</a></div>
+  
 <div class="blue" >
     <div id="name_1" class="fighter"></div>
     <div id="s_1" class="score"></div>
@@ -880,39 +918,26 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
     <div class="sh_2" id="sh_2_1" style="display:none;"></div>
     <div class="sh_3" id="sh_3_1" style="display:none;"></div>
     
-    <a class="bbtn pos_1" onclick=" AddScore(1,100)" >Ippon (<span id="t_100_1">q</span>)</a>
-    <a class="bbtn pos_2" onclick=" AddScore(1,10)" >Waza-ari (<span id="t_10_1">w</span>)</a>
-    <a class="bbtn pos_3" onclick=" AddScore(1,1)" >Yuko (<span id="t_1_1">e</span>)</a> 
-    <a class="bbtn pos_4" onclick=" AddShido(1,1)" >Shido (<span id="t_sh_1">r</span>)</a> 
-    <a class="bbtn  pos_s_1" onclick=" AddScore(1,-100)" > (<span id="t_m100_1">Q</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_2" onclick=" AddScore(1,-10)" > (<span id="t_m10_1">W</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn  pos_s_3" onclick=" AddScore(1,-1)" > (<span id="t_m1_1">E</span>)&nbsp;<span class="btn_sos"></span></a>
-    <a class="bbtn pos_s_4" onclick=" AddShido(1,-1)" > (<span id="t_msh_1">R</span>)&nbsp;<span class="btn_sos"></span></a>
-    <div class="sbbb">
-        <a class="bbtn" onclick="StartPausePin(1)" ><img src="css/pin_down_blue.png" width="80px"/>(<span id="t_pd_1">a</span>)</a>
-    </div>
-    <a class="bbtn  pos_s_d1" onclick="decision(1)" >Décision (<span id="t_dc_1">n</span>)</a>
 </div>
-<div class="sbbb">
-<a class="bbtn" onclick="StartPauseTimer()" >&nbsp;&nbsp;&nbsp;&nbsp;&#x23EF (bare d\'espace)&nbsp;&nbsp;&nbsp;&nbsp;</a>
-<a class="bbtn" onclick="addTime(1000)"  > Ajouter 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
-<a class="bbtn" onclick="addTime(-1000)"  > Enlever 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
 
-<a class="bbtn" onclick="gong()" >Gong (<span id="t_gong">1</span>)</a>
+   
+<div class="timer_3" id="pd_white">
+    <span id="pd_running_white" style="display:none;"><img src="css/pin_down_white.png"  id="img_pd_white" /> </span>
+    <span id="pd_time_white" style="display:none;"></span>
+    
 </div>
-<div class="timer">
-<span id="gs" style="display:none;" >GS&nbsp;</span>
-<span id="time"></span>
-<span id="running" style="display:none;">&#x23F2;</span>
 
-</div><br/>
-<div class="timer">
-<img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
-<img src="css/pin_down_blue.png"  id="img_pd_blue" style="display:none;"/>
-<img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
-<span id="pd_time" style="display:none;"></span>
-<span id="pd_running" style="display:none;">&#x23F2;<a class="bbtn" onclick="stop_pin_down()" >Toketa (<span id="t_toketa">ArrowDown</span>)</a></span>
+<div class="timer_3">
+    <span id="time"></span>
 </div>
+
+<div class="timer_3" id="pd_blue">
+    <span id="pd_time_blue" style="display:none;"></span>
+    <span id="pd_running_blue" style="display:none;"><img  src="css/pin_down_blue.png" id="img_pd_blue" /></span>
+</div>
+
+<br/>
+
 <span id="next_fight" class="nf" style="display:none">
    <span  class="ntitle" >Prochain Combat</span>
     <div class="nwhite" >
@@ -922,52 +947,119 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
    <span id="next_name_1"  class="fighter" style="font-size:60px;"></span>
    </div>
 </span>
+</div>
+<span class="ctrl_left">
+    <div> <a class="bbtn" onclick=" AddScore(2,100)" >Ippon (<span id="t_100_2">u</span>)</a> <a class="bbtn" onclick=" AddScore(2,-100)" > </span>&nbsp;(<span id="t_m100_2">U</span>)&nbsp;<span class="btn_sos"></span></a></div>
+    <div> <a class="bbtn" onclick=" AddScore(2,10)" >Waza-ari (<span id="t_10_2">i</span>)</a> <a class="bbtn" onclick=" AddScore(2,-10)" > (<span id="t_m10_2">I</span>)&nbsp;<span class="btn_sos"></span></a></div>
+    <div><a class="bbtn" onclick=" AddScore(2,1)" >Yuko (<span id="t_1_2">o</span>)</a><a class="bbtn" onclick=" AddScore(2,-1)" > (<span id="t_m1_2">O</span>)&nbsp;<span class="btn_sos"></span></a></div>
+    <div><a class="bbtn" onclick=" AddShido(2,1)" >Shido (<span id="t_sh_2">p</span>)</a> <a class="bbtn" onclick=" AddShido(2,-1)" > (<span id="t_msh_2">P</span>)&nbsp;<span class="btn_sos"></span></a> </div>  
+    <div><a class="bbtn" onclick="decision(2)" >Décision (<span id="t_dc_2">v</span>)</a></div> 
+    
+</span>
 
+
+<span class="ctrl_right">
+    <div><a class="bbtn  " onclick=" AddScore(1,-100)" > (<span id="t_m100_1">Q</span>)&nbsp;<span class="btn_sos"></span></a><a class="bbtn " onclick=" AddScore(1,100)" >Ippon (<span id="t_100_1">q</span>)</a></div>
+    <div><a class="bbtn  " onclick=" AddScore(1,-10)" > (<span id="t_m10_1">W</span>)&nbsp;<span class="btn_sos"></span></a><a class="bbtn " onclick=" AddScore(1,10)" >Waza-ari (<span id="t_10_1">w</span>)</a></div>
+    <div><a class="bbtn  " onclick=" AddScore(1,-1)" > (<span id="t_m1_1">E</span>)&nbsp;<span class="btn_sos"></span></a> <a class="bbtn " onclick=" AddScore(1,1)" >Yuko (<span id="t_1_1">e</span>)</a></div>
+    <div><a class="bbtn " onclick=" AddShido(1,-1)" > (<span id="t_msh_1">R</span>)&nbsp;<span class="btn_sos"></span></a><a class="bbtn " onclick=" AddShido(1,1)" >Shido (<span id="t_sh_1">r</span>)</a> </div>
+    <div><a class="bbtn  " onclick="decision(1)" >Décision (<span id="t_dc_1">n</span>)</a></div>
+</span>
+
+<span class="ctrl_center">
+
+ <div>
+      <a class="bbtn" onclick="addTime(-1000)"  > Enlever 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
+      <a class="bbtn" onclick="StartPauseTimer()" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hajime / Mate &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>(bare d\'espace)</a>
+      <a class="bbtn" onclick="addTime(1000)"  > Ajouter 1" &nbsp; <span class="btn_sos"> &nbsp; <span></span></a>
+ </div>
+ 
+ <div><a class="bbtn" onclick="gong()" >Gong (<span id="t_gong">1</span>)</a>  </div>
+ <div>&nbsp;</div>
+
+ <div class="osaekomi">
+   <a class="bbtn " onclick="StartPausePin(2)" ><img src="css/pin_down_white.png" width="80px"/><br/>(<span id="t_pd_2">l</span>)</a>
+   <a class="bbtn"  style="display:none;" id="toketa" onclick="stop_pin_down()" >Toketa <br/>(<span id="t_toketa">ArrowDown</span>)</a>
+   <a class="bbtn" onclick="StartPausePin(1)" ><img src="css/pin_down_blue.png" width="80px"/><br/>(<span id="t_pd_1">a</span>)</a>
+ </div>
+</span>
+
+    
+<span class="ctrl_top">
+<a class="bbtn" onclick="open_pop(\'pop_other\');" >Autres situations</a>
+<a class="bbtn" style="float:right;" href="MirorScoreBoard.html" target="_blanck">Tableau des scores</a> 
+<a class="bbtn" style="float:right;" onclick="open_pop(\'pop_sbconf\');" >Configuration</a>
+
+
+ </div>
+    
+    
 <span class="pop_back pop_hide" Id="pop_sbconf">
-		<span class="popcont">
-		 <span class="pop_tt">CONFIGURATION </span> <br/><br/>
-		 <!-- Catégorie: <input type="text" id="cat_name" value="'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'"/><br/><br/>
-		  Durée du combat: <input type="number" id="cat_dur" min="1" value="'.$cat_dur.'"/>min<br/><br/>
-		  Combattant Bleu: <input type="text" id="fight_blue" value="Combattant 1"/><br/><br/>
-		  Combattant Blanc: <input type="text" id="fight_white" value="Combattant 2"/><br/><br/> -->
+		<span class="popcont popconf">
+		 <span class="pop_tt">Configuration du Tatami:</span> <br/>
+		  Numéro Tatami: <input type="number" min="1" id="tatami_num" value="1"/><br/><br/>
+		  <span style="display:none;">
+		  Catégorie: <input type="text" id="cat_name" value="'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'"/><br/>
+		  Durée du combat: <input type="number" id="cat_dur" min="1" value="'.$cat_dur.'"/>min<br/>
+		  Durée du golden score: <input type="number" id="gs_dur" min="-1" value="'.$cat_gs.'"/>min<br/><br/>
 		  
-		  Osaekomi combattant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/><br/>
-		  Osaekomi combattant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/><br/>
-		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/><br/>
 		  
-		  Ipon combattant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/><br/>
-		  Waza-ari combattant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/><br/>
-		  Yuko combattant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/><br/>
-		  Shido combattant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/><br/>
+		  <span class="pop_tt">Combattants: </span><br/>
+		  Combattant Bleu: <input type="text" id="fight_blue" value="Combattant 1"/><br/>
+		  Combattant Blanc: <input type="text" id="fight_white" value="Combattant 2"/><br/><br/>
+		  <span class="pop_tt">Prochain combat:  </span><br/>
+		  Combattant Bleu: <input type="text" id="next_fight_blue" value=""/><br/>
+		  Combattant Blanc: <input type="text" id="next_fight_white" value=""/><br/><br/>
+		  
+		  
+		  <span class="bbtn"  id="btn_conf_key" onclick="toggleClass(document.getElementById(\'conf_key\'),\'hide\');">Configuration clavier</span><br/><br/>
+		  <span class="hide" id="conf_key" >
+		  Osaekomi/Toketa combattant bleu <input type="text" id="k_pd_1" maxlength="10"  value="ArrowRight"/> <br/>
+		  Osaekomi/Toketa combattant blanc <input type="text" id="k_pd_2" maxlength="10"  value="ArrowLeft"/><br/>
+		  Toketa <input type="text" id="k_toketa" maxlength="10"  value="ArrowDown"/><br/><br/>
+		  
+		  Ipon combattant bleu <input class="key" type="text" id="k_100_1" maxlength="1"  value="z"/> Annulation <input class="key" type="text" id="k_m100_1" maxlength="1"  value="h"/><br/>
+		  Waza-ari combattant bleu <input class="key" type="text" id="k_10_1" maxlength="1"  value="u"/> Annulation <input class="key" type="text" id="k_m10_1" maxlength="1"  value="j"/><br/>
+		  Yuko combattant bleu <input class="key" type="text" id="k_1_1" maxlength="1"  value="i"/> Annulation <input class="key" type="text" id="k_m1_1" maxlength="1"  value="k"/> <br/>
+		  Shido combattant bleu <input class="key" type="text" id="k_sh_1" maxlength="1"  value="o"/> Annulation <input class="key" type="text" id="k_msh_1" maxlength="1"  value="l"/><br/>
 		  
 		  Décision combattant bleu <input class="key" type="text" id="k_dc_1" maxlength="1"  value="n"/><br/><br/><br/>
 		  
-		  Ipon combattant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/><br/>
-		  Waza-ari combattant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/><br/>
-		  Yuko combattant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/><br/>
-		  Shido combattant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/><br/>
+		  Ipon combattant blanc <input  class="key" type="text" id="k_100_2" maxlength="1"  value="q"/> Annulation <input class="key" type="text" id="k_m100_2" maxlength="1"  value="a"/><br/>
+		  Waza-ari combattant blanc <input  class="key" type="text" id="k_10_2" maxlength="1"  value="w"/> Annulation <input class="key" type="text" id="k_m10_2" maxlength="1"  value="s"/><br/>
+		  Yuko combattant blanc <input  class="key" type="text" id="k_1_2" maxlength="1"  value="e"/> Annulation <input class="key" type="text" id="k_m1_2" maxlength="1"  value="d"/><br/>
+		  Shido combattant blanc <input class="key"  type="text" id="k_sh_2" maxlength="1"  value="r"/> Annulation <input class="key" type="text" id="k_msh_2" maxlength="1"  value="f"/><br/>
 		  
 		  Décision combattant blanc <input class="key" type="text" id="k_dc_2" maxlength="1"  value="v"/><br/><br/><br/>
 		  
 		  Gong <input class="key" type="text" id="k_gong" maxlength="1"  value="1"/><br/><br/>
-		  
+		  </span>
 
-		  
+		  </span>
 		 
-      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');
-                              /* conf();*/conf_key();" >Appliquer</a>
-      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_sbconf\'),\'pop_hide\');" >Annuler</a></div>
+      <a class="bbtn" onclick="close_pop(\'pop_sbconf\');conf();conf_key();" >Appliquer</a>
+      <a class="bbtn" onclick="close_pop(\'pop_sbconf\');" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_other">
+		<span class="popcont">
+		      <span class="pop_tt">Autres situations </span>  <br/><br/>
+		       <a class="bbtn" onclick="close_pop(\'pop_other\');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+              <a class="bbtn" onclick="close_pop(\'pop_other\');yoshi();" >"Yoshi" après un "Sono-mama" avec Osaekomi</a></div> <br/><br/><br/>
+              <a class="bbtn" onclick="window.location.reload();" >Annuler le combat et retourner à la catégorie</a></div> <br/><br/><br/>
+              
+              
+		     
+              <a class="bbtn" onclick="close_pop(\'pop_other\');" >Fermer la popup</a></div>
 		</span>
 </span>
 
 <span class="pop_back pop_hide" Id="pop_victory">
 		<span class="popcont">
-		      <span class="pop_tt">VICTOIRE DE </span> <br/><br/>
-		      <span class="pop_tt"><span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
-		      <span class="pop_tt">PAR  </span> <br/><br/>
-		      <span class="pop_tt"><span id="vic_type"></span> - <span id="vic_score"></span> </span> <br/><br/>
-		      
-		      <form action="figtRes.php" method="post">
+		      <span class="pop_tt">VICTOIRE DE <span id="vic_name"></span> (<span id="vic_color"></span>) </span> <br/><br/>
+		      <span class="pop_tt">PAR <span id="vic_type"></span> - <span id="vic_score"></span> </span> <br/><br/>
+		        <form action="figtRes.php" method="post">
 		        
                                  <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
                                  <input type="hidden" name="fid" id="fid" value="-1" />
@@ -975,11 +1067,19 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv2" id="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="bbtn" type="submit" value="Enregistrer "/>
-      <a class="bbtn" onclick="toggleClass(document.getElementById(\'pop_victory\'),\'pop_hide\');" >Annuler</a></div>
+      <a class="bbtn" onclick="close_pop(\'pop_victory\');" >Annuler</a></div>
                </form>
 		</span>
 </span>
 
+<span class="pop_back pop_hide" Id="pop_break">
+		<span class="popcont break">
+		      <span class="pop_tt">PAUSE </span> <br/><br/>
+		      <span id="break_time"></span> <br/><br/>
+		      
+             <a class="bbtn" onclick="end_break();" >Terminer</a></div>
+		</span>
+</span>
 
  <audio controls src="gong-92707.mp3" id="gong" style="display:none;"></audio>     
      
@@ -989,9 +1089,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 
 <script>
 
-      
+var f_id =-1;
+ 
+var use_key=true;             
+var gs_durration=-1;        
 var running=false;
 var pin_down=0;
+var previous_pin_down=0;
+var display_pin_down=0;
 var direction=-1;
 var start = Date.now();
 var current = 4*60000;  // 4min
@@ -1004,6 +1109,7 @@ var winner=0;
 var pin_down_start = Date.now();
 var pd_time=0;
 var pd_score=0;
+var previous_pd_score=0;
 var gs=false;
 var char_pd_1="ArrowRight";
 var char_pd_2="ArrowLeft";
@@ -1026,23 +1132,61 @@ var char_m10_2="i";
 var char_m1_2="o";
 var char_dc_1="n";
 var char_dc_2="v";
-var f_id =-1;
 var char_gong="1";
 
+
+var break_start = Date.now();
+var break_running=false;
+localStorage.setItem("break_running", false);
+var breakTime=0;
+
 function setf_id(new_f_id){
- f_id=new_f_id;
+    f_id=new_f_id;
 }
+
+
+function start_break() {
+    break_start = Date.now();
+    break_running=true;
+    localStorage.setItem("break_running", true);
+    open_pop("pop_break");
+    breakTime = document.getElementById("cat_dur").value*60000;
+    localStorage.setItem("breakTime", displayTime(breakTime/1000));
+}
+function end_break() {
+    break_running=false;
+    localStorage.setItem("break_running", false);
+    close_pop("pop_break")
+}
+
+function open_pop(pop_id){
+   toggleClass(document.getElementById(pop_id),"pop_hide");
+   use_key=false;
+}
+function close_pop(pop_id){
+    toggleClass(document.getElementById(pop_id),"pop_hide");
+    use_key=true;
+}
+
+
 
 function StartPauseTimer(){
   running = !running;
       if (running){ 
         reset_pin_down();
+        display_pin_down=0;
+        localStorage.setItem("display_pin_down", 0);
+        display_pd();
         start = Date.now();
       } else {
          current = display;
          stop_pin_down();
       }
-      document.getElementById("running").style.display= running?"inline-block":"none";
+      if (running){
+        document.getElementById("time").classList.add("run");
+        } else {
+         document.getElementById("time").classList.remove("run");
+        }
       localStorage.setItem("running", running);
 }
 
@@ -1053,10 +1197,12 @@ function StartPausePin(num){
            } else {
            // other key switch side pin down and possible scoring
               pin_down=num;
+              display_pin_down=num;
               score_1+=(num==1)?pd_score:-pd_score;
               score_2+=(num==1)?-pd_score:pd_score;
               localStorage.setItem("score_1", score_1);
               localStorage.setItem("score_2", score_2);
+              localStorage.setItem("display_pin_down", display_pin_down);
               displayScore();
               check_score();  
               localStorage.setItem("pin_down",pin_down);
@@ -1065,7 +1211,27 @@ function StartPausePin(num){
            reset_pin_down();
            pin_down=num;
            pin_down_start = Date.now();
+           display_pin_down=num;
+           localStorage.setItem("display_pin_down", display_pin_down);
+           localStorage.setItem("pin_down",pin_down);
         }
+}
+
+function yoshi(){
+    if (pd_time>0){
+        local_pin_down=previous_pin_down;
+        local_pd_score=previous_pd_score;
+        local_pd_time=pd_time;
+        StartPauseTimer();
+        
+        pin_down=local_pin_down;
+        pd_score=local_pd_score;
+        display_pin_down=local_pin_down;
+        pin_down_start = Date.now() -1000*local_pd_time;
+  
+    } else {
+       StartPauseTimer();
+    }
 }
 
 function AddScore(fighter_num, amount){
@@ -1113,54 +1279,55 @@ function decision(fighter_num){
 
 document.addEventListener(
   "keydown",
-  (event) => {
-    const keyName = event.key;
-    if (keyName === " ") {
-       StartPauseTimer();
-    } else if (keyName === char_pd_1){
-       StartPausePin(1);
-    }  else if (keyName === char_pd_2){
-       StartPausePin(2)
-    } else if (keyName === char_toketa){
-       stop_pin_down();
-    }else if (keyName === char_sh_1){
-        AddShido(1,1);
-    } else if (keyName === char_msh_1){
-        AddShido(1,-1);
-    } else if (keyName === char_sh_2){
-        AddShido(2,1);
-    } else if (keyName === char_msh_2){
-        AddShido(2,-1);
-    } else if (keyName === char_100_1){
-        AddScore(1,100);
-    } else if (keyName === char_100_2){
-        AddScore(2,100);
-    } else if (keyName === char_10_1){
-        AddScore(1,10);
-    } else if (keyName === char_10_2){
-        AddScore(2,10);
-    } else if (keyName === char_1_1){ 
-        AddScore(1,1);
-    } else if (keyName === char_1_2){
-        AddScore(2,1);
-    } else if (keyName === char_m100_1){
-        AddScore(1,-100);
-    } else if (keyName === char_m100_2){
-        AddScore(2,-100);
-    } else if (keyName === char_m10_1){
-        AddScore(1,-10);
-    } else if (keyName === char_m10_2){
-        AddScore(2,-10);
-    } else if (keyName === char_m1_1){ 
-        AddScore(1,-1);
-    } else if (keyName === char_m1_2){
-        AddScore(2,-1);
-    } else if (keyName === char_dc_1){
-        decision(1);
-    } else if (keyName === char_dc_2){
-        decision(2);
-    } else if (keyName === char_gong){
-        gong();
+  (event) => { if (use_key){
+        const keyName = event.key;
+        if (keyName === " ") {
+           StartPauseTimer();
+        } else if (keyName === char_pd_1){
+           StartPausePin(1);
+        }  else if (keyName === char_pd_2){
+           StartPausePin(2)
+        } else if (keyName === char_toketa){
+           stop_pin_down();
+        }else if (keyName === char_sh_1){
+            AddShido(1,1);
+        } else if (keyName === char_msh_1){
+            AddShido(1,-1);
+        } else if (keyName === char_sh_2){
+            AddShido(2,1);
+        } else if (keyName === char_msh_2){
+            AddShido(2,-1);
+        } else if (keyName === char_100_1){
+            AddScore(1,100);
+        } else if (keyName === char_100_2){
+            AddScore(2,100);
+        } else if (keyName === char_10_1){
+            AddScore(1,10);
+        } else if (keyName === char_10_2){
+            AddScore(2,10);
+        } else if (keyName === char_1_1){ 
+            AddScore(1,1);
+        } else if (keyName === char_1_2){
+            AddScore(2,1);
+        } else if (keyName === char_m100_1){
+            AddScore(1,-100);
+        } else if (keyName === char_m100_2){
+            AddScore(2,-100);
+        } else if (keyName === char_m10_1){
+            AddScore(1,-10);
+        } else if (keyName === char_m10_2){
+            AddScore(2,-10);
+        } else if (keyName === char_m1_1){ 
+            AddScore(1,-1);
+        } else if (keyName === char_m1_2){
+            AddScore(2,-1);
+        } else if (keyName === char_dc_1){
+            decision(1);
+        } else if (keyName === char_dc_2){
+            decision(2);
+        } else if (keyName === char_gong){
+            gong();
+        }
     }
   },
   false,
@@ -1170,15 +1337,20 @@ function gong(){
   document.getElementById("gong").play();
 }
 
-function display_pd(){
-    document.getElementById("pd_time").style.display= (pin_down>0 || pd_time>0)?"inline-block":"none";
-    document.getElementById("img_pd_time").style.display= (pd_time>0 && pin_down==0)?"inline-block":"none";
-    document.getElementById("img_pd_blue").style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
-    document.getElementById("img_pd_white").style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
+function display_pd(){    
+    document.getElementById("toketa").style.display= (pin_down>0)?"inline-block":"none";
     
-    document.getElementById("pd_time").innerHTML=pd_time+"\"";
-    document.getElementById("pd_running").style.display= pin_down>0?"inline-block":"none";
+    document.getElementById("pd_time_blue").style.display= (display_pin_down==1)?"inline-block":"none";
+    document.getElementById("pd_time_white").style.display= (display_pin_down==2)?"inline-block":"none";
     
+
+    document.getElementById("pd_running_blue").style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
+    document.getElementById("pd_running_white").style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
+    
+    
+    document.getElementById("pd_time_blue").innerHTML=pd_time+"\"";
+    document.getElementById("pd_time_white").innerHTML=pd_time+"\"";
+      
 }
 
 function reset(){
@@ -1190,22 +1362,30 @@ function reset(){
     winner=0;
     running=false;
     gs=false;
+    document.getElementById("time").classList.remove("timer_gs");
+    display_pin_down=0;
     
     document.getElementById("win_1").style.display= "none";
     document.getElementById("win_2").style.display= "none";
     
    
-    localStorage.setItem("running", running);
-    localStorage.setItem("score_1", score_1);
-    localStorage.setItem("shido_1", shido_1);
-    localStorage.setItem("score_2", score_2);
-    localStorage.setItem("shido_2", shido_2);
-    localStorage.setItem("winner", winner);
-    localStorage.setItem("gs", gs);
+    localStorage.setItem("running", false);
+    localStorage.setItem("score_1", 0);
+    localStorage.setItem("shido_1", 0);
+    localStorage.setItem("score_2", 0);
+    localStorage.setItem("shido_2", 0);
+    localStorage.setItem("winner", 0);
+    localStorage.setItem("pin_down",0);
+    localStorage.setItem("display_pin_down", display_pin_down);
+    localStorage.setItem("gs", false);
 };
 
-function set_duration(minutes){
+function set_duration(minutes,new_gs){
     current = minutes*60000; 
+    gs_durration=-1;
+    if (new_gs>0){
+        gs_durration = new_gs*60000; 
+    }
     direction=-1;
     display = current; 
     localStorage.setItem("time", displayTime(current/1000));
@@ -1245,14 +1425,17 @@ function pauseTimer(){
     running=false;
     pin_down=0;
     current = display;
-    document.getElementById("running").style.display= running?"inline-block":"none";
+    document.getElementById("time").classList.remove("run");
+    
     localStorage.setItem("running", running);
-    document.getElementById("pd_running").style.display= (pin_down>0)?"inline-block":"none";
+
+    document.getElementById("pd_running_blue").style.display= "none";
+    document.getElementById("pd_running_white").style.display= "none";
     localStorage.setItem("pin_down", pin_down);
 }
 
 function check_time(){
-   if (display<=0 && pin_down==0){
+   if ((display<=0 || (gs && gs_durration>0 && display>=gs_durration)) && pin_down==0){
       gong();
       pauseTimer();
       if (score_1>score_2){
@@ -1263,18 +1446,16 @@ function check_time(){
           winner=2;
           document.getElementById("win_2").style.display= "inline-block"; 
           check_score();
-      } else {
+      } else if (!gs){
         gs=true;
         localStorage.setItem("gs", gs);
         direction=1;
         current = 0;  
         display = 0;
         localStorage.setItem("time", displayTime(0));
-        document.getElementById("time").innerHTML=  displayTime(0);
-        document.getElementById("gs").style.display = "inline-block";
-        
+        document.getElementById("time").innerHTML =  displayTime(0);
+        document.getElementById("time").classList.add("timer_gs");
       }
-      
    }
 }
 
@@ -1360,6 +1541,8 @@ function check_score(){
         document.getElementById("sh_3_2").style.display= "none";  
     }
     
+    
+    
     if (score_1>=20){
         winner=1;
         if (pin_down>0){
@@ -1408,7 +1591,6 @@ function check_score(){
         if (score_1_win>=20 && score_1_win<100) {
             score_1_win+=80;
         }
-        
         var score_2_win = score_2;
         if (score_2_win>=20 && score_2_win<100) {
             score_2_win+=80;
@@ -1439,14 +1621,12 @@ function check_score(){
         document.getElementById("vic_name").innerHTML = document.getElementById("name_"+winner).innerHTML;
         document.getElementById("vic_color").innerHTML = winner==1?"Bleu":"Blanc";
         document.getElementById("vic_type").innerHTML = res_name;
-        document.getElementById("vic_score").innerHTML = "2("+pv+")";
-           
+        document.getElementById("vic_score").innerHTML = "2 ("+pv+")";
         document.getElementById("fid").value = f_id;
         document.getElementById("pv1").value = winner==1 ? pv : 0;
         document.getElementById("pv2").value = winner==2 ? pv : 0;
-        
-        
-        toggleClass(document.getElementById("pop_victory"),"pop_hide");
+
+        open_pop("pop_victory");
     }
 }
 
@@ -1461,22 +1641,26 @@ function displayTime(time_sec){
         sign="-";
         time_sec= -time_sec;
     }
-    return sign+Math.floor(time_sec/60)+"\'"+ ("0" + time_sec%60).slice(-2)+"\"";
+    return sign+Math.floor(time_sec/60)+"\'"+ ("0" + time_sec%60).slice(-2)+"\\"";
 }
 
 function reset_pin_down(){
+    previous_pin_down=0;
+    previous_pd_score=0;
     pin_down=0;
     pd_time=0;
     pd_score=0;
-    localStorage.setItem("pin_down", pin_down);
+    localStorage.setItem("pin_down", 0);
     localStorage.setItem("pd_time", 0);
     display_pd();
 }
 
 function stop_pin_down(){
+    previous_pin_down=pin_down;
+    previous_pd_score=pd_score;
     pin_down=0;
     pd_score=0;
-    localStorage.setItem("pin_down", pin_down);
+    localStorage.setItem("pin_down", 0);
     display_pd();
     check_time();
 }
@@ -1516,15 +1700,23 @@ setInterval(function() {
             display_pd();
             check_pd_time();
         } 
+    } else if (break_running){
+        let break_delta = Date.now() - break_start;
+        let break_sisplay = breakTime - break_delta;
+        const dd_bt = displayTime(Math.ceil(break_sisplay/1000));
+        localStorage.setItem("breakTime", dd_bt);
+        document.getElementById("break_time").innerHTML= dd_bt;
+        if (break_sisplay<0){
+            end_break();
+        }
     }
 }, 100); 
 
 
 function conf(){
-  set_title(document.getElementById("cat_name").value);
-  set_name(document.getElementById("fight_blue").value,document.getElementById("fight_white").value);
-  set_name(document.getElementById("next_fight_blue").value,document.getElementById("next_fight_white").value);
-  set_duration(document.getElementById("cat_dur").value);
+  set_title("Tatami N° "+document.getElementById("tatami_num").value + " : " +document.getElementById("cat_name").value);
+  localStorage.setItem("tatami_num", document.getElementById("tatami_num").value);
+  set_duration(document.getElementById("cat_dur").value, document.getElementById("gs_dur").value);
   reset();
   reset_pin_down();
   displayScore();
@@ -1588,9 +1780,10 @@ function conf_key(){
     document.getElementById("t_gong").innerHTML = char_gong;
 }
 
-set_title("'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'");
-set_name("Combattant 1","Combattant 2");
-set_duration('.$cat_dur.');
+//set_title("'.$cat_sn.' '.$cat_n.' '.$cat_gen.' '.$weight.'");
+document.getElementById("tatami_num").value = localStorage.getItem("tatami_num");
+conf();
+set_duration('.$cat_dur.','.$cat_gs.');
 reset();
 reset_pin_down();
 displayScore();

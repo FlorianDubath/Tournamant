@@ -1,7 +1,8 @@
 <head>
    <meta charset="UTF-8">
+   <link rel="stylesheet" type="text/css" href="./css/test.css" />
    <style>
-        body {
+          body {
             background-color: black;
             font-family:sans;
         }
@@ -11,9 +12,16 @@
            text-align:center;
            font-size:40px;
            margin-top:1%;
+           margin-left:auto; 
+           margin-right:auto;
+           width:100%;
+           display:inline-block;
+           font-weight:900;
         }
-           .blue, .nblue {
-            height:440px;
+        
+     
+        .blue, .nblue {
+            height:480px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: blue;
@@ -23,7 +31,7 @@
         }   
        
         .white, .nwhite {
-            height:440px;
+            height:480px;
             display:inline-block;
             width:calc(50% - 3px);
             background-color: white;
@@ -49,102 +57,468 @@
            margin-bottom:10px;
            width:100%;
            display:inline-block;
+        font-weight:900;
         }
         .nblue {
             color:#999999;
             background-color: #000055;
             height:unset;
+        font-weight:900;
+           margin-bottom:30px;
             }
          .nwhite {
             background-color: #777777;
             height:unset;
+        font-weight:900;
+           margin-bottom:30px;
         }
         .fighter {
         margin-top:20px;
-        font-size:80px;
-        }
-        .score {
-        //margin-top:40px;
-        font-size:200px;
-        letter-spacing: 20px;
+        font-size:100px;
+        font-weight:900;
+        text-align:center;
+        overflow:hidden;
         }
         
-        .timer {
-           height:240px;
-           color:#DDFFDD; 
-           text-align:center; 
-           font-size:200px;
+        .nfighter {
+        margin-top:20px;
+        font-size:60px;
+        font-weight:900;
+        text-align:center;
+        overflow:hidden;
         }
+        .score {
+        margin-top:20px;
+        font-size:250px;
+        letter-spacing: 20px;
+        font-weight:900;
+        }
+        
+      
+        
+        .timer_3 {
+           width:calc(33% - 3px);
+           display:inline-block;
+           height:240px;
+           color:#FFFFDD; 
+           text-align:center; 
+           font-size:240px;
+           font-weight:900;
+        }
+        
+        .timer_gs {
+           color:#bf9b30;
+        }
+        
+        
+        
+        .paused {
+           color:#DDFFDD;
+        }
+        
         .win {
             position: absolute;
             width:100%;
             
+           font-weight:900;
             font-size:100px;
             color:#bf9b30;
-            right:0px;bottom:0px;
+            right:0px;
+            bottom:240px;
         }
-         
-        .sh_1{
+        
+        .bbtn {
+           display:inline-block;
+           padding:5px; 
+           text-decoration:none;
+           color:black;
+           background-color:grey;
+           border:solid 2px lightgrey;
+           border-radius:5px;
+           margin-right:5px;
+           font-size:24px;
+        }
+        .sbbb{
+           display:inline-block;
+           padding-top:5px;
+           text-align:center;
+           vertical-align:center;
+           width:100%;
+        }
+         .sh_1{
           position: absolute; 
-          right:calc(50% - 250px);
-          top:200px;
+          right:calc(50% - 300px);
+          top:260px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
           border:solid grey 2px;
         }  
         .sh_2{
          position: absolute; 
-          right:calc(50% - 275px);
-          top:225px;
+          right:calc(50% - 325px);
+          top:290px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:yellow;
-          border:solid grey 2px;
+          border:solid grey 3px;
         }
         .sh_3{
          position: absolute; 
-          right:calc(50% - 300px);
-          top:250px;
+          right:calc(50% - 350px);
+          top:320px;
           width:60px;
-          height:80px;
+          height:90px;
           background-color:red;
           border:solid grey 2px;
         }
+      
+        .key{
+           width:50px;
+        }
+        
+        .ctrl_left {
+            position: absolute;
+            top: 250px;
+            left:10px;
+        }
+        .ctrl_left>div{
+           margin-bottom:20px;
+        }
+        
+        .ctrl_right {
+            position: absolute;
+            top: 250px;
+            right:10px;
+            text-align:right;
+        }
+        .ctrl_right>div{
+           margin-bottom:20px;
+           text-align:right;
+        }
+        
+        .ctrl_center {
+            position: absolute;
+            top: 250px;
+            width:1000px;
+            left:calc(50% - 492px);
+            text-align:center;
+        }
+        .ctrl_center>div{
+           margin-bottom:20px;
+         }
+        .osaekomi>.bbtn {
+            vertical-align:top;
+            height:3em;
+        }
+        
+        .ctrl_top{
+            position: absolute;
+            top: 10px;
+            width:100%;
+            left:0;
+        }
+           
+        .popcont {
+           max-height:calc(100% - 200px);
+           overflow-y:scroll;
+        }
+        
+         .break{
+           margin:0px;
+           position:absolute;
+           max-width:100%;
+           width:100%;
+           top:300px;
+           height:calc(100% - 300px);
+           padding:100px;
+           background-color:#EEEEEE;
+         }
+         .break>span{
+           text-align:center; 
+           font-size:170px;
+           font-weight:900;
+         }
+         
+         .popconf{
+           max-width:800px;
+           font-size:24px;
+         }
+         
+         .popconf input{
+           font-size:24px;
+         }
+         
+         .hide{
+           display:none!important;
+        }
+        #time{
+          text-decoration:underline;
+        }
+        .run{
+          text-decoration:none !important;
+        }
+        
+        #img_pd_white,#img_pd_blue{
+           padding-bottom:20px;
+        }
+       
+        
+         /* FullHD 1080p */
+        @media (max-width: 2000px) {
+           .title{
+               height:7%;
+               font-size:50px;
+               margin-top:10px;
+               
+            }
+        
+            .blue, .nblue, .white, .nwhite {
+                height:400px;
+                
+            }   
+       
+       
+           .ntitle{
+               font-size:50px;
+               margin-top:8px;
+               margin-bottom:5px;
+            }
+            .nblue, .nwhite {
+               margin-bottom:0px;
+               height:100px;
+            }
+            
+            .fighter, .nfighter {
+                margin-top:3px;
+                font-size:70px;
+            }
+            
+            .score {
+                margin-top:0px;
+                font-size:250px;
+            }
+            
+            .sh_1{
+              position: absolute; 
+              right:calc(50% - 300px);
+              top:190px;
+              width:60px;
+              height:80px;
+              background-color:yellow;
+              border:solid grey 2px;
+            }  
+            .sh_2{
+             position: absolute; 
+              right:calc(50% - 320px);
+              top:210px;
+              width:60px;
+              height:80px;
+              background-color:yellow;
+              border:solid grey 3px;
+            }
+            .sh_3{
+             position: absolute; 
+              right:calc(50% - 340px);
+              top:230px;
+              width:60px;
+              height:80px;
+              background-color:red;
+              border:solid grey 2px;
+            }
+            
+            .win {
+               font-size:60px;
+               bottom:235px;
+            }
+            
+            #img_pd_white,#img_pd_blue{
+               width:150px;
+               padding-bottom:20px;
+            }
+        
+      
+        
+        .timer_3 { 
+           height:200px;
+           font-size:200px;
+        }
+        
+        
+       
+        .break{
+           top:210px;
+           height:calc(100% - 150px);
+           padding:60px;
+         }
+         .break>span{
+           font-size:100px;
+         }
+        }
+        
+         /* TV 720p HD Ready */
+        @media (max-width: 1300px) {
+           .title{
+               height:7%;
+               font-size:36px;
+               margin-top:10px;
+               
+            }
+        
+            .blue, .nblue, .white, .nwhite {
+                height:320px;
+                
+            }   
+       
+       
+           .ntitle{
+               font-size:36px;
+               margin-top:8px;
+               margin-bottom:5px;
+            }
+            .nblue, .nwhite {
+               margin-bottom:0px;
+               height:64px;
+            }
+            
+            .fighter, .nfighter {
+                margin-top:3px;
+                font-size:50px;
+                font-weight:900;
+            }
+            
+            .score {
+                margin-top:0px;
+                font-size:160px;
+            }
+            
+            .sh_1{
+              position: absolute; 
+              right:calc(50% - 250px);
+              top:130px;
+              width:60px;
+              height:80px;
+              background-color:yellow;
+              border:solid grey 2px;
+            }  
+            .sh_2{
+             position: absolute; 
+              right:calc(50% - 270px);
+              top:150px;
+              width:60px;
+              height:80px;
+              background-color:yellow;
+              border:solid grey 3px;
+            }
+            .sh_3{
+             position: absolute; 
+              right:calc(50% - 290px);
+              top:170px;
+              width:60px;
+              height:80px;
+              background-color:red;
+              border:solid grey 2px;
+            }
+            
+            .win {
+               font-size:60px;
+               bottom:185px;
+            }
+            
+            #img_pd_white,#img_pd_blue{
+               width:100px;
+               padding-bottom:20px;
+            }
+        
+      
+        
+        .timer_3 { 
+           height:140px;
+           font-size:140px;
+        }
+         
+       
+        .break{
+           top:150px;
+           height:calc(100% - 150px);
+           padding:60px;
+         }
+         .break>span{
+           font-size:100px;
+         }
+        }
+        
+        
+        
+        
     </style>
 </head>
 <body>
-<div id="title" class="title"></div>
-<div class="blue" ><div id="name_1" class="fighter"></div><div id="s_1" class="score"></div><div class="win" id="win_1" style="display:none;">vainqueur</div>
+
+<div style="width:100%">
+<span id="title" class="title" width="100%"></span> <br/>
+<div class="blue" >
+    <div id="name_1" class="fighter"></div>
+    <div id="s_1" class="score"></div>
+    <div class="win" id="win_1" style="display:none;">vainqueur</div>
     <div class="sh_1" id="sh_1_1" style="display:none;"></div>
     <div class="sh_2" id="sh_2_1" style="display:none;"></div>
-    <div class="sh_3" id="sh_3_1" style="display:none;"></div></div>
-<div class="white" ><div id="name_2" class="fighter"></div><div id="s_2" class="score"></div><div class="win" id="win_2" style="display:none;">vainqueur</div>
+    <div class="sh_3" id="sh_3_1" style="display:none;"></div>
+    
+</div>
+
+<div class="white" >
+    <div id="name_2" class="fighter"></div>
+    <div id="s_2" class="score"></div>
+    <div class="win" id="win_2" style="display:none;">vainqueur</div>
     <div class="sh_1" id="sh_1_2" style="display:none;"></div>
     <div class="sh_2" id="sh_2_2" style="display:none;"></div>
-    <div class="sh_3" id="sh_3_2" style="display:none;"></div></div>
-
-<div class="timer">
-<span id="gs" style="display:none;" >GS&nbsp;</span>
-<span id="time"></span>
-<span id="running" style="display:none;">&#x23F2;</span>
-</div><br/>
-<div class="timer">
-<img src="css/pin_down.png"  id="img_pd_time" style="display:none;"/>
-<img src="css/pin_down_blue.png"  id="img_pd_blue" style="display:none;"/>
-<img src="css/pin_down_white.png"  id="img_pd_white" style="display:none;"/>
-<span id="pd_time" style="display:none;"></span>
-<span id="pd_running" style="display:none;">&#x23F2;</span>
+    <div class="sh_3" id="sh_3_2" style="display:none;"></div>
+  
 </div>
+  
+
+   
+<div class="timer_3" id="pd_blue">
+    <span id="pd_running_blue" style="display:none;"><img  src="css/pin_down_blue.png" id="img_pd_blue" /></span>
+    <span id="pd_time_blue" style="display:none;"></span>
+    
+</div>
+
+<div class="timer_3">
+    
+    <span id="time"></span>
+</div>
+
+
+
+<div class="timer_3" id="pd_white">
+    <span id="pd_time_white" style="display:none;"></span>
+    <span id="pd_running_white" style="display:none;"><img src="css/pin_down_white.png"  id="img_pd_white" /> </span>
+</div>
+
+<br/>
+
 <span id="next_fight" class="nf" style="display:none">
    <span  class="ntitle" >Prochain Combat</span>
    <div class="nblue" >
-   <span id="next_name_1"  class="fighter" style="font-size:60px;"></span>
+   <span id="next_name_1"  class="nfighter" ></span>
    </div>
     <div class="nwhite" >
-   <span id="next_name_2"  class="fighter" style="font-size:60px;"></span>
+   <span id="next_name_2"  class="nfighter" ></span>
    </div>
-   
+ 
+</span>
+
+</div>
+
+
+
+<span class="pop_back pop_hide" Id="pop_break">
+		<span class="popcont break">
+		      <span class="pop_tt">PAUSE </span> <br/><br/>
+		      <span id="break_time"></span> <br/><br/>
+		</span>
 </span>
 </body>
 <script>
@@ -231,17 +605,18 @@ function displayScore(){
 }
 
 function display_pd(){
-   const pd_time = localStorage.getItem("pd_time");
-   const pin_down = localStorage.getItem("pin_down"); document.getElementById('pd_time').style.display=pd_time>0?"inline-block":"none";
-    document.getElementById('img_pd_time').style.display=(pd_time>0 && pin_down==0)?"inline-block":"none";
+    const pd_time = localStorage.getItem("pd_time");
+    const pin_down = localStorage.getItem("pin_down"); 
+    const display_pin_down = localStorage.getItem("display_pin_down"); 
+ 
+    document.getElementById('pd_time_blue').style.display= (display_pin_down==1)?"inline-block":"none";
+    document.getElementById('pd_time_white').style.display= (display_pin_down==2)?"inline-block":"none";
+
+    document.getElementById('pd_running_blue').style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
+    document.getElementById('pd_running_white').style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
     
-    
-    document.getElementById('img_pd_blue').style.display= (pd_time>0 && pin_down==1)?"inline-block":"none";
-    document.getElementById('img_pd_white').style.display= (pd_time>0 && pin_down==2)?"inline-block":"none";
-    
-    
-    document.getElementById('pd_time').innerHTML=pd_time+'"';
-    document.getElementById('pd_running').style.display= pin_down>0?"inline-block":"none";
+    document.getElementById('pd_time_blue').innerHTML=pd_time+'"';
+    document.getElementById('pd_time_white').innerHTML=pd_time+'"';
 }
 
 
@@ -249,8 +624,16 @@ setInterval(function() {
         const d_time = localStorage.getItem("time");
         document.getElementById('time').innerHTML= d_time;
         const running = localStorage.getItem("running")=='true';
-        document.getElementById('running').style.display = running?"inline-block":"none";
-        document.getElementById('gs').style.display = (localStorage.getItem("gs")=='true')?"inline-block":"none";
+        if (running){
+            document.getElementById('time').classList.add("run");
+        } else {
+            document.getElementById('time').classList.remove("run");
+        }
+        if (localStorage.getItem("gs")=='true'){
+            document.getElementById('time').classList.add("timer_gs");
+        } else {
+            document.getElementById('time').classList.remove("timer_gs");
+        }
         display_pd();
         score_1 = localStorage.getItem("score_1");
         score_2 = localStorage.getItem("score_2");
@@ -258,6 +641,13 @@ setInterval(function() {
         displayScore();
         display_name();
         display_title();
+        
+        if (localStorage.getItem("break_running")=='true'){
+            document.getElementById('pop_break').classList.remove("pop_hide");
+            document.getElementById('break_time').innerHTML=localStorage.getItem("breakTime");
+        } else {
+            document.getElementById('pop_break').classList.add("pop_hide");
+        }
         
 }, 100); 
 </script>
