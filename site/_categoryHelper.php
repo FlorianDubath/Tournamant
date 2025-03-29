@@ -663,6 +663,9 @@ function get_step_results($step_id){
 
 function check_for_tie($ActualCategoryId) {
 
+  // TODO check for handsokumake
+  // todo  check for no win / forfeit
+
     $mysqli= ConnectionFactory::GetConnection(); 
     // check for 2-fighter cat
     $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=? AND CategoryStepsTypeId=10");
@@ -788,28 +791,91 @@ function check_link($ActualCategoryId) {
 }
 
 
+function getCompetitorFromFight($fight_id, $is_comp_1){
+   $mysqli= ConnectionFactory::GetConnection(); 
+   $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id, TournamentCompetitor2Id FROM Fight WHERE Id=?");
+   $stmt->bind_param("i", $fight_id);         
+   $stmt->bind_result($comp_1,$comp_2);     
+   $stmt->execute();  
+   $stmt->fetch();
+   $stmt->close();
+   return $is_comp_1?$comp_1:$comp_2;
+}
 
-
-function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2){
+function add_HMD($ActualCategoryId, $fight_id, $hmd_1, $hmd_2){
+   $mysqli= ConnectionFactory::GetConnection(); 
+   // find all fights to be fighted in the category and put them as lost by forfeit, if the other is already forfeit => nowin
+   // Set the TournamentCompetitor as HandokuMake
+   if ($hmd_1==1){
+      $cid = getCompetitorFromFight($fight_id, true);
+      
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=1, noWinner=forfeit2 WHERE ActualCategoryId=? AND TournamentCompetitor1Id=? AND pv1 IS NOT NULL");
+      $stmt->bind_param("ii",$ActualCategoryId, $cid);       
+      $stmt->execute();  
+      $stmt->close();
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit2=1, noWinner=forfeit1 WHERE ActualCategoryId=? AND TournamentCompetitor2Id=? AND pv1 IS NOT NULL");
+      $stmt->bind_param("ii",$ActualCategoryId, $cid);       
+      $stmt->execute();  
+      $stmt->close();
+      
+      $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET Hansokumake=1 WHERE Id=?");
+      $stmt->bind_param("i", $cid);       
+      $stmt->execute();  
+      $stmt->close();
+   }
    
-    
-    if ($pv_1>=0 && $pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
-    
- 
-        $mysqli= ConnectionFactory::GetConnection(); 
-        
+   if ($hmd_2==1){
+      $cid = getCompetitorFromFight($fight_id, false);
+      
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=1, noWinner=forfeit2 WHERE ActualCategoryId=? AND TournamentCompetitor1Id=? AND pv1 IS NOT NULL");
+      $stmt->bind_param("ii",$ActualCategoryId, $cid);       
+      $stmt->execute();  
+      $stmt->close();
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit2=1, noWinner=forfeit1 WHERE ActualCategoryId=? AND TournamentCompetitor2Id=? AND pv1 IS NOT NULL");
+      $stmt->bind_param("ii",$ActualCategoryId, $cid);       
+      $stmt->execute();  
+      $stmt->close();
+      
+      $stmt = $mysqli->prepare("UPDATE TournamentCompetitor SET Hansokumake=1 WHERE Id=?");
+      $stmt->bind_param("i", $cid);       
+      $stmt->execute();  
+      $stmt->close();
+   }
+   
+   check_for_tie($ActualCategoryId); 
+   check_link($ActualCategoryId);
+   if (isCatCompleted($ActualCategoryId)) {
+	close_category($ActualCategoryId);
+   }
+}
+
+
+function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2, $ff_1, $ff_2, $noWin){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    if ($noWin) {
+        $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=1, ResultSavedBy=?  WHERE Id=?");
+        $stmt->bind_param("ii", $_SESSION['_UserId'], $fight_id);       
+        $stmt->execute();
+        $stmt->close();
+    } else if ($ff_1>0 || $ff_2>0) {
+        $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=?, forfeit2=?, ResultSavedBy=? WHERE Id=?");
+        $stmt->bind_param("iiii", $ff_1, $ff_2, $_SESSION['_UserId'], $fight_id);       
+        $stmt->execute();
+        $stmt->close();
+    } else if ($pv_1>=0 && $pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
         $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=?, ResultSavedBy=? WHERE Id=?");
         $stmt->bind_param("iiii", $pv_1, $pv_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
-        
-        check_for_tie($ActualCategoryId); 
-        
-        check_link($ActualCategoryId);
-        if (isCatCompleted($ActualCategoryId)) {
-            close_category($ActualCategoryId);
-        }
-    } else {echo 'Error in data'; exit;}
+    } else {
+    	echo 'Error in data'; exit;
+    }
+    
+    check_for_tie($ActualCategoryId); 
+    check_link($ActualCategoryId);
+    if (isCatCompleted($ActualCategoryId)) {
+        close_category($ActualCategoryId);
+    }
     
 }
 
@@ -829,6 +895,7 @@ function isCatCompleted($ActualCategoryId){
 }
 
 function get_full_result($ActualCategoryId){
+    // todo  check for no win / forfeit
     if (!isCatCompleted($ActualCategoryId)){
     
         return NULL;

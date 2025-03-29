@@ -687,6 +687,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="10" />
                                  <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Ippon">
                        </form>
@@ -697,6 +700,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="7" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
                        
@@ -706,6 +712,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="5" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input  class="resbtn" type="submit" value="Yuko">
                        </form>
                        
@@ -715,6 +724,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="1" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input  class="resbtn" type="submit" value="Décision">
                        </form>
                       
@@ -740,6 +752,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="10" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Ippon">
                        </form>
@@ -749,6 +764,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="7" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
@@ -758,6 +776,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="5" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Yuko ">
                        </form>
@@ -767,6 +788,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="1" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Décision">
                        </form>
@@ -1071,6 +1095,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" id="fid" value="-1" />
                                  <input type="hidden" name="pv1" id="pv1" value="0" />
                                  <input type="hidden" name="pv2" id="pv2" value="0" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="bbtn" type="submit" value="Enregistrer "/>
       <a class="bbtn" onclick="close_pop(\'pop_victory\');" >Annuler</a></div>
@@ -1126,6 +1153,21 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
              <a class="bbtn" onclick="end_break();" >Terminer</a></div>
 		</span>
 </span>
+
+
+<form action="figtRes.php" method="post">
+	 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+	 <input type="hidden" name="fid" id="hidden_fid" value="-1" />
+	 <input type="hidden" name="pv1" value="0" />
+	 <input type="hidden" name="pv2" value="0" />
+	 <input type="hidden" name="ff1" id="hidden_ff1" value="0" />
+	 <input type="hidden" name="ff2" id="hidden_ff2" value="0" />
+	 <input type="hidden" name="hmd1" id="hidden_hmd1" value="0" />
+	 <input type="hidden" name="hmd2" id="hidden_hmd2" value="0" />
+	 <input type="hidden" name="noWin" id="hidden_nw" value="0" />
+	 <input type="hidden" name="cid" value="'.$catId.'" />
+	 <input type="submit" style="display:none" id="hidden_btn"/>
+</form>
 
  <audio controls src="gong-92707.mp3" id="gong" style="display:none;"></audio>     
      
@@ -1247,8 +1289,13 @@ function configure_forfeit(missing){
 function forfeit() {
     const one_forfeit = document.getElementById("cb_ff_1").checked;
     const two_forfeit = document.getElementById("cb_ff_2").checked;
-    // TODO
-    
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=one_forfeit?1:0;
+    document.getElementById("hidden_ff2").value=two_forfeit?1:0;
+    document.getElementById("hidden_hmd1").value=0;
+    document.getElementById("hidden_hmd2").value=0;
+    document.getElementById("noWin").value=(one_forfeit && two_forfeit)?1:0;
+    document.getElementById("hidden_btn").click();
     close_pop("pop_forfeit");
 }
 
@@ -1263,14 +1310,26 @@ function configure_hmd(){
 function hmd() {
     const one_hmd = document.getElementById("cb_hmd_1").checked;
     const two_hmd = document.getElementById("cb_hmd_2").checked;
-    // TODO
+    
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=0;
+    document.getElementById("hidden_ff2").value=0;
+    document.getElementById("hidden_hmd1").value=one_hmd?1:0;
+    document.getElementById("hidden_hmd2").value=two_hmd?1:0;
+    document.getElementById("noWin").value = one_hmd && two_hmd;
+    document.getElementById("hidden_btn").click();
     
     close_pop("pop_hmd");
 }
 
 function hmi() {
-    // TODO
-    
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=0;
+    document.getElementById("hidden_ff2").value=0;
+    document.getElementById("hidden_hmd1").value=0;
+    document.getElementById("hidden_hmd2").value=0;
+    document.getElementById("noWin").value=1;
+    document.getElementById("hidden_btn").click();
     close_pop("pop_hmi");
 }
 

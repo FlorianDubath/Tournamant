@@ -67,11 +67,12 @@ En cours:
       - possibilité de marquer les 2 en forfait /Hansokumake directe / HansokuMake -ok
       - validation supplémentaire pour le hansokumake directe  -ok
       - affichage count-down dans le miror -ok
-      
-   * enregistrement du forfait / hansokumake directe dans la base
+   * enregistrement du forfait / hansokumake directe dans la base -ok
+   * Adaptation des combats de la catégories pour le hansokumake directe  -ok
    * Adaptation du calcul des vaicoeurs
-   * Adaptation des combats de la catégories pour le hansokumake directe
+   
    * check dans les autres catégorie au chargement + indicateur dans la page des catégories pour la table centrale
+   
    * tenir compte du flag forfait pour le calcul des point valeurs individuels
    * exports des points valeurs du tournois
 
