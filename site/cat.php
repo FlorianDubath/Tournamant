@@ -1045,13 +1045,19 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 <span class="pop_back pop_hide" Id="pop_other">
 		<span class="popcont">
 		      <span class="pop_tt">Autres situations </span>  <br/><br/>
-		       <a class="bbtn" onclick="close_pop(\'pop_other\');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_Late();" >Combattant(s) en retard</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_forfeit(0);" >Combattant(s) forfait(s)</a></div> <br/><br/>
+		      
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');open_pop(\'pop_hmi\')" >Double Hansoku-Make</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_hmd();" >Hansoku-Make(s) direct(s)</a></div> <br/><br/>
+		       
               <a class="bbtn" onclick="close_pop(\'pop_other\');yoshi();" >"Yoshi" après un "Sono-mama" avec Osaekomi</a></div> <br/><br/><br/>
-              <a class="bbtn" onclick="window.location.reload();" >Annuler le combat et retourner à la catégorie</a></div> <br/><br/><br/>
-              
-              
 		     
-              <a class="bbtn" onclick="close_pop(\'pop_other\');" >Fermer la popup</a></div>
+              <a class="bbtn" onclick="close_pop(\'pop_other\');" >Annuler/Fermer</a></div>
 		</span>
 </span>
 
@@ -1069,6 +1075,46 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input class="bbtn" type="submit" value="Enregistrer "/>
       <a class="bbtn" onclick="close_pop(\'pop_victory\');" >Annuler</a></div>
                </form>
+		</span>
+</span>
+
+
+<span class="pop_back pop_hide" Id="pop_late_conf">
+		<span class="popcont">
+		    <span class="pop_tt">COMBATTANT(S) ABSENT(S) AU DEUXIEME APPEL</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_late_2" onchange="cb_late_changed();"/><span id="late_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_late_1" onchange="cb_late_changed();"/><span id="late_name_1"></span> (Bleu)</span><br/><br/>
+		    <span class="pop_tt"><span id="late_time"></span> </span><br/><br/>
+		    <a class="bbtn" id="btn_late_start" onclick="start_Late();" >Lancer le décompte</a></div><br/><br/>
+            <a class="bbtn" onclick="end_late();" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_forfeit">
+		<span class="popcont">
+		    <span class="pop_tt">COMBATANT(S) FORFAIT(S)</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_ff_2" "/><span id="ff_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_ff_1" "/><span id="ff_name_1"></span> (Bleu)</span><br/><br/>
+		    <a class="bbtn" onclick="forfeit();" >Enregistrer le(s) forfait(s)</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_forfeit\');" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_hmi">
+		<span class="popcont" >
+		    <span class="pop_tt">DOUBLE HANSOKU-MAKE (INDIRECT)</span> <br/><br/>
+		    <a class="bbtn" onclick="hmi();" >Enregistrer le double Hansoku-Make indirect</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_hmi\');" >Annuler</a></div>
+		</span>
+</span> 
+
+<span class="pop_back pop_hide" Id="pop_hmd">
+		<span class="popcont" style="background-color:red">
+		    <span class="pop_tt">HANSOKU-MAKE(s) DIRECT(S)</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_hmd_2" "/><span id="hmd_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_hmd_1" "/><span id="hmd_name_1"></span> (Bleu)</span><br/><br/>
+		    <a class="bbtn" onclick="hmd();" >Enregistrer le(s) Hansoku-Make(s) direct(s)</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_hmd\');" >Annuler</a></div>
 		</span>
 </span>
 
@@ -1135,15 +1181,107 @@ var char_dc_2="v";
 var char_gong="1";
 
 
-var break_start = Date.now();
-var break_running=false;
-localStorage.setItem("break_running", false);
-var breakTime=0;
+
 
 function setf_id(new_f_id){
     f_id=new_f_id;
 }
 
+
+
+var late_start = Date.now();
+var late_running=false;
+localStorage.setItem("late_running", false);
+localStorage.setItem("late_comp", 0);
+var lateTime=0;
+
+function configure_Late() {
+    lateTime = 30000;
+    document.getElementById("late_time").innerHTML =  displayTime(lateTime/1000);
+    localStorage.setItem("lateTime", displayTime(lateTime/1000));
+    document.getElementById("cb_late_1").checked=false;
+    document.getElementById("cb_late_2").checked=false;
+    document.getElementById("btn_late_start").style.display="inline-block";
+    document.getElementById("late_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("late_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_late_conf");
+}
+
+function cb_late_changed(){
+    if (late_running){
+       var missing=0 + 1*document.getElementById("cb_late_1").checked + 2*document.getElementById("cb_late_2").checked;
+       localStorage.setItem("late_comp", missing);
+       if (missing==0){
+           end_late();
+       } 
+    }
+}
+
+function start_Late() {
+    var missing=0 + 1*document.getElementById("cb_late_1").checked + 2*document.getElementById("cb_late_2").checked;
+    if (missing>0){
+        document.getElementById("btn_late_start").style.display="none";
+        late_start = Date.now();
+        late_running=true;
+        localStorage.setItem("late_running", true);
+        localStorage.setItem("late_comp", missing);
+    }
+}
+function end_late() {
+    late_running=false;
+    localStorage.setItem("late_running", false);
+    localStorage.setItem("late_comp", 0);
+    close_pop("pop_late_conf")
+}
+
+function configure_forfeit(missing){
+    const two = Math.floor(missing/2);
+    const one = missing % 2;
+    document.getElementById("cb_ff_1").checked=one;
+    document.getElementById("cb_ff_2").checked=two;
+    document.getElementById("ff_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("ff_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_forfeit");
+}
+
+function forfeit() {
+    const one_forfeit = document.getElementById("cb_ff_1").checked;
+    const two_forfeit = document.getElementById("cb_ff_2").checked;
+    // TODO
+    
+    close_pop("pop_forfeit");
+}
+
+function configure_hmd(){
+    document.getElementById("cb_hmd_1").checked=false;
+    document.getElementById("cb_hmd_2").checked=false;
+    document.getElementById("hmd_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("hmd_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_hmd");
+}
+
+function hmd() {
+    const one_hmd = document.getElementById("cb_hmd_1").checked;
+    const two_hmd = document.getElementById("cb_hmd_2").checked;
+    // TODO
+    
+    close_pop("pop_hmd");
+}
+
+function hmi() {
+    // TODO
+    
+    close_pop("pop_hmi");
+}
+
+
+
+
+
+var break_start = Date.now();
+var break_running=false;
+localStorage.setItem("break_running", false);
+var breakTime=0;
 
 function start_break() {
     break_start = Date.now();
@@ -1708,6 +1846,20 @@ setInterval(function() {
         document.getElementById("break_time").innerHTML= dd_bt;
         if (break_sisplay<0){
             end_break();
+        }
+    } else if (late_running){
+        let late_delta = Date.now() - late_start;
+        let late_sisplay = lateTime - late_delta;
+        const dd_bt = displayTime(Math.ceil(late_sisplay/1000));
+        localStorage.setItem("lateTime", dd_bt);
+        document.getElementById("late_time").innerHTML= dd_bt;
+        if (late_sisplay<0){
+            const missing =  parseInt(localStorage.getItem("late_comp"));
+            if (missing>0){
+                configure_forfeit(missing);
+            }
+            
+            end_late();
         }
     }
 }, 100); 

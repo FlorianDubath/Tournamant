@@ -224,7 +224,7 @@
            overflow-y:scroll;
         }
         
-         .break{
+         .break, .late{
            margin:0px;
            position:absolute;
            max-width:100%;
@@ -237,6 +237,12 @@
          .break>span{
            text-align:center; 
            font-size:170px;
+           font-weight:900;
+         }
+         
+         .late>span{
+           text-align:center; 
+           font-size:90px;
            font-weight:900;
          }
          
@@ -346,13 +352,16 @@
         
         
        
-        .break{
+        .break, .late{
            top:210px;
            height:calc(100% - 150px);
            padding:60px;
          }
          .break>span{
            font-size:100px;
+         }
+         .late>span{
+           font-size:50px;
          }
         }
         
@@ -438,13 +447,17 @@
         }
          
        
-        .break{
+        .break, .late{
            top:150px;
            height:calc(100% - 150px);
            padding:60px;
          }
          .break>span{
            font-size:100px;
+         }
+         
+         .late>span{
+           font-size:50px;
          }
         }
         
@@ -518,6 +531,15 @@
 		<span class="popcont break">
 		      <span class="pop_tt">PAUSE </span> <br/><br/>
 		      <span id="break_time"></span> <br/><br/>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_late">
+		<span class="popcont late">
+		      <span class="pop_tt">RETARD :</span> <br/><br/>
+		      <span class="pop_tt"><span id="late_name_1"></span></span><br/><br/>
+		      <span class="pop_tt"><span id="late_name_2"></span></span><br/><br/> 
+		      <span class="pop_tt" id="late_time"></span> <br/><br/>
 		</span>
 </span>
 </body>
@@ -647,6 +669,26 @@ setInterval(function() {
             document.getElementById('break_time').innerHTML=localStorage.getItem("breakTime");
         } else {
             document.getElementById('pop_break').classList.add("pop_hide");
+        }
+        if (localStorage.getItem("late_running")=='true'){
+            document.getElementById('pop_late').classList.remove("pop_hide");
+            document.getElementById('late_time').innerHTML=localStorage.getItem("lateTime");
+            const missing = localStorage.getItem("late_comp");
+            if (missing % 2) {
+                 document.getElementById('late_name_1').innerHTML= localStorage.getItem("name_1")+" (Bleu)";
+            } else {
+                 document.getElementById('late_name_1').innerHTML="";
+            }
+            if (Math.floor(missing/2)) {
+                document.getElementById('late_name_2').innerHTML= localStorage.getItem("name_2") + " (Blanc)";
+            } else {
+                 document.getElementById('late_name_2').innerHTML="";
+            }
+            
+        } else {
+            document.getElementById('pop_late').classList.add("pop_hide");
+            document.getElementById('late_name_1').innerHTML="";
+            document.getElementById('late_name_2').innerHTML="";
         }
         
 }, 100); 

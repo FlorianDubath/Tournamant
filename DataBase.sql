@@ -497,3 +497,9 @@ ALTER TABLE TournamentAgeCategory ADD COLUMN GS INT NULL DEFAULT -1;
 
 UPDATE TournamentAgeCategory set GS=3 WHERE ShortName IN ('F9','M9','F11','M11','F13','M13');
 
+
+-----------------------------------------
+ALTER TABLE TournamentCompetitor ADD COLUMN Hansokumake TINYINT NOT NULL DEFAULT 0;
+ALTER TABLE Fight ADD COLUMN forfeit1 TINYINT  NULL;
+ALTER TABLE Fight ADD COLUMN forfeit2 TINYINT  NULL;
+ALTER TABLE Fight ADD COLUMN noWinner TINYINT  NULL;
