@@ -546,7 +546,7 @@ echo'
 	                                  INNER JOIN TournamentClub C2 ON C2.Id=TC2.ClubId
 	                                  INNER JOIN ActualCategory ON Fight.ActualCategoryId=ActualCategory.Id
 	                                  
-	                                  WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND pv1 IS NOT NULL
+	                                  WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND pv1 IS NOT NULL AND forfeit1<>1 AND forfeit2<>1 
 	                                  ORDER BY ActualCategory.Name, Fight.Id");
 	                            
            $stmt->bind_param("ii", $Id, $Id);         

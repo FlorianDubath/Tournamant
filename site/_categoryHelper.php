@@ -31,6 +31,7 @@ function create_link($ActualCategory_id, $out_step_id, $step_id_1_id, $rank_1, $
 }
 
 function update_step_direct($step_id, $user_id_1, $user_id_2){
+    $need_recheck=false;
     $mysqli= ConnectionFactory::GetConnection(); 
     
     $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE Id=? AND CategoryStepsTypeId=1");
@@ -41,12 +42,36 @@ function update_step_direct($step_id, $user_id_1, $user_id_2){
     $stmt->close();
     
     if (!empty($r_step_Id)){
-        $mysqli= ConnectionFactory::GetConnection(); 
-        $stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=? WHERE step_id=?");
-        $stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
-        $stmt->execute();
-        $stmt->close();
+        if ($user_id_1<0 && $user_id_2>0) {
+        	$mysqli= ConnectionFactory::GetConnection(); 
+		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0, forfeit1=1, forfeit2=0, noWinner=0 WHERE step_id=?");
+		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
+		$stmt->execute();
+		$stmt->close();
+		$need_recheck=true;
+        } else  if ($user_id_1>0 && $user_id_2<0) {
+                $mysqli= ConnectionFactory::GetConnection(); 
+		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0,  forfeit1=0, forfeit2=1, noWinner=0 WHERE step_id=?");
+		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
+		$stmt->execute();
+		$stmt->close();
+		$need_recheck=true;
+        } else if ($user_id_1<0 && $user_id_2<0) {
+         	$mysqli= ConnectionFactory::GetConnection(); 
+		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0,  forfeit1=1, forfeit2=1, noWinner=1 WHERE step_id=?");
+		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
+		$stmt->execute();
+		$stmt->close();
+		$need_recheck=true;
+        } else {
+		$mysqli= ConnectionFactory::GetConnection(); 
+		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=? WHERE step_id=?");
+		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
+		$stmt->execute();
+		$stmt->close();
+        }
     }
+    return $need_recheck;
 }
 
 
@@ -785,9 +810,6 @@ function check_for_tie($ActualCategoryId) {
 
 
 function check_link($ActualCategoryId) {
-
-  // TODO check for handsokumake
-  // todo  check for no win / forfeit
     check_for_tie($ActualCategoryId);
     update_sorter_step($ActualCategoryId);
     
@@ -812,10 +834,14 @@ function check_link($ActualCategoryId) {
     }
     $stmt->close();
     
+    $need_recheck=false;
     foreach ($links as $link){
-        update_step_direct($link["step_Id"],$link["f1"],$link["f2"]);
+        $need_recheck |= update_step_direct($link["step_Id"],$link["f1"],$link["f2"]);
     }
     
+    if ($need_recheck){
+        check_link($ActualCategoryId);
+    }  
 }
 
 
@@ -923,12 +949,9 @@ function isCatCompleted($ActualCategoryId){
 }
 
 function get_full_result($ActualCategoryId){
-    // todo  check for no win / forfeit
     if (!isCatCompleted($ActualCategoryId)){
-    
         return NULL;
     }
-
 
     $mysqli= ConnectionFactory::GetConnection(); 
     
@@ -996,7 +1019,6 @@ function get_full_result($ActualCategoryId){
         
         return $result; 
     }  
-
 }
 
 function promote_Unique($tc_id_1){
@@ -1255,13 +1277,11 @@ function close_category($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     $result = get_full_result($ActualCategoryId);
     
-    // TODO CHECK for tie due to nowin 
-    
     if (! empty($result)){
     
         $skip_nominal=False;
     
-        // Check for tie =1 in ckĥecktie
+        // Check for tie =1 in cĥecktie
         $stmt = $mysqli->prepare("SELECT Id FROM CategoryStep WHERE ActualCategoryId=?");
         $stmt->bind_param("i", $ActualCategoryId);  
         $stmt->bind_result($id_step);         
@@ -1287,8 +1307,9 @@ function close_category($ActualCategoryId){
 	           $palmares[$cur_rank]=array();
 	           $curr_score=$score;
 	       }
-		   
-	       array_push($palmares[$cur_rank],$comp_id);
+	       if ($comp_id>0)	{   
+	       	   array_push($palmares[$cur_rank],$comp_id);
+	       }
 		   
 	       $counter+=1;
 	    }

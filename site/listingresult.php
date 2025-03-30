@@ -37,7 +37,8 @@ echo '
                        if ( $_SESSION['_IsMainTable']==1) {
                        echo'
                    <a class="pgeBtn" href="results.php" title="PDF Catégories" >PDF Catégories</a>
-                   <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>';
+                   <a class="pgeBtn" href="resultsclub.php" title="PDF Clubs" >PDF Clubs</a>
+                   <a class="pgeBtn" href="pv.php" title="Points Valeurs" >Points Valeurs</a>';
                    }
                    echo'
                </span>

@@ -69,12 +69,13 @@ En cours:
       - affichage count-down dans le miror -ok
    * enregistrement du forfait / hansokumake directe dans la base -ok
    * Adaptation des combats de la catégories pour le hansokumake directe  -ok
-   * Adaptation du calcul des vaicoeurs -- en cours
+   * Adaptation du calcul des vaicoeurs -ok
+   
+   * tenir compte du flag forfait pour le calcul des point valeurs individuels -ok
+   
+   * exports des points valeurs du tournois
    
    * check dans les autres catégorie au chargement + indicateur dans la page des catégories pour la table centrale
-   
-   * tenir compte du flag forfait pour le calcul des point valeurs individuels
-   * exports des points valeurs du tournois
 
 
 A faire :
