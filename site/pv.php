@@ -182,13 +182,28 @@ function makePDF(pdf_name) {
   $step= 12;
   foreach($competitors as $counter => $competitor) {
         if ($position>280){
-             echo ' add_title(doc);
-                    doc.setFontSize(16).setFont("helvetica", "bold");
-                    '; // TODO ADD the header
+             $position= 42;
+             echo " add_title(doc);
+                    doc.setFontSize(16).setFont('helvetica', 'bold');
+                      
+                    doc.text('N°', 30, ".$position.");
+		    doc.text('Nom Prénom', 45, ".$position.");
+	            doc.text('Licence', 85, ".$position.");
+		    doc.text('Club', 100, ".$position.");
+		    doc.text('Combats', 135, ".$position.");
+		    doc.text('Points', 160, ".$position.");
+		    doc.text('Ippons', 180, ".$position.");
+                    "; 
              $position= 55;
         }
         
-        echo "doc.text('".$rank." : ".$surname." ".$name." ". $club."', 30, ".$position.");"; 
+        echo "  doc.text('".$counter."', 30, ".$position.");
+		doc.text('".$competitor["Name"]."', 50, ".$position.");
+		doc.text('".$competitor["License"]."', 90, ".$position.");
+		doc.text('".$competitor["Club"]."', 110, ".$position.");
+		doc.text('".$competitor["FightNumber"]."', 210, ".$position.");
+		doc.text('".$competitor["PV"]."', 230, ".$position.");
+		doc.text('".$competitor["IpponNumber"]."', 250, ".$position.");"; 
         $position=$position + $step;  
   }
      
