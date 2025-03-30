@@ -8,11 +8,6 @@ if ($_SESSION['_IsMainTable']!=1 && $_SESSION['_IsAdmin']!=1) {
 	header('Location: ./index.php');
 }
 
-// TODO change and get the PV
-
-
-$acid = (int)$_GET['acid'];
-
 include '_commonBlock.php';
 writeHead();
 
@@ -33,58 +28,25 @@ writeBand();
     echo'
     
     <div>
-        <span class="h_title">
-               GENERER LES RESULTATS PAR CATEGORIE
-            </span>
-      
-        <form action="./results.php" method="get">
-        <span class="label">Catégorie :</span>
-              <select name="acid"><option value="-1" >Tous</option> <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>';
-               $stmt = $mysqli->prepare(" SELECT 
-                           ActualCategory.Id, 
-                           ActualCategory.Name 
-               FROM ActualCategory 
-               INNER JOIN TournamentCategory ON TournamentCategory.Id = ActualCategory.CategoryId
-               INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
-               INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id
-               ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC");
-      	        $stmt->execute();
-               $stmt->bind_result($ccId,$ccname);
-               while ($stmt->fetch()){
-                  $sel ='';
-                  if ($ccId==$acid) { $sel=' selected ';}
-                  echo '<option value="'.$ccId.'" '.$sel.'>'.$ccname.'</option>';
-               }
-	           $stmt->close();
-               
-               echo'
-                </select>
-        <input class="pgeBtn" type="submit" value="Générer">
-       </form><br/>
+       <span class="h_title">
+           GENERER LA LISTE DES POINTS VALEURS
+       </span>
        <span Id="progress"> </span>
-        <span class="btnBar"> 
-       <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>
+       <span class="btnBar"> 
+           <a class="pgeBtn" href="listingresult.php" title="Fermer" >Fermer</a>
        </span>
     </div>
 
     <div id="print" style="display:none;">
          <img id="logo_lt" src="css/Logo_ACG_JJJ_light.png"></img>
-         <img id="gold" src="css/gold.png"></img>
-         <img id="silver" src="css/silver.png"></img>
-         <img id="bronze" src="css/bronze.png"></img>
     </div>
-    
-    </div>
-    </div>
-    </div>
+   </div>
+  </div>
+ </div>
 ';
-
-if (!empty($acid)) {
-
-  
 $stmt = $mysqli->prepare("SELECT Name, TournamentStart,TournamentEnd FROM TournamentVenue order by Id desc limit 1");
-$stmt->execute();
 $stmt->bind_result( $trName,$TournamentStart,$TournamentEnd);
+$stmt->execute();
 $stmt->fetch();
 $stmt->close();
 
@@ -93,10 +55,81 @@ if ($TournamentStart!=$TournamentEnd) {
     $date_txt =  $date_txt.' - '. formatDate($TournamentEnd);
 }
 
-$where_clause='';
-if($acid>0 ) {	
-     $where_clause=" WHERE ActualCategoryResult.ActualCategoryId=".$acid." ";
+$stmt = $mysqli->prepare("SELECT
+			    TournamentCompetitor.Id,
+			    TournamentCompetitor.Name,
+			    TournamentCompetitor.Surname,
+			    TournamentCompetitor.LicenceNumber,
+			    TournamentClub.Name
+			  FROM TournamentCompetitor
+			  INNER JOIN TournamentClub on TournamentClub.Id = TournamentCompetitor.ClubId
+			  INNER JOIN TournamentGrade on TournamentGrade.Id = TournamentCompetitor.GradeId
+			  WHERE TournamentGrade.CollectVP=1 
+			  ORDER BY TournamentCompetitor.Surname, TournamentCompetitor.Name");
+$stmt->execute();
+$stmt->bind_result( $cid,$name,$surname,$licenceNumber,$club);
+
+$competitors = array();
+$counter = 0;
+while ($stmt->fetch()){
+    $competitors[$counter] = array(
+				    "Id"  => $cid,
+				    "Name" => $surname." ".$name,
+				    "License" => $licenceNumber,
+				    "Club" => $club,
+				    "FightNumber" => 0,
+				    "PV" => 0,
+				    "IpponNumber" => 0
+				);
+    $counter += 1;
 }
+$stmt->close();
+
+
+$stmt = $mysqli->prepare(" SELECT 
+                                 G1.CollectVP + G2.CollectVP,
+                                 TC1.Id,
+                                 pv1,
+                                 TC2.Id,
+                                 pv2,
+                         FROM Fight
+                         INNER JOIN TournamentCompetitor TC1 ON TournamentCompetitor1Id = TC1.Id
+                         INNER JOIN TournamentCompetitor TC2 ON TournamentCompetitor2Id = TC2.Id
+                         INNER JOIN TournamentGrade G1 ON TC1.GradeId = G1.Id
+                         INNER JOIN TournamentGrade G2 ON TC2.GradeId = G2.Id
+                         WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND 
+                         pv1 IS NOT NULL AND forfeit1<>1 AND forfeit2<>1 
+                         ORDER BY TC1.Id, TC2.Id 
+                         ");   
+$stmt->execute();
+$stmt->bind_result($collect,$tc1, $pv1, $tc2, $pv2);
+
+while ($stmt->fetch()){
+    foreach($competitors as $counter => $competitor) {
+        if ($competitor["Id"]==$tc1){
+            $competitor["FightNumber"]+=1;
+            if ($collect==2 && $pv1 > $pv2){
+               $competitor["PV"]+=$pv1;
+               if ($pv1 == 10){
+                   $competitor["IpponNumber"]+=1;
+               }
+            }
+        } else if ($competitor["Id"]==$tc2){
+            $competitor["FightNumber"]+=1;
+            if ($collect==2 && $pv1 < $pv2){
+               $competitor["PV"]+=$pv2;
+               if ($pv2 == 10){
+                   $competitor["IpponNumber"]+=1;
+               }
+            }
+        }
+    }
+}
+$stmt->close();
+
+
+
+$pdf_name="Liste des Points Valeurs.pdf";
 
 echo'
 </body>
@@ -143,77 +176,22 @@ function add_title(doc){
 
 function makePDF(pdf_name) {
 
-  var doc = new jsPDF({format: \'a4\',orientation:\'p\'});
-  var imgGold = wrapImgData(getImgData("gold"));
-  var imgSilver = wrapImgData(getImgData("silver"));
-  var imgBronze = wrapImgData(getImgData("bronze"));';
-  
-     $stmt = $mysqli->prepare("select distinct
-                                 ActualCategory.Id,
-                                 ActualCategory.Name,
-                                 ActualCategoryResult.RankId,
-                                 ActualCategoryResult.Medal,
-                                 TournamentCompetitor.Name,
-                                 TournamentCompetitor.Surname,
-                                 TournamentClub.Name
-                             from ActualCategoryResult
-                             INNER JOIN ActualCategory ON ActualCategory.Id=ActualCategoryResult.ActualCategoryId
-                             INNER JOIN TournamentCompetitor ON TournamentCompetitor.Id = ActualCategoryResult.Competitor1Id
-                             INNER JOIN TournamentClub on TournamentClub.Id=TournamentCompetitor.ClubId
-                             INNER JOIN TournamentCategory ON TournamentCategory.Id = ActualCategory.CategoryId
-                             INNER JOIN TournamentAgeCategory ON TournamentAgeCategory.Id = TournamentCategory.AgeCategoryId
-                             INNER JOIN TournamentWeighting ON TournamentWeighting.AgeCategoryId = TournamentAgeCategory.Id
-                             ".$where_clause."
-                             ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, TournamentAgeCategory.GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC, ActualCategoryResult.RankId ASC;
-                           ");
-     $stmt->bind_result( $acat_id, $agcat_name,$rank,$medal,$name,$surname,$club);
-     $stmt->execute();
-     
-     
-     
-    
-     $current_cat ='';
-     $position= 55;
-     $step= 12;
-     
-     
-     while ($stmt->fetch()){
-         
-         if ( $current_cat!=$agcat_name){
-               if ( $current_cat!=''){
-                   echo ' doc.addPage();';
-               } 
-              
-               echo ' add_title(doc);
-                      doc.setFontSize(18).setFont("helvetica", "bold");
-                      doc.text(\''.$agcat_name.'\', doc.internal.pageSize.width/2, 35, {align: \'center\'});
-                      doc.setFontSize(16).setFont("helvetica", "bold");'; 
-              $position= 55;
-              $current_cat=$agcat_name;
+  var doc = new jsPDF({format: \'a4\',orientation:\'p\'});';
+ 
+  $position= 290;
+  $step= 12;
+  foreach($competitors as $counter => $competitor) {
+        if ($position>280){
+             echo ' add_title(doc);
+                    doc.setFontSize(16).setFont("helvetica", "bold");
+                    '; // TODO ADD the header
+             $position= 55;
         }
         
-        
-       if ($medal==1){
-          echo 'doc.addImage(imgGold, "PNG", 22, '.($position-6).', 5, 8);';
-       } else if ($medal==2){
-          echo 'doc.addImage(imgSilver, "PNG", 22, '.($position-6).', 5, 8);';
-       } else if ($medal==3){
-          echo 'doc.addImage(imgBronze, "PNG", 22, '.($position-6).', 5, 8);';
-       } 
-        
         echo "doc.text('".$rank." : ".$surname." ".$name." ". $club."', 30, ".$position.");"; 
-       
-        $position=$position + $step;
-     }
-     $stmt->close();
-              
-    $pdf_name="Résultats_Globaux.pdf";
-    if ($where_clause!='') {
-        $pdf_name="Résultats_".$current_cat.".pdf";
-    }
-
-  
-  
+        $position=$position + $step;  
+  }
+     
  echo' 
     doc.save(pdf_name);
 }
@@ -222,7 +200,7 @@ function makePDF(pdf_name) {
 
 </script>';
 
-}
+
 echo '
 </html>';
 
