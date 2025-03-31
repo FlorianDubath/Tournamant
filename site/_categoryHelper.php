@@ -43,32 +43,28 @@ function update_step_direct($step_id, $user_id_1, $user_id_2){
     
     if (!empty($r_step_Id)){
         if ($user_id_1<0 && $user_id_2>0) {
-        	$mysqli= ConnectionFactory::GetConnection(); 
-		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0, forfeit1=1, forfeit2=0, noWinner=0 WHERE step_id=?");
-		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
-		$stmt->execute();
-		$stmt->close();
-		$need_recheck=true;
+		    $stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor2Id=?, pv1=0, pv2=0, forfeit1=1, forfeit2=0, noWinner=0 WHERE step_id=?");
+		    $stmt->bind_param("ii", $user_id_2, $step_id);         
+		    $stmt->execute();
+		    $stmt->close();
+		    $need_recheck=true;
         } else  if ($user_id_1>0 && $user_id_2<0) {
-                $mysqli= ConnectionFactory::GetConnection(); 
-		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0,  forfeit1=0, forfeit2=1, noWinner=0 WHERE step_id=?");
-		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
-		$stmt->execute();
-		$stmt->close();
-		$need_recheck=true;
+		    $stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, pv1=0, pv2=0,  forfeit1=0, forfeit2=1, noWinner=0 WHERE step_id=?");
+		    $stmt->bind_param("ii", $user_id_1, $step_id);         
+		    $stmt->execute();
+		    $stmt->close();
+		    $need_recheck=true;
         } else if ($user_id_1<0 && $user_id_2<0) {
-         	$mysqli= ConnectionFactory::GetConnection(); 
-		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=?, pv1=0, pv2=0,  forfeit1=1, forfeit2=1, noWinner=1 WHERE step_id=?");
-		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
-		$stmt->execute();
-		$stmt->close();
-		$need_recheck=true;
+		    $stmt = $mysqli->prepare("UPDATE Fight SET pv1=0, pv2=0,  forfeit1=1, forfeit2=1, noWinner=1 WHERE step_id=?");
+		    $stmt->bind_param("i", $step_id);         
+		    $stmt->execute();
+		    $stmt->close();
+		    $need_recheck=true;
         } else {
-		$mysqli= ConnectionFactory::GetConnection(); 
-		$stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=? WHERE step_id=?");
-		$stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
-		$stmt->execute();
-		$stmt->close();
+		    $stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor1Id=?, TournamentCompetitor2Id=? WHERE step_id=?");
+		    $stmt->bind_param("iii", $user_id_1, $user_id_2, $step_id);         
+		    $stmt->execute();
+		    $stmt->close();
         }
     }
     return $need_recheck;
@@ -365,16 +361,17 @@ function create_steps_11($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[5], $user_ids[8], 'Groupe C');
     
     
-    $resolve_3 = create_resolver_3($ActualCategoryId,'Sorting');
-    create_link($ActualCategoryId, $resolve_3, $pool_1, 1, $pool_1, 2);
-    create_link($ActualCategoryId, $resolve_3, $pool_2, 1, $pool_2, 2);
-    create_link($ActualCategoryId, $resolve_3, $pool_3, 1, $pool_3, 2);
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_3, 2, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_1, 2);
     
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $resolve_3, 1, $resolve_3, 3);
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $quarter_1, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $resolve_3, 2, $resolve_3, 4);
+    create_link($ActualCategoryId, $half_2, $pool_2, 1, $quarter_2, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -386,11 +383,23 @@ function create_steps_12($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
     $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -402,12 +411,23 @@ function create_steps_13($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
     $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
     
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
-    
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
@@ -418,11 +438,23 @@ function create_steps_14($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_3($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], 'Groupe C');
     $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe D');
     
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -434,11 +466,23 @@ function create_steps_15($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
     $pool_4=create_step_pool_3($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], 'Groupe C');
     
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -450,11 +494,23 @@ function create_steps_16($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
     $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -466,11 +522,23 @@ function create_steps_17($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
     $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -482,11 +550,23 @@ function create_steps_18($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_4($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], 'Groupe C');
     $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -498,11 +578,23 @@ function create_steps_19($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_5($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], $user_ids[18], 'Groupe C');
     $pool_4=create_step_pool_4($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
@@ -514,11 +606,23 @@ function create_steps_20($ActualCategoryId, $user_ids) {
     $pool_3=create_step_pool_5($ActualCategoryId, $user_ids[2], $user_ids[6], $user_ids[10], $user_ids[14], $user_ids[18], 'Groupe C');
     $pool_4=create_step_pool_5($ActualCategoryId, $user_ids[3], $user_ids[7], $user_ids[11], $user_ids[15], $user_ids[19], 'Groupe D');
 
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_1, $pool_1, 1, $pool_2, 2);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_2, $pool_3, 1, $pool_4, 2); 
+    
+    $quarter_1=create_step_direct($ActualCategoryId,'Quart 1');
+    create_link($ActualCategoryId, $quarter_3, $pool_1, 2, $pool_2, 1);
+    
+    $quarter_2=create_step_direct($ActualCategoryId,'Quart 2');
+    create_link($ActualCategoryId, $quarter_4, $pool_3, 2, $pool_4, 1);
+
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_3, 1);
+    create_link($ActualCategoryId, $half_1, $quarter_1, 1, $quarter_2, 1);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_2, 1, $pool_4, 1);
+    create_link($ActualCategoryId, $half_2, $quarter_3, 1, $quarter_4, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
