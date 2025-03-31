@@ -332,35 +332,28 @@ function create_steps_8($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $
 }
 
 function create_steps_9($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9) {
-    $pool_1=create_step_pool_3($ActualCategoryId, $user_id_1, $user_id_4, $user_id_7, 'Groupe A');
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_5, $user_id_8, 'Groupe B');
-    $pool_3=create_step_pool_3($ActualCategoryId, $user_id_3, $user_id_6, $user_id_9, 'Groupe C');
-    
-    $resolve_3 = create_resolver_3($ActualCategoryId,'Sorting');
-    create_link($ActualCategoryId, $resolve_3, $pool_1, 1, $pool_1, 2);
-    create_link($ActualCategoryId, $resolve_3, $pool_2, 1, $pool_2, 2);
-    create_link($ActualCategoryId, $resolve_3, $pool_3, 1, $pool_3, 2);
-    
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9, 'Groupe A');
+    $pool_2=create_step_pool_4($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8,  'Groupe B');
+  
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $resolve_3, 1, $resolve_3, 3);
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $resolve_3, 2, $resolve_3, 4);
+    create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
 }
 
 function create_steps_10($ActualCategoryId, $user_id_1, $user_id_2, $user_id_3, $user_id_4, $user_id_5, $user_id_6, $user_id_7, $user_id_8, $user_id_9, $user_id_10) {
-    $pool_1=create_step_pool_4($ActualCategoryId, $user_id_1, $user_id_4, $user_id_7, $user_id_10, 'Groupe A');
-    $pool_2=create_step_pool_3($ActualCategoryId, $user_id_2, $user_id_5, $user_id_8, 'Groupe B');
-    $pool_3=create_step_pool_3($ActualCategoryId, $user_id_3, $user_id_6, $user_id_9, 'Groupe C');
-    
+    $pool_1=create_step_pool_5($ActualCategoryId, $user_id_1, $user_id_3, $user_id_5, $user_id_7, $user_id_9, 'Groupe A');
+    $pool_2=create_step_pool_5($ActualCategoryId, $user_id_2, $user_id_4, $user_id_6, $user_id_8, $user_id_10,  'Groupe B');
+  
     $half_1=create_step_direct($ActualCategoryId,'Demi-Finale 1');
-    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 1);
+    create_link($ActualCategoryId, $half_1, $pool_1, 1, $pool_2, 2);
     
     $half_2=create_step_direct($ActualCategoryId,'Demi-Finale 2');
-    create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_3, 1);
+    create_link($ActualCategoryId, $half_2, $pool_1, 2, $pool_2, 1);
     
     $final=create_step_direct($ActualCategoryId,'Finale');
     create_link($ActualCategoryId, $final, $half_1, 1, $half_2, 1);
