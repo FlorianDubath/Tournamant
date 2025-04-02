@@ -582,7 +582,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
-                                 TournamentCompetitor.Birth, 
+                                 TournamentCompetitor.Birth,  
+                                 TournamentCompetitor.Hansokumake,
                                  TournamentClub.Name, 
                                  TournamentGrade.Name,
                                  TournamentCompetitor.LicenceNumber
@@ -594,7 +595,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                              WHERE  ActualCategory.Id=?
                              ORDER BY TournamentCompetitor.Surname, TournamentCompetitor.Name");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence);
+     $stmt->bind_result( $strId, $Surname, $Name, $Birth, $hmd, $Club, $Grade, $licence);
      $stmt->execute();
      
      while ($stmt->fetch()){
@@ -609,7 +610,11 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       <td>'. $Club.'</td>
       <td>'.$Grade.'</td>
       <td>'. $licence.'</td>
-      <td><a href="card.php?sid='.$strId.'" target="_blancK">Carte</a></td>
+      <td>';
+      if ($hmd>0){
+               echo '<span title="Hansoku-Make Direct">&#x26A0;</span>&nbsp;';
+      }
+      echo '<a href="card.php?sid='.$strId.'" target="_blancK">Carte</a></td>
       </tr>';
 
      }

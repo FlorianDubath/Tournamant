@@ -49,19 +49,21 @@ Changé et testé:
    
 A tester:
 ---------
+- [Changement] Scoreboard indépendant (ScoreBoard.html) remonter le prochain combat dans combat à la fin du combat.
 
-- score board indépendent=> remonter le prochain combat dans combat à la fin du combat
+- [Changement] Modifier le système de combat (cf feuille). + changer display (_categoryHelper.php, _visualizationHelper.php)
 
-- Revoir et Modifier les systèmes de combats (cf feuille). + changer display 
+- [Changement] hansekoumate directe (avec confirmation => élimination du tournois)
 
-En cours:
----------
-- hansekoumate directe (avec confirmation => élimination du tournois)
-- forfait : ne pas tenir compte du combat pour les points
-- 2 forfaits après le début des combats
-- règle des 30"
-- exporter liste des point valeurs (nom prénom grade club liscence #combat pv #ipon) => pdf
+- [Changement] Ajouter les forfait + ne pas tenir compte du combat pour les points
 
+- [Changement] 2 forfaits après le début des combats
+
+- [Changement] Ajouter la règle des 30" + forfait automatique
+
+- [Changement] Exporter liste des point valeurs (nom prénom grade club liscence #combat pv #ipon) => pdf
+
+En particulier:
    * DB ajout d'un flag sur le compétiteur pour le hansokumake, de flag forfait pour chaque combattant et d'un pas de vaincoeur sur les combats  -ok
    * Adapter le score bord pour:
       - ajouter les boutons "Compétiteur appelé en retard", "forfaits" et  "Hansokumake directe"  -ok
@@ -77,18 +79,18 @@ En cours:
    
    * exports des points valeurs du tournois -ok
    
-   * check dans les autres catégorie au chargement + indicateur dans la page des catégories pour la table centrale
+   * check dans les autres catégorie au chargement + indicateur dans la page des catégories pour la table centrale -ok
 
 
 A faire :
 ---------
-
 
 - rang des participants au dela de 1,2,3  (cat +res +pdf)
 
 - intégrer plusieurs systèmes (open)
 
 - catégorie manuelle: ajouter les combats + fermer la catégorie + ajouter classement
+
 - édition manuelle des classements 
 
 - delais entre l'heure annoncée de fin de la pesée et la fin effective (10 min)

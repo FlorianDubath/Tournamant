@@ -44,6 +44,7 @@ echo '
                                  IFNULL(-TournamentCategory.MaxWeight, IFNULL(TournamentCategory.MinWeight,'OPEN')),
                                  ActualCategory.Id,
                                  ActualCategory.IsCompleted,
+                                 V_HMD_ActualCategory.HMD,
                                  TournamentWeighting.WeightingEnd, 
                                  count(DISTINCT V2.CompetitorId), 
                                  count(DISTINCT V3.CompetitorId) 
@@ -54,6 +55,7 @@ echo '
                              LEFT OUTER JOIN V_Category V2 on TournamentCategory.id = V2.CategoryId
                              LEFT OUTER JOIN V_Category V3 on TournamentCategory.Id = V3.CategoryId  AND V3.WeightChecked=1
                              LEFT OUTER JOIN ActualCategory ON TournamentCategory.Id=ActualCategory.CategoryId 
+                             LEFT OUTER JOIN V_HMD_ActualCategory ON V_HMD_ActualCategory.ActualCategoryId=ActualCategory.Id 
                              
                              GROUP BY TournamentCategory.Id, 
                                  TournamentAgeCategory.Name,
@@ -63,10 +65,11 @@ echo '
                                  TournamentCategory.MaxWeight,                                
                                  ActualCategory.Id,
                                  ActualCategory.IsCompleted,
+                                 V_HMD_ActualCategory.HMD,
                                  TournamentWeighting.WeightingEnd
                                  ORDER bY TournamentWeighting.WeightingEnd, TournamentAgeCategory.MinAge ASC, GenderId ASC, IFNULL(MaxWeight, 100+MinWeight) ASC;
                            ");
-     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_gen,$weight, $a_cat_id,$a_cat_comp, $weighting_end, $total, $weighted);
+     $stmt->bind_result( $catId, $cat_n,$cat_sn,$cat_gen,$weight, $a_cat_id,$a_cat_comp, $hmd, $weighting_end, $total, $weighted);
      $stmt->execute();
      
      
@@ -115,6 +118,9 @@ echo '
          if ($a_cat_comp and $a_cat_comp==1){
              echo 'Terminée';
          } else if ($a_cat_id and $a_cat_id>0){
+            if ($hmd>0){
+               echo '<span title="Au moin 1 compétiteur à reçu un Hansoku-Make Direct">&#x26A0;</span>&nbsp;';
+            }
              echo 'En cours';
          }  else if ($now > $w_end && $_SESSION['_IsMainTable']==1 ) {
             if ($weighted>0) {

@@ -503,3 +503,16 @@ ALTER TABLE TournamentCompetitor ADD COLUMN Hansokumake TINYINT NOT NULL DEFAULT
 ALTER TABLE Fight ADD COLUMN forfeit1 TINYINT  NULL;
 ALTER TABLE Fight ADD COLUMN forfeit2 TINYINT  NULL;
 ALTER TABLE Fight ADD COLUMN noWinner TINYINT  NULL;
+
+
+CREATE VIEW V_HMD_ActualCategory AS
+SELECT 
+	ActualCategory.Id AS ActualCategoryId,
+	count(TournamentCompetitor.Id) AS HMD
+FROM ActualCategory
+INNER JOIN TournamentRegistration 
+	ON TournamentRegistration.CategoryId=ActualCategory.CategoryId OR TournamentRegistration.CategoryId=ActualCategory.Category2Id 
+INNER JOIN TournamentCompetitor 
+	ON TournamentCompetitor.Id=TournamentRegistration.CompetitorId
+WHERE TournamentCompetitor.Hansokumake == 1 
+GROUP BY ActualCategory.Id
