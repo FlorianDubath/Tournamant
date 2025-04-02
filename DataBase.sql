@@ -514,5 +514,5 @@ INNER JOIN TournamentRegistration
 	ON TournamentRegistration.CategoryId=ActualCategory.CategoryId OR TournamentRegistration.CategoryId=ActualCategory.Category2Id 
 INNER JOIN TournamentCompetitor 
 	ON TournamentCompetitor.Id=TournamentRegistration.CompetitorId
-WHERE TournamentCompetitor.Hansokumake == 1 
-GROUP BY ActualCategory.Id
+WHERE TournamentCompetitor.Hansokumake = 1 
+GROUP BY ActualCategory.Id;

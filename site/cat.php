@@ -643,7 +643,10 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  Fight.Id,
                                  CategoryStep.Name,
                                  Fight.pv1,
+                                 Fight.forfeit1,
                                  Fight.pv2,
+                                 Fight.forfeit2,
+                                 Fight.noWinner,
                                  TC1.Surname,
                                  TC1.Name, 
                                  TC2.Surname,
@@ -659,7 +662,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                              
                              
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
+     $stmt->bind_result( $f_id, $step_name, $pv1, $ff1, $pv2, $ff2, $nowin, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
      $stmt->execute();
      
     
@@ -671,14 +674,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
          }
      
          $row_value='';
-         if (empty($Surname1) || empty($Surname2)) {
+         if (empty($Surname1) && empty($Surname2)) {
            $row_value =' <tr >
                   <td>'. $step_name.' '.$tb_s.'</td>
                   <td></td>
                   <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
-         } else if (empty($pv1) && empty($pv2)){
+         } else if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin)){
            $row_value = ' <tr >
                   <td>'. $step_name.' '.$tb_s.'</td>
                   <td>';
@@ -811,9 +814,13 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
          } else { 
            $cl_1="VIC";
            $cl_2="LOS";
-           if ($pv2>0){
+           if ($pv2>0 || $ff1>0){
               $cl_1="LOS";
               $cl_2="VIC";
+           }
+           if ($nowin){
+              $cl_1="LOS";
+              $cl_2="LOS";
            }
            $row_value = ' <tr > 
                   <td>'. $step_name.' '.$tb_s;   
@@ -1299,7 +1306,7 @@ function forfeit() {
     document.getElementById("hidden_ff2").value=two_forfeit?1:0;
     document.getElementById("hidden_hmd1").value=0;
     document.getElementById("hidden_hmd2").value=0;
-    document.getElementById("noWin").value=(one_forfeit && two_forfeit)?1:0;
+    document.getElementById("hidden_nw").value=(one_forfeit && two_forfeit)?1:0;
     document.getElementById("hidden_btn").click();
     close_pop("pop_forfeit");
 }
@@ -1321,7 +1328,7 @@ function hmd() {
     document.getElementById("hidden_ff2").value=0;
     document.getElementById("hidden_hmd1").value=one_hmd?1:0;
     document.getElementById("hidden_hmd2").value=two_hmd?1:0;
-    document.getElementById("noWin").value = one_hmd && two_hmd;
+    document.getElementById("hidden_nw").value = one_hmd && two_hmd;
     document.getElementById("hidden_btn").click();
     
     close_pop("pop_hmd");

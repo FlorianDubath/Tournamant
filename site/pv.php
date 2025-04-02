@@ -86,40 +86,40 @@ while ($stmt->fetch()){
 $stmt->close();
 
 
+
 $stmt = $mysqli->prepare(" SELECT 
                                  G1.CollectVP + G2.CollectVP,
                                  TC1.Id,
                                  pv1,
                                  TC2.Id,
-                                 pv2,
+                                 pv2
                          FROM Fight
                          INNER JOIN TournamentCompetitor TC1 ON TournamentCompetitor1Id = TC1.Id
                          INNER JOIN TournamentCompetitor TC2 ON TournamentCompetitor2Id = TC2.Id
                          INNER JOIN TournamentGrade G1 ON TC1.GradeId = G1.Id
                          INNER JOIN TournamentGrade G2 ON TC2.GradeId = G2.Id
-                         WHERE (TournamentCompetitor1Id = ? OR TournamentCompetitor2Id = ?) AND 
-                         pv1 IS NOT NULL AND forfeit1<>1 AND forfeit2<>1 
+                         WHERE pv1 IS NOT NULL AND forfeit1<>1 AND forfeit2<>1 
                          ORDER BY TC1.Id, TC2.Id 
                          ");   
-$stmt->execute();
 $stmt->bind_result($collect,$tc1, $pv1, $tc2, $pv2);
+$stmt->execute();
 
 while ($stmt->fetch()){
     foreach($competitors as $counter => $competitor) {
         if ($competitor["Id"]==$tc1){
-            $competitor["FightNumber"]+=1;
+            $competitors[$counter]["FightNumber"]+=1;
             if ($collect==2 && $pv1 > $pv2){
-               $competitor["PV"]+=$pv1;
+               $competitors[$counter]["PV"]+=$pv1;
                if ($pv1 == 10){
-                   $competitor["IpponNumber"]+=1;
+                   $competitors[$counter]["IpponNumber"]+=1;
                }
             }
         } else if ($competitor["Id"]==$tc2){
-            $competitor["FightNumber"]+=1;
+            $competitors[$counter]["FightNumber"]+=1;
             if ($collect==2 && $pv1 < $pv2){
-               $competitor["PV"]+=$pv2;
+               $competitors[$counter]["PV"]+=$pv2;
                if ($pv2 == 10){
-                   $competitor["IpponNumber"]+=1;
+                   $competitors[$counter]["IpponNumber"]+=1;
                }
             }
         }
@@ -168,9 +168,9 @@ function add_title(doc){
   doc.addImage(imgAddData, "PNG", doc.internal.pageSize.width/2-60,doc.internal.pageSize.height/2-60, 120, 120);
   
   doc.setFontSize(16).setFont("helvetica", "bold");
-  doc.text(\''.$trName.'\', doc.internal.pageSize.width/2, 12, {align: \'center\'});
+  doc.text(\''.$trName.'\', doc.internal.pageSize.width/2, 20, {align: \'center\'});
   doc.setFontSize(16).setFont("helvetica", "normal");
-  doc.text(\''.$date_txt.'\', doc.internal.pageSize.width/2,  20, {align: \'center\'});
+  doc.text(\''.$date_txt.'\', doc.internal.pageSize.width/2,  28, {align: \'center\'});
   doc.setFontSize(14).setFont("helvetica", "normal");
 }
 
@@ -178,33 +178,54 @@ function makePDF(pdf_name) {
 
   var doc = new jsPDF({format: \'a4\',orientation:\'p\'});';
  
-  $position= 290;
   $step= 12;
+  $position= 42;
+             echo " add_title(doc);
+                    doc.setFontSize(12).setFont('helvetica', 'bold');
+                      
+                    doc.text('N°', 14, ".$position.");
+		    doc.text('Nom Prénom', 25, ".$position.");
+	            doc.text('Licence', 68, ".$position.");
+		    doc.text('Club', 90, ".$position.");
+		    doc.text('Combats', 142, ".$position.");
+		    doc.text('Points', 166, ".$position.");
+		    doc.text('Ippons', 185, ".$position.");
+		    
+             doc.setFontSize(12).setFont('helvetica', 'normal');
+                    "; 
+             $position= 55;
+             $pos=0;
   foreach($competitors as $counter => $competitor) {
         if ($position>280){
+             echo " doc.addPage(); ";
              $position= 42;
              echo " add_title(doc);
-                    doc.setFontSize(16).setFont('helvetica', 'bold');
+                    doc.setFontSize(12).setFont('helvetica', 'bold');
                       
-                    doc.text('N°', 30, ".$position.");
-		    doc.text('Nom Prénom', 45, ".$position.");
-	            doc.text('Licence', 85, ".$position.");
-		    doc.text('Club', 100, ".$position.");
-		    doc.text('Combats', 135, ".$position.");
-		    doc.text('Points', 160, ".$position.");
-		    doc.text('Ippons', 180, ".$position.");
+                    doc.text('N°', 14, ".$position.");
+		    doc.text('Nom Prénom', 25, ".$position.");
+	            doc.text('Licence', 68, ".$position.");
+		    doc.text('Club', 90, ".$position.");
+		    doc.text('Combats', 142, ".$position.");
+		    doc.text('Points', 166, ".$position.");
+		    doc.text('Ippons', 185, ".$position.");
+		    
+             doc.setFontSize(12).setFont('helvetica', 'normal');
                     "; 
              $position= 55;
         }
         
-        echo "  doc.text('".$counter."', 30, ".$position.");
-		doc.text('".$competitor["Name"]."', 50, ".$position.");
-		doc.text('".$competitor["License"]."', 90, ".$position.");
-		doc.text('".$competitor["Club"]."', 110, ".$position.");
-		doc.text('".$competitor["FightNumber"]."', 210, ".$position.");
-		doc.text('".$competitor["PV"]."', 230, ".$position.");
-		doc.text('".$competitor["IpponNumber"]."', 250, ".$position.");"; 
-        $position=$position + $step;  
+        if ($competitor["FightNumber"]>0){
+            echo "  doc.text('".($pos+1)."', 17, ".$position.", {align: 'right',});
+		    doc.text('".$competitor["Name"]."', 25, ".$position.");
+		    doc.text('".$competitor["License"]."', 84, ".$position.", {align: 'right',});
+		    doc.text('".$competitor["Club"]."', 90, ".$position.");
+		    doc.text('".$competitor["FightNumber"]."', 160, ".$position.", {align: 'right',});
+		    doc.text('".$competitor["PV"]."', 177, ".$position.", {align: 'right',});
+		    doc.text('".$competitor["IpponNumber"]."', 193, ".$position.", {align: 'right',});"; 
+            $position=$position + $step;  
+            $pos+=1;
+        }
   }
      
  echo' 

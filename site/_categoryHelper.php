@@ -41,7 +41,14 @@ function update_step_direct($step_id, $user_id_1, $user_id_2){
     $stmt->fetch(); 
     $stmt->close();
     
-    if (!empty($r_step_Id)){
+    $stmt = $mysqli->prepare("SELECT count(Id) FROM Fight WHERE step_id=? AND noWinner IS NULL");
+    $stmt->bind_param("i", $step_id);   
+    $stmt->bind_result( $to_update);
+    $stmt->execute();
+    $stmt->fetch(); 
+    $stmt->close();
+    
+    if (!empty($r_step_Id) &&  $to_update==1){
         if ($user_id_1<0 && $user_id_2>0) {
 		    $stmt = $mysqli->prepare("UPDATE Fight SET TournamentCompetitor2Id=?, pv1=0, pv2=0, forfeit1=1, forfeit2=0, noWinner=0 WHERE step_id=?");
 		    $stmt->bind_param("ii", $user_id_2, $step_id);         
@@ -642,6 +649,16 @@ function get_list_from_val($exp_val,$dict){
 function get_step_results($step_id){
     $mysqli= ConnectionFactory::GetConnection(); 
     
+    $stmt = $mysqli->prepare("SELECT count(Id) FROM Fight WHERE step_id=? and pv1 IS NULL");
+    $stmt->bind_param("i", $step_id);         
+    $stmt->bind_result($missing_fight);     
+    $stmt->execute();  
+    $stmt->fetch();
+    $stmt->close();
+    if ($missing_fight>0){
+        return array("ordered"=>Null,"full"=>Null);
+    }
+    
     $stmt = $mysqli->prepare("SELECT CategoryStepsTypeId FROM CategoryStep WHERE Id=?");
     $stmt->bind_param("i", $step_id);         
     $stmt->bind_result($step_type);     
@@ -653,15 +670,15 @@ function get_step_results($step_id){
         //direct step 
         $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id, pv1, forfeit1, TournamentCompetitor2Id, pv2, forfeit2, noWinner FROM Fight WHERE step_id=?");
         $stmt->bind_param("i", $step_id);         
-        $stmt->bind_result($TournamentCompetitor1Id, $pv1, $ff1, $TournamentCompetitor2Id, $pv2, $ff2);     
+        $stmt->bind_result($TournamentCompetitor1Id, $pv1, $ff1, $TournamentCompetitor2Id, $pv2, $ff2, $noWinner);     
         $stmt->execute();  
         $stmt->fetch();
         $stmt->close();
-        if (noWinner==1){
+        if ($noWinner==1){
                 return array("ordered"=>array(1=>-1, 2=>-1),"full"=>array(1=>-1, 2=>-1));
-        } else if ($pv1>0 || forfeit2==1){
+        } else if ($pv1>0 || $forfeit2==1){
                 return array("ordered"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id),"full"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id));
-        } else if ($pv2>0 || forfeit1==1){
+        } else if ($pv2>0 || $forfeit1==1){
                 return array("ordered"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id),"full"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id));
         } else {
                 return array("ordered"=>NULL,"full"=>NULL);
@@ -669,6 +686,7 @@ function get_step_results($step_id){
         
     } else if ($step_type<10) {
         // pool step  
+  
         $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id,pv1, forfeit1,TournamentCompetitor2Id,pv2, forfeit2, TieBreakFight, noWinner FROM Fight WHERE step_id=?");
         $stmt->bind_param("i", $step_id);         
         $stmt->bind_result($TournamentCompetitor1Id, $pv1, $ff1, $TournamentCompetitor2Id, $pv2, $ff2, $tb, $nowin);     
@@ -676,23 +694,22 @@ function get_step_results($step_id){
         $results = array();
         // victory and PV
         while ($stmt->fetch()) {
-            if (empty($nowin)){
-                return array("ordered"=>NULL,"full"=>NULL);
-            }
-            if (!array_key_exists($TournamentCompetitor1Id, $results)){
-                $results[$TournamentCompetitor1Id]=0;
-            }
-            
-            if (!array_key_exists($TournamentCompetitor2Id, $results)){
-                $results[$TournamentCompetitor2Id]=0;
-            }
-            
-            if ($tb==0) {
-                $results[$TournamentCompetitor1Id] += 1000000000*(int)($pv1>0 || $ff2==1)+1000000*$pv1;
-                $results[$TournamentCompetitor2Id] += 1000000000*(int)($pv2>0 || $ff1==1)+1000000*$pv2;
-            } else {
-                $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0 || $ff2==1)+10*$pv1;
-                $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0 || $ff1==1)+10*$pv2;
+            if ($nowin==0){
+                if (!array_key_exists($TournamentCompetitor1Id, $results)){
+                    $results[$TournamentCompetitor1Id]=0;
+                }
+                
+                if (!array_key_exists($TournamentCompetitor2Id, $results)){
+                    $results[$TournamentCompetitor2Id]=0;
+                }
+                
+                if ($tb==0) {
+                    $results[$TournamentCompetitor1Id] += 1000000000*(int)($pv1>0 || $ff2==1)+1000000*$pv1;
+                    $results[$TournamentCompetitor2Id] += 1000000000*(int)($pv2>0 || $ff1==1)+1000000*$pv2;
+                } else {
+                    $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0 || $ff2==1)+10*$pv1;
+                    $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0 || $ff1==1)+10*$pv2;
+                }
             }
         }
         $stmt->close();
@@ -703,7 +720,7 @@ function get_step_results($step_id){
             $tied_keys=get_list_from_val($value,$results);
             $stmt = $mysqli->prepare("SELECT TournamentCompetitor1Id, TournamentCompetitor2Id, pv1, pv2, forfeit1, forfeit2, noWinner FROM Fight WHERE step_id=? AND TournamentCompetitor1Id IN (".implode(',',$tied_keys).") AND TournamentCompetitor2Id IN (".implode(',',$tied_keys).")");
             $stmt->bind_param("i", $step_id);         
-            $stmt->bind_result($TCompetitor1Id, $TCompetitor2Id, $pv1, $pv2, $ff1, $ff2,$ nowin);     
+            $stmt->bind_result($TCompetitor1Id, $TCompetitor2Id, $pv1, $pv2, $ff1, $ff2, $nowin);     
             $stmt->execute();  
             while ($stmt->fetch()) {
                 $results[$TCompetitor1Id] += (int)($pv1>0 || $ff2==1);
@@ -735,18 +752,17 @@ function get_step_results($step_id){
         $results = array();
         // victory and PV
         while ($stmt->fetch()) {
-            if (empty($nowin)){
-                return array("ordered"=>NULL,"full"=>NULL);
+            if ($nowin!=1){
+                if (!array_key_exists($TournamentCompetitor1Id, $results)){
+                    $results[$TournamentCompetitor1Id]=0;
+                }
+                
+                if (!array_key_exists($TournamentCompetitor2Id, $results)){
+                    $results[$TournamentCompetitor2Id]=0;
+                }
+                $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0  || $ff2==1)+10*$pv1;
+                $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0  || $ff1==1)+10*$pv2;
             }
-            if (!array_key_exists($TournamentCompetitor1Id, $results)){
-                $results[$TournamentCompetitor1Id]=0;
-            }
-            
-            if (!array_key_exists($TournamentCompetitor2Id, $results)){
-                $results[$TournamentCompetitor2Id]=0;
-            }
-            $results[$TournamentCompetitor1Id] += 10000*(int)($pv1>0  || $ff2==1)+10*$pv1;
-            $results[$TournamentCompetitor2Id] += 10000*(int)($pv2>0  || $ff1==1)+10*$pv2;
         }
         $stmt->close();
         arsort($results, SORT_NUMERIC);
@@ -785,7 +801,7 @@ function get_step_results($step_id){
 }
 
 function addTieBreakFight($ActualCategoryId, $stepId, $compId1, $compId2, $HMD1, $HMD2, $tie){
-
+       $mysqli= ConnectionFactory::GetConnection(); 
 	   if ($HMD1 + $HMD2==0) {
                    // normal step: in case of equality add a 3rd fight
 		   $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id, TieBreakFight) VALUES (?,?,?,?,?)");
@@ -852,6 +868,7 @@ function check_for_tie($ActualCategoryId) {
         
         foreach ( $linked as $step_id=>$rank_list){
             $step_res = get_step_results($step_id);
+            
             $ranks = array_values($rank_list);
             if (array_key_exists("tie", $step_res) && $step_res["tie"]>0) {  
              /// WE assume that 
@@ -993,7 +1010,6 @@ function add_HMD($ActualCategoryId, $fight_id, $hmd_1, $hmd_2){
       $stmt->close();
    }
    
-   check_for_tie($ActualCategoryId); 
    check_link($ActualCategoryId);
    if (isCatCompleted($ActualCategoryId)) {
 	close_category($ActualCategoryId);
@@ -1004,17 +1020,17 @@ function add_HMD($ActualCategoryId, $fight_id, $hmd_1, $hmd_2){
 function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2, $ff_1, $ff_2, $noWin){
     $mysqli= ConnectionFactory::GetConnection(); 
     if ($noWin) {
-        $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=1, ResultSavedBy=?  WHERE Id=?");
-        $stmt->bind_param("ii", $_SESSION['_UserId'], $fight_id);       
+        $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=1, pv1=0, pv2=0, forfeit1=?, forfeit2=?, ResultSavedBy=?  WHERE Id=?");
+        $stmt->bind_param("iiii", $ff_1, $ff_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
     } else if ($ff_1>0 || $ff_2>0) {
-        $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=?, forfeit2=?, ResultSavedBy=? WHERE Id=?");
+        $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=0, pv1=0, pv2=0, forfeit1=?, forfeit2=?, ResultSavedBy=? WHERE Id=?");
         $stmt->bind_param("iiii", $ff_1, $ff_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
     } else if ($pv_1>=0 && $pv_2>=0 && $pv_1*$pv_2==0 && $pv_1+$pv_2>0) {
-        $stmt = $mysqli->prepare("UPDATE Fight SET pv1=?, pv2=?, ResultSavedBy=? WHERE Id=?");
+        $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=0, pv1=?, pv2=?, forfeit1=0, forfeit2=0, ResultSavedBy=? WHERE Id=?");
         $stmt->bind_param("iiii", $pv_1, $pv_2, $_SESSION['_UserId'], $fight_id);       
         $stmt->execute();
         $stmt->close();
@@ -1022,7 +1038,6 @@ function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2, $ff_1, $ff
     	echo 'Error in data'; exit;
     }
     
-    check_for_tie($ActualCategoryId); 
     check_link($ActualCategoryId);
     if (isCatCompleted($ActualCategoryId)) {
         close_category($ActualCategoryId);
@@ -1042,7 +1057,7 @@ function isCatCompleted($ActualCategoryId){
     $stmt->execute();  
     $stmt->fetch();
     $stmt->close();
-    return empty($missing_fight);
+    return $missing_fight==0;
 }
 
 function get_full_result($ActualCategoryId){
@@ -1319,13 +1334,13 @@ function cancel_fight($ActualCategoryId, $fight_Id){
 	 $stmt = $mysqli->prepare("UPDATE Fight FD
 	 INNER JOIN StepLinking ON FD.step_id = out_step_id 
 	 INNER JOIN Fight FI ON (FI.step_id = in_step_1_id OR  FI.step_id = in_step_2_id) AND FI.Id=?
-	 SET FD.TournamentCompetitor1Id=NULL, FD.pv1=NULL, FD.TournamentCompetitor2Id=NULL, FD.pv2=NULL");
+	 SET FD.TournamentCompetitor1Id=NULL, FD.pv1=NULL, FD.TournamentCompetitor2Id=NULL, FD.pv2=NULL, FD.forfeit1=NULL, FD.forfeit2=NULL,FD.noWinner=NULL");
          $stmt->bind_param("i", $fight_Id);  
 	 $stmt->execute();
 	 $stmt->close();
 	 
 	 
-	 $stmt = $mysqli->prepare("UPDATE Fight SET pv1=NULL, pv2=NULL WHERE Id=?");
+	 $stmt = $mysqli->prepare("UPDATE Fight SET pv1=NULL, pv2=NULL, forfeit1=NULL, forfeit2=NULL, noWinner=NULL WHERE Id=?");
          $stmt->bind_param("i", $fight_Id);  
 	 $stmt->execute();
 	 $stmt->close();
@@ -1396,9 +1411,10 @@ function close_category($ActualCategoryId){
 
 	    $curr_score=-1;
 	    $cur_rank=1;
-	    $counter=1;
+	    $counter=0;
 	    $palmares=array();
 	    foreach($s_res['full'] as $comp_id => $score){
+	       $counter+=1;
 	       if ($curr_score!=$score){
 	           $cur_rank=$counter;
 	           $palmares[$cur_rank]=array();
@@ -1408,7 +1424,6 @@ function close_category($ActualCategoryId){
 	       	   array_push($palmares[$cur_rank],$comp_id);
 	       }
 		   
-	       $counter+=1;
 	    }
             
             $counter=0;
@@ -1436,11 +1451,13 @@ function close_category($ActualCategoryId){
                 }
                 
                 foreach($cid as $compid){
-                    $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
-                    $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $Medal);         
-                    $stmt->execute();
-                    $stmt->close();
+                    if ($compid>0){
+                        $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
+                        $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $Medal);         
+                        $stmt->execute();
+                        $stmt->close();
                     $number+=1;
+                    }
                 }
                 
                 if($Medal>0) {$Medal+=1;} 
@@ -1456,7 +1473,7 @@ function close_category($ActualCategoryId){
          $stmt->close();
          
     } else {
-       echo 'Cannot close a category with is not completed';
+       echo 'Cannot close a category which is not completed';
        exit;
     }
 }

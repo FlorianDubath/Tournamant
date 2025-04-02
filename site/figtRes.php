@@ -17,7 +17,7 @@ $ff_1=$_POST['ff1'];
 $ff_2=$_POST['ff2'];
 $hmd_1=array_key_exists('hmd1',$_POST)?$_POST['hmd1']:0;
 $hmd_2=array_key_exists('hmd2',$_POST)?$_POST['hmd2']:0;
-$noWin=$_POST['nowin'];
+$noWin=$_POST['noWin'];
 
 if ($hmd_1+$hmd_2==1){
     $pv_1=10*$hmd_2;

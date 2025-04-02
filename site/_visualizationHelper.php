@@ -159,13 +159,13 @@ function plot_pool($step_id, $catName, $stepName){
     </svg>';
 }
 
-function plot_cell($pos_x,$pos_y. $name, $surname){
+function plot_cell($pos_x,$pos_y, $name, $surname){
    echo '<rect width="200" height="80" x="'.$pos_x.'" y="'.$pos_y.'"   style="fill:rgb(230,230,230);stroke-width:2;stroke:black"/>
          <text x="'.($pos_x+100).'" y="'.($pos_y+30).'" fill="black" font-size="20" text-anchor="middle">'.$surname.'</text>
          <text x="'.($pos_x+100).'" y="'.($pos_y+60).'" fill="black" font-size="20" text-anchor="middle">'.$name.'</text>';
 }
 
-function plot_grp($pos_x,$pos_y. $grp, $rank){
+function plot_grp($pos_x,$pos_y, $grp, $rank){
    echo '<text x="'.($pos_x+100).'" y="'.($pos_y+30).'" fill="black" font-size="20" text-anchor="middle">'.$grp.'</text>
 	     <text x="'.($pos_x+100).'" y="'.($pos_y+60).'" fill="black" font-size="20" text-anchor="middle">'.$rank.'</text>';
 }
@@ -401,7 +401,7 @@ function plot_table($top_step_id, $catName){
      // 2 or 3 fights 
      $withHalf = $h2_type==1 || $h1_type==1;
      $withQuarter = $h11_type==1 || $h12_type==1 || $h21_type==1 || $h22_type==1;
-     if ($withHalf) {
+     if ($withQuarter) {
          echo '<svg  width="100%" height="auto" viewBox="0 0 902 800" >';
          echo '  <text x="560" y="390" fill="black" font-size="20"  text-anchor="middle">'.$catName.'</text> ';
          //finale 
@@ -416,7 +416,7 @@ function plot_table($top_step_id, $catName){
         // half
          plot_cell(680, 150, $f_1_surname, $f_1_name);
          plot_cell(680, 510, $f_2_surname, $f_2_name);
-         plot_brace(680, 190, 550, 400, false);
+         plot_brace(880, 190, 550, 400, false);
          if ($h1_type==1) {
             plot_cell(440, 60, $h1_1_surname, $h1_1_name);
             plot_cell(440, 260, $h1_2_surname, $h1_2_name);
