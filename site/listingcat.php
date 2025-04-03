@@ -119,7 +119,7 @@ echo '
              echo 'Terminée';
          } else if ($a_cat_id and $a_cat_id>0){
             if ($hmd>0){
-               echo '<span title="Au moin 1 compétiteur à reçu un Hansoku-Make Direct">&#x26A0;</span>&nbsp;';
+               echo '<span title="Au moin 1 compétiteur a reçu un Hansoku-Make Direct">&#x26A0;</span>&nbsp;';
             }
              echo 'En cours';
          }  else if ($now > $w_end && $_SESSION['_IsMainTable']==1 ) {

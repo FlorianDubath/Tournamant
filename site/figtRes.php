@@ -24,6 +24,7 @@ if ($hmd_1+$hmd_2==1){
     $pv_2=10*$hmd_1;
 }
 
+
 include 'connectionFactory.php';
 include '_categoryHelper.php';
 add_fight_result($acid, $fid, $pv_1, $pv_2, $ff_1, $ff_2, $noWin);

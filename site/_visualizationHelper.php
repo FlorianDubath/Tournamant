@@ -49,7 +49,7 @@ function plot_pool($step_id, $catName, $stepName){
          $comp[$tc1_id] = array("name"=>$tc1_name,"surname"=>$tc1_surname );
          $comp[$tc2_id] = array("name"=>$tc2_name,"surname"=>$tc2_surname );
          $a_key = $tc1_id.'-'.$tc2_id;
-         if (!empty($pv1) || !empty($pv2) || $nowin==1){
+         if ($pv1>0 || $pv2>0 || $ff1>0 || $ff2>0 ||$nowin==1){
              $fgt[$a_key] =  array("pv1"=>$pv1,"pv2"=>$pv2,"ff1"=>$ff1,"ff2"=>$ff2, "nowin"=>$nowin );
          } else if (array_key_exists($a_key, $fgt)){
              unset($fgt[$a_key]);
@@ -403,7 +403,7 @@ function plot_table($top_step_id, $catName){
      $withQuarter = $h11_type==1 || $h12_type==1 || $h21_type==1 || $h22_type==1;
      if ($withQuarter) {
          echo '<svg  width="100%" height="auto" viewBox="0 0 902 800" >';
-         echo '  <text x="560" y="390" fill="black" font-size="20"  text-anchor="middle">'.$catName.'</text> ';
+         echo '  <text x="560" y="400" fill="black" font-size="20"  text-anchor="middle">'.$catName.'</text> ';
          //finale 
          if ($f_1_pv>0 || $f_2_ff>0) {
             plot_cell(680, 360, $f_1_surname, $f_1_name);
@@ -415,8 +415,8 @@ function plot_table($top_step_id, $catName){
         
         // half
          plot_cell(680, 150, $f_1_surname, $f_1_name);
-         plot_cell(680, 510, $f_2_surname, $f_2_name);
-         plot_brace(880, 190, 550, 400, false);
+         plot_cell(680, 560, $f_2_surname, $f_2_name);
+         plot_brace(880, 190, 600, 400, false);
          if ($h1_type==1) {
             plot_cell(440, 60, $h1_1_surname, $h1_1_name);
             plot_cell(440, 260, $h1_2_surname, $h1_2_name);
@@ -428,7 +428,7 @@ function plot_table($top_step_id, $catName){
          if ($h2_type==1) {
             plot_cell(440, 460, $h2_1_surname, $h2_1_name);
             plot_cell(440, 660, $h2_2_surname, $h2_2_name);
-            plot_brace(640, 500, 700, 550, true);
+            plot_brace(640, 500, 700, 600, true);
          }  else {
             plot_grp(440, 510, $f_2_grp, $f_2_rank);
          }

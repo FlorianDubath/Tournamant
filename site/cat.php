@@ -1170,8 +1170,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 <form action="figtRes.php" method="post">
 	 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
 	 <input type="hidden" name="fid" id="hidden_fid" value="-1" />
-	 <input type="hidden" name="pv1" value="0" />
-	 <input type="hidden" name="pv2" value="0" />
+	 <input type="hidden" name="pv1" id="hidden_pv1" value="0" />
+	 <input type="hidden" name="pv2" id="hidden_pv2" value="0" />
 	 <input type="hidden" name="ff1" id="hidden_ff1" value="0" />
 	 <input type="hidden" name="ff2" id="hidden_ff2" value="0" />
 	 <input type="hidden" name="hmd1" id="hidden_hmd1" value="0" />
@@ -1304,6 +1304,8 @@ function forfeit() {
     document.getElementById("hidden_fid").value=f_id;
     document.getElementById("hidden_ff1").value=one_forfeit?1:0;
     document.getElementById("hidden_ff2").value=two_forfeit?1:0;
+    document.getElementById("hidden_pv1").value=0;
+    document.getElementById("hidden_pv2").value=0;
     document.getElementById("hidden_hmd1").value=0;
     document.getElementById("hidden_hmd2").value=0;
     document.getElementById("hidden_nw").value=(one_forfeit && two_forfeit)?1:0;
@@ -1326,9 +1328,12 @@ function hmd() {
     document.getElementById("hidden_fid").value=f_id;
     document.getElementById("hidden_ff1").value=0;
     document.getElementById("hidden_ff2").value=0;
+    
+    document.getElementById("hidden_pv1").value=(two_hmd && !one_hmd)?10:0;
+    document.getElementById("hidden_pv2").value=(one_hmd && !two_hmd)?10:0;
     document.getElementById("hidden_hmd1").value=one_hmd?1:0;
     document.getElementById("hidden_hmd2").value=two_hmd?1:0;
-    document.getElementById("hidden_nw").value = one_hmd && two_hmd;
+    document.getElementById("hidden_nw").value = (one_hmd && two_hmd)?1:0;
     document.getElementById("hidden_btn").click();
     
     close_pop("pop_hmd");
@@ -1338,6 +1343,8 @@ function hmi() {
     document.getElementById("hidden_fid").value=f_id;
     document.getElementById("hidden_ff1").value=0;
     document.getElementById("hidden_ff2").value=0;
+    document.getElementById("hidden_pv1").value=0;
+    document.getElementById("hidden_pv2").value=0;
     document.getElementById("hidden_hmd1").value=0;
     document.getElementById("hidden_hmd2").value=0;
     document.getElementById("noWin").value=1;

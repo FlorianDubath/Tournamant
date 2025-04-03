@@ -675,11 +675,13 @@ function get_step_results($step_id){
         $stmt->fetch();
         $stmt->close();
         if ($noWinner==1){
-                return array("ordered"=>array(1=>-1, 2=>-1),"full"=>array(1=>-1, 2=>-1));
+                return array("ordered"=>array(1=>-1, 2=>-1),"full"=>array(-1=>1));
         } else if ($pv1>0 || $forfeit2==1){
-                return array("ordered"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id),"full"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id));
+        
+                return array("ordered"=>array(1=>$TournamentCompetitor1Id, 2=>$TournamentCompetitor2Id),"full"=>array($TournamentCompetitor1Id=>1, $TournamentCompetitor2Id=>2));
         } else if ($pv2>0 || $forfeit1==1){
-                return array("ordered"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id),"full"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id));
+            
+                return array("ordered"=>array(1=>$TournamentCompetitor2Id, 2=>$TournamentCompetitor1Id),"full"=>array($TournamentCompetitor2Id=>1, $TournamentCompetitor1Id=>2));
         } else {
                 return array("ordered"=>NULL,"full"=>NULL);
         }
@@ -950,6 +952,18 @@ function check_link($ActualCategoryId) {
     
     $need_recheck=false;
     foreach ($links as $link){
+    
+        // check that the fighters have not been Disqualified
+        $c1 = $link["f1"];
+        $c2 = $link["f2"];
+        if (checkHMD($c1)==1){
+           $c1 = -1;
+        }
+        if (checkHMD($c2)==1){
+           $c2 = -1;
+        }
+        
+    
         $need_recheck |= update_step_direct($link["step_Id"],$link["f1"],$link["f2"]);
     }
     
@@ -957,7 +971,16 @@ function check_link($ActualCategoryId) {
         check_link($ActualCategoryId);
     }  
 }
-
+function checkHMD($comp_id){
+   $mysqli= ConnectionFactory::GetConnection(); 
+   $stmt = $mysqli->prepare("SELECT Hansokumake FROM TournamentCompetitor WHERE Id=?");
+   $stmt->bind_param("i", $comp_id);         
+   $stmt->bind_result($hmd);     
+   $stmt->execute();  
+   $stmt->fetch();
+   $stmt->close();
+   return $hmd;
+}
 
 function getCompetitorFromFight($fight_id, $is_comp_1){
    $mysqli= ConnectionFactory::GetConnection(); 
@@ -977,11 +1000,11 @@ function add_HMD($ActualCategoryId, $fight_id, $hmd_1, $hmd_2){
    if ($hmd_1==1){
       $cid = getCompetitorFromFight($fight_id, true);
       
-      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=1, noWinner=forfeit2 WHERE ActualCategoryId=? AND TournamentCompetitor1Id=? AND pv1 IS NOT NULL");
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit1=1, forfeit2=IFNULL(forfeit2,0), pv1=0, pv2=0, noWinner=IFNULL(forfeit2,0) WHERE ActualCategoryId=? AND TournamentCompetitor1Id=? AND pv1 IS NULL");
       $stmt->bind_param("ii",$ActualCategoryId, $cid);       
       $stmt->execute();  
       $stmt->close();
-      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit2=1, noWinner=forfeit1 WHERE ActualCategoryId=? AND TournamentCompetitor2Id=? AND pv1 IS NOT NULL");
+      $stmt = $mysqli->prepare("UPDATE Fight SET forfeit2=1, forfeit2=IFNULL(forfeit2,0), pv1=0, pv2=0, noWinner=forfeit1 WHERE ActualCategoryId=? AND TournamentCompetitor2Id=? AND pv1 IS NULL");
       $stmt->bind_param("ii",$ActualCategoryId, $cid);       
       $stmt->execute();  
       $stmt->close();
@@ -1018,6 +1041,7 @@ function add_HMD($ActualCategoryId, $fight_id, $hmd_1, $hmd_2){
 
 
 function add_fight_result($ActualCategoryId, $fight_id, $pv_1, $pv_2, $ff_1, $ff_2, $noWin){
+ 
     $mysqli= ConnectionFactory::GetConnection(); 
     if ($noWin) {
         $stmt = $mysqli->prepare("UPDATE Fight SET noWinner=1, pv1=0, pv2=0, forfeit1=?, forfeit2=?, ResultSavedBy=?  WHERE Id=?");
@@ -1125,11 +1149,21 @@ function get_full_result($ActualCategoryId){
                 $stmt->close();
             }
             
+            
             $counter+=1;
             $current_steps=$new_current_steps;
         }
         
-        return $result; 
+        
+        //normalization
+        $result_norm = array();
+        $counter = 1;
+        foreach($result as $rank=>$comp_list){
+            $result_norm[max($rank,$counter)]= $comp_list;
+            $counter+=sizeof($comp_list);
+        }
+
+        return $result_norm; 
     }  
 }
 
@@ -1388,9 +1422,10 @@ function cancel_Category($ActualCategoryId, $force){
 function close_category($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     $result = get_full_result($ActualCategoryId);
+
     
     if (! empty($result)){
-    
+ 
         $skip_nominal=False;
     
         // Check for tie =1 in cĥecktie
@@ -1406,7 +1441,7 @@ function close_category($ActualCategoryId){
         
         if ($multiple==1 && count($result)>2) {
             $s_res = get_step_results($id_step);
-            
+          
 	    $skip_nominal=True;
 
 	    $curr_score=-1;
@@ -1428,12 +1463,13 @@ function close_category($ActualCategoryId){
             
             $counter=0;
             foreach($palmares as $rank=>$clist){
+                $curr_rank=max($rank,$counter);
                 foreach($clist as $compid){
                     $medal=$rank;
                     if ($medal>3) { $medal=0;}
                     if ($medal==0 && $counter==3){$medal=3; } // in a pool the forth get also a bronz medal 
                     $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
-                    $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $medal);         
+                    $stmt->bind_param("iiii", $ActualCategoryId, $compid, $curr_rank, $medal);         
                     $stmt->execute();
                     $stmt->close();
                     $counter +=1;
@@ -1450,13 +1486,14 @@ function close_category($ActualCategoryId){
                     $cid=array($cid);    
                 }
                 
+               // $curr_rank = max($rank, $number);
                 foreach($cid as $compid){
                     if ($compid>0){
                         $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
                         $stmt->bind_param("iiii", $ActualCategoryId, $compid, $rank, $Medal);         
                         $stmt->execute();
                         $stmt->close();
-                    $number+=1;
+                        $number+=1;
                     }
                 }
                 

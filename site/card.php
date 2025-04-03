@@ -36,6 +36,7 @@ writeHead();
                                       CollectVP,
                                       TournamentGrade.Name,
                                       LicenceNumber,
+                                      Hansokumake,
                                       TournamentCompetitor.CheckedIn,
                                       SUM(TournamentRegistration.WeightChecked)
                                FROM TournamentCompetitor 
@@ -47,7 +48,7 @@ writeHead();
  ");
  
 $stmt->bind_param("s", $_REQUEST['sid'] );
-$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $GradeCollectVP, $Grade, $licence,$chin,$alreadyWC);
+$stmt->bind_result( $Id, $strId,$Surname,$Name,$Birth, $Gender, $Club, $GradeCollectVP, $Grade, $licence,$hmd, $chin,$alreadyWC);
 $stmt->execute();
 $stmt->fetch();
 $stmt->close();
@@ -359,6 +360,31 @@ if ( ! empty($_SESSION['_UserId'])) {
       	       $stmt->close();
       	       
         echo '</span>'; 
+    }
+    
+    
+    if ($hmd==1){
+        echo '<span class="item_action" style="Background-color:red;"><span class="h_title">COMPETITEUR DISQUALIFIE (HANSOKU-MAKE DIRECT)';
+        
+        if ($_SESSION['_IsMainTable']==1){
+            echo '<a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_hmd\'),\'pop_hide\');"></a>
+			        <span class="pop_back pop_hide" Id="pop_hmd">
+			           <span class="popcont">
+				       <span class="pop_tt">ANNULER LE HANSOKU-MAKE DIRECT </span> <br/><br/>
+				       <span class="btnBar"> 
+				            <form action="./cancelHmd.php" method="post">
+                                <input type="hidden" name="id" value="'.$Id.'"/>
+                                <input type="hidden" name="sid" value="'.$strId.'"/>
+		                        <input class="pgeBtn"  type="submit" value="Annuler le Hansoku-Make Direct">
+		                        <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_hmd\'),\'pop_hide\');">Fermer</a>  
+		                     </form>
+		                </span>
+		              </span>
+		              </span>'; 
+        }
+        
+        
+        echo '</span></span>';
     }
     
     
