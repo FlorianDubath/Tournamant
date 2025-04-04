@@ -528,6 +528,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       <th>Classement</th>
       <th>Nom Prénom</th>
       <th>Club</th>
+      <th></th>
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
       
@@ -535,22 +536,32 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       $stmt = $mysqli->prepare("select distinct
                                  RankId,
                                  Medal,
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
                                  TournamentClub.Name
                              FROM ActualCategoryResult
                              INNER JOIN TournamentCompetitor on TournamentCompetitor.Id =  Competitor1Id
                              INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
-                             WHERE  ActualCategoryId=?");
+                             WHERE  ActualCategoryId=?
+                             order by RankId ASC");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $rk, $Medal, $Surname, $Name, $Club);
+     $stmt->bind_result( $rk, $Medal, $cid, $Surname, $Name, $Club);
      $stmt->execute();
      
      while ($stmt->fetch()){
           echo ' <tr class="result_'.$Medal.'">
           <td>'.$medal_char[$Medal].$rk.'</td>
       <td>'.$Surname.' '.$Name.'</td>
-      <td>'. $Club.'</td>
+      <td>'. $Club.'</td>';
+      
+      if ($_SESSION['_IsMainTable']==1){
+          echo'
+           <td><a class="btn_sos" href="./changeRes.php?acatid='.$actual_cat_Id.'&cid='.$cid.'&catid='.$curr_c_id.'" ></a></td>';
+			    
+      }
+      
+      echo'
       </tr>';
 
      }

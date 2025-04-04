@@ -65,6 +65,7 @@ Changé et testé:
 
 - [Changement] annuler un HMD depuis la carte pour un utilisateur table centrale
 
+- [Changement] édition manuelle des classements 
 
 Testé:
 ---------
@@ -95,7 +96,7 @@ A faire :
 
 - catégorie manuelle: ajouter les combats + fermer la catégorie + ajouter classement
 
-- édition manuelle des classements 
+
 
 - delais entre l'heure annoncée de fin de la pesée et la fin effective (10 min)
 
