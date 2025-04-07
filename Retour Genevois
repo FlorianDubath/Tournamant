@@ -91,10 +91,11 @@ En particulier:
 
 A faire :
 ---------
+- catégorie manuelle (flag dans la DB): ajouter les combats (nouveau type de steps)+ fermer la catégorie + ajouter classement
+TODO /closeCat.php
 
 - intégrer plusieurs systèmes (open)
 
-- catégorie manuelle: ajouter les combats + fermer la catégorie + ajouter classement
 
 
 

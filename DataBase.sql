@@ -516,3 +516,9 @@ INNER JOIN TournamentCompetitor
 	ON TournamentCompetitor.Id=TournamentRegistration.CompetitorId
 WHERE TournamentCompetitor.Hansokumake = 1 
 GROUP BY ActualCategory.Id;
+
+
+ALTER tABLE ActualCategory ADD COLUMN Mannual INT NOT NULL DEFAULT 0;
+
+INSERT CategoryStepsType (Id,Name) VALUES (1000,'Manuelle');
+

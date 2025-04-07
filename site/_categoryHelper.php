@@ -140,6 +140,18 @@ function update_sorter_step($ActualCategory_id){
 
 
 
+function create_step_man($ActualCategory_id, $name){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    
+    $stmt = $mysqli->prepare("INSERT INTO CategoryStep (ActualCategoryId,CategoryStepsTypeId, Name) VALUES (?,1000,?)");
+    $stmt->bind_param("is", $ActualCategory_id, $name);         
+    $stmt->execute();
+    $step_id = $mysqli->insert_id;
+    $stmt->close();
+
+    return $step_id;
+}
+
 
 function create_step_pool_2($ActualCategory_id, $user_id_1, $user_id_2, $name){
     $mysqli= ConnectionFactory::GetConnection(); 
@@ -821,6 +833,46 @@ function addTieBreakFight($ActualCategoryId, $stepId, $compId1, $compId2, $HMD1,
            } 
 }
 
+function add_fight_to_manual_Category($acatid,$c1,$c2){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    
+    $stmt = $mysqli->prepare("SELECT CategoryStep.Id 
+                              FROM CategoryStep 
+                              INNER JOIN ActualCategory ON ActualCategory.Id=ActualCategoryId
+                              WHERE ActualCategory.Id=? and Mannual=1 and CategoryStepsTypeId=1000");
+    $stmt->bind_param("i", $acatid);    
+    $stmt->bind_result($stepId);   
+    $stmt->execute(); 
+    $stmt->fetch(); 
+    $stmt->close(); 
+    if (isset($stepId) && $stepId>0 && $c1!=$c2){
+          $stmt = $mysqli->prepare("INSERT INTO Fight (ActualCategoryId, step_id, TournamentCompetitor1Id, TournamentCompetitor2Id) VALUES (?,?,?,?)");
+		   $stmt->bind_param("iiii", $acatid, $stepId, $c1, $c2);         
+		   $stmt->execute();
+		   $stmt->close();
+    }     
+}
+
+function delete_fight_from_manual_Category($acatid,$fid){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    
+    $stmt = $mysqli->prepare("SELECT CategoryStep.Id 
+                              FROM CategoryStep 
+                              INNER JOIN ActualCategory ON ActualCategory.Id=ActualCategoryId
+                              WHERE ActualCategory.Id=? and Mannual=1 and CategoryStepsTypeId=1000");
+    $stmt->bind_param("i", $acatid);    
+    $stmt->bind_result($stepId);   
+    $stmt->execute(); 
+    $stmt->fetch(); 
+    $stmt->close(); 
+    if (isset($stepId) && $stepId>0 ){
+          $stmt = $mysqli->prepare("DELETE FROM  Fight WHERE ActualCategoryId=? AND step_id=? AND Id=?");
+		   $stmt->bind_param("iii", $acatid, $stepId, $fid);         
+		   $stmt->execute();
+		   $stmt->close();
+    }     
+}
+
 
 function check_for_tie($ActualCategoryId) {
 
@@ -1073,15 +1125,16 @@ function isCatCompleted($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     
     // look for linking and more specifically for the step which is only in the output never in the inputs
-    $stmt = $mysqli->prepare("SELECT count(Id) 
+    $stmt = $mysqli->prepare("SELECT count(Fight.Id),  ActualCategory.Mannual
                               FROM Fight 
+                              INNER JOIN ActualCategory on ActualCategoryId=ActualCategory.Id
                               WHERE ActualCategoryId =? AND pv1 IS NULL");
     $stmt->bind_param("i", $ActualCategoryId);         
-    $stmt->bind_result($missing_fight);     
+    $stmt->bind_result($missing_fight,$man);     
     $stmt->execute();  
     $stmt->fetch();
     $stmt->close();
-    return $missing_fight==0;
+    return $missing_fight==0 && (isset($man) && $man!=1);
 }
 
 function get_full_result($ActualCategoryId){
@@ -1203,6 +1256,30 @@ function promote_Unique($tc_id_1){
     $actual_category_id = $mysqli->insert_id;
     $stmt->close();      
 }
+function open_manual_Category($tc_id_1,$tc_id_2,$name){
+    $mysqli= ConnectionFactory::GetConnection(); 
+    $actual_category_id = -1;
+    if ($tc_id_2>0){
+        $stmt = $mysqli->prepare("INSERT INTO ActualCategory (CategoryId,Category2Id,Name, Mannual) VALUES (?,?,?,1)");
+        $stmt->bind_param("iis", $tc_id_1, $tc_id_2, $name);         
+        $stmt->execute();
+        $actual_category_id = $mysqli->insert_id;
+        $stmt->close();
+    } else {
+        $stmt = $mysqli->prepare("INSERT INTO ActualCategory (CategoryId,Name,Mannual) VALUES (?,?,1)");
+        $stmt->bind_param("is", $tc_id_1, $name);         
+        $stmt->execute();
+        $actual_category_id = $mysqli->insert_id;
+        $stmt->close();
+    }
+    
+    create_step_man($actual_category_id, 'Cat. Manuelle');
+    
+    return $actual_category_id;
+}
+
+
+
 
 function open_Category($tc_id_1,$tc_id_2,$name){
     $mysqli= ConnectionFactory::GetConnection(); 
@@ -1315,6 +1392,8 @@ function open_Category($tc_id_1,$tc_id_2,$name){
         break;
 
     }
+    
+    return  $actual_category_id;
 }
 
 function cancel_fight($ActualCategoryId, $fight_Id){

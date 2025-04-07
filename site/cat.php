@@ -356,6 +356,7 @@ $mysqli= ConnectionFactory::GetConnection();
                                  CategoryId,
                                  Category2Id,
                                  IsCompleted,
+                                 Mannual,
                                  max(pv1) IS NOT NULL 
                              from ActualCategory
                              LEFT OUTER JOIN Fight ON Fight.ActualCategoryId = ActualCategory.Id
@@ -364,7 +365,7 @@ $mysqli= ConnectionFactory::GetConnection();
                            ");
                              
      $stmt->bind_param("ii", $curr_c_id,$curr_c_id );
-     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $started);
+     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $catMannual, $started);
      $stmt->execute();
      $stmt->fetch();
      $stmt->close();  
@@ -419,6 +420,7 @@ echo'
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
       $query="select
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
@@ -427,7 +429,8 @@ echo'
                                  TournamentGrade.Name,
                                  TournamentCompetitor.LicenceNumber,
                                  TournamentRegistration.WeightChecked,
-                                 TournamentCompetitor.CheckedIn
+                                 TournamentCompetitor.CheckedIn,
+                                 TournamentCompetitor.Hansokumake
                              FROM TournamentCompetitor
                              INNER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id
                                INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
@@ -441,10 +444,13 @@ echo'
       
       $stmt = $mysqli->prepare($query);
      $stmt->bind_param("i", $curr_c_id );
-     $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin);
+     $stmt->bind_result( $id, $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin,$hmd);
      $stmt->execute();
      
+    
+     
      while ($stmt->fetch()){
+   
      $date='';
       if (isset($Birth)){
        $d1=new DateTime($Birth);
@@ -463,7 +469,7 @@ echo'
       </tr>';
 
      }
-     
+
      $stmt->close();
      echo '</table>
               </span>
@@ -590,6 +596,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       </tr>';
 
       $stmt = $mysqli->prepare("select
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
@@ -597,7 +604,8 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  TournamentCompetitor.Hansokumake,
                                  TournamentClub.Name, 
                                  TournamentGrade.Name,
-                                 TournamentCompetitor.LicenceNumber
+                                 TournamentCompetitor.LicenceNumber,
+                                 TournamentCompetitor.Hansokumake
                              FROM TournamentCompetitor
                              INNER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id and WeightChecked=1
                              INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
@@ -606,10 +614,15 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                              WHERE  ActualCategory.Id=?
                              ORDER BY TournamentCompetitor.Surname, TournamentCompetitor.Name");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $strId, $Surname, $Name, $Birth, $hmd, $Club, $Grade, $licence);
+     $stmt->bind_result( $id, $strId, $Surname, $Name, $Birth, $hmd, $Club, $Grade, $licence, $hmd);
      $stmt->execute();
      
+     $fighters=array();
+
      while ($stmt->fetch()){
+     if ($hmd!=1){
+         $fighters[$id] = $Surname.' '.$Name;
+     }
      $date='';
       if (isset($Birth)){
        $d1=new DateTime($Birth);
@@ -632,14 +645,79 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
      
      $stmt->close();
      echo '</table></span>';
-     
 
+     echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>';
+     if ($catMannual==1 && $cat_completed!=1){
+          
      
-
      
-     echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>
-     
-          <table class="wt t4">
+         echo '
+           <span class="btnBar"> 
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Clôturer la Catégorie" >Clôturer la Catégorie</a> <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Ajouter un Combat" >Ajouter un Combat</a>
+           </span>
+           <span class="pop_back pop_hide" Id="pop_addCombat">
+		        <span class="popcont">
+		           <span class="pop_tt">Ajouter un Combat:</span> <br/>
+		           <form action="addFight.php" method="post">
+		               <input   type="hidden" name="actid" value="'.$actual_cat_Id.'">
+		               <input   type="hidden" name="cid" value="'.$curr_c_id.'">
+		               <select name="c1" >';
+		               
+		               foreach ($fighters as $key=>$val) {
+		                   echo '<option value="'.$key.'">'.$val.'</option>';
+		               }
+                       echo '</select>   V.S.  <select name="c2" >';
+                       foreach ($fighters as $key=>$val) {
+		                   echo '<option value="'.$key.'">'.$val.'</option>';
+		               }
+  echo'
+</select> <br/> <br/>
+ <span class="btnBar"> 
+                       <input class="pgeBtn"  type="submit" value="Ajouter">
+		               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Annuler" >Annuler</a>
+           </span>
+		          </form>
+		        </span>
+		   </span>
+		    <span class="pop_back pop_hide" Id="pop_closeCat">
+		        <span class="popcont">
+		           <span class="pop_tt">Clôturer la Catégorie:</span> <br/>
+		           <form action="closeCat.php" method="post">
+		               <input   type="hidden" name="actid" value="'.$actual_cat_Id.'">
+		               <input   type="hidden" name="cid" value="'.$curr_c_id.'">
+		                <table class="wt t4">
+                          <tr class="tblHeader">  <th>Nom</th>  <th>Rang</th> <th>Médaille</th></tr>';
+                          $list_key='';
+		                foreach ($fighters as $key=>$val) {
+		                   $list_key=$list_key.','.$key;
+		                   echo '<tr>
+		                            <td>'.$val.'</td>
+		                            <td><input type="number" min="1" max="100" name="r_'.$key.'" value="'.$rk.'"></td>
+		                            <td> <select name="m_'.$key.'" >
+                                      <option value="1">Or</option>
+                                      <option value="2">Argent</option>
+                                      <option value="3">Bronze</option>
+                                      <option value="0">-</option>
+                                    </select></td>
+		                         </tr>';
+		                
+		                }
+		    
+		               echo'
+		                </table><br/>
+ <span class="btnBar"> 
+                       <input   type="hidden" value="'.$list_key.'">
+                       <input class="pgeBtn"  type="submit" value="Enregistrer">
+		               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Annuler" >Annuler</a>
+           </span>
+		          </form>
+		        </span>
+		   </span>
+           
+           ';
+     }
+     echo'
+      <table class="wt t4">
       <tr class="tblHeader">
       <th>Type</th>
       <th>PV</th>
@@ -694,7 +772,12 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                   </tr>';
          } else if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin)){
            $row_value = ' <tr >
-                  <td>'. $step_name.' '.$tb_s.'</td>
+                  <td>';
+                   if ($is_table && $catMannual==1){
+                     $row_value = $row_value.'<a class="pgeBtn" href="addFight.php?actid='.$actual_cat_Id.'&fid='.$f_id.'&cid='.$catId.'" >-</a>';            
+                  }
+                  
+                  $row_value = $row_value.$step_name.' '.$tb_s.'</td>
                   <td>';
                   if($is_table){
                        $row_value = $row_value.'
@@ -835,7 +918,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
            }
            $row_value = ' <tr > 
                   <td>'. $step_name.' '.$tb_s;   
-           if($is_table){   
+           if($is_table){ 
+           
+           
+
+           
+           
+           
+             
    $row_value=$row_value.'    
       <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_canc_fgt_'.$f_id.'\'),\'pop_hide\');"></a>
 			    <span class="pop_back pop_hide" Id="pop_canc_fgt_'.$f_id.'">
