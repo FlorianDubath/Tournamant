@@ -67,6 +67,10 @@ Changé et testé:
 
 - [Changement] édition manuelle des classements 
 
+- [Changement] catégorie manuelle (flag dans la DB): ajouter les combats (nouveau type de steps)+ fermer la catégorie + ajouter classement 
+
+- [Changement] affichages des catégories (écran supplémentaire) (liste catégorie + liste combats de chaque catégorie en cours)
+
 Testé:
 ---------
 
@@ -91,25 +95,16 @@ En particulier:
 
 A faire :
 ---------
-- catégorie manuelle (flag dans la DB): ajouter les combats (nouveau type de steps)+ fermer la catégorie + ajouter classement
-TODO /closeCat.php
-
-- intégrer plusieurs systèmes (open)
-
-
-
-
-- delais entre l'heure annoncée de fin de la pesée et la fin effective (10 min)
-
-- affichages des catégories (écran supplémentaire) (liste catégorie + liste combats de chaque catégorie en cours)
 
 - exporter un pdf de la catégorie
+
+- delais entre l'heure annoncée de fin de la pesée et la fin effective (10 min)
 
 - Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
   - resset du temps
   - (10 yuko affichage venant devant le ippon)
 
-
+- intégrer plusieurs systèmes (open)
 
 
 
