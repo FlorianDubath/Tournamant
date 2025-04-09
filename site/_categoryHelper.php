@@ -1498,6 +1498,42 @@ function cancel_Category($ActualCategoryId, $force){
 }
 
 
+close_manual_category($ActualCategoryId, $fighters){
+	$mysqli= ConnectionFactory::GetConnection();
+	// Check the category is a manual category
+	$stmt = $mysqli->prepare("SELECT Id FROM  ActualCategory where Id=? AND Mannual=1");
+	$stmt->bind_param("i", $ActualCategoryId);  
+	$stmt->bind_result($id_cat);         
+	$stmt->execute();
+	$stmt->fetch();
+	$stmt->close();
+	if ($ActualCategoryId>0 && $ActualCategoryId==$id_cat){
+	    foreach($fighters as $fid=>$res){
+	        // Check the fighter is in the category 
+	        $stmt = $mysqli->prepare(" SELECT TournamentRegistration.Id
+					   FROM TournamentRegistration 
+					   INNER JOIN ActualCategory ON ActualCategory.CategoryId=TournamentRegistration.CategoryId OR ActualCategory.Category2Id=TournamentRegistration.CategoryId
+					   WHERE WeightChecked=1 AND ActualCategory.Mannual=1 AND ActualCategory.Id=? AND CompetitorId=? ");
+		$stmt->bind_param("ii", $ActualCategoryId, $fid);  
+		$stmt->bind_result($id_reg);         
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		if (isset($id_reg) && $id_reg>0){
+		    $stmt = $mysqli->prepare("INSERT INTO ActualCategoryResult (ActualCategoryId,Competitor1Id,RankId,Medal) VALUES (?,?,?,?)");
+                    $stmt->bind_param("iiii", $ActualCategoryId, $fid, $res['Rank'], $res['Medal']);         
+		    $stmt->execute();
+		    $stmt->close();
+		} 
+	    }
+	    
+	    $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
+            $stmt->bind_param("i", $ActualCategoryId);         
+            $stmt->execute();
+            $stmt->close();
+	}
+}
+
 function close_category($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     $result = get_full_result($ActualCategoryId);

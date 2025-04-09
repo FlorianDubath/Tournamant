@@ -706,7 +706,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 		               echo'
 		                </table><br/>
  <span class="btnBar"> 
-                       <input   type="hidden" value="'.$list_key.'">
+                       <input   type="hidden" name="kl" value="'.$list_key.'">
                        <input class="pgeBtn"  type="submit" value="Enregistrer">
 		               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Annuler" >Annuler</a>
            </span>
