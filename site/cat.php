@@ -697,7 +697,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                       <option value="1">Or</option>
                                       <option value="2">Argent</option>
                                       <option value="3">Bronze</option>
-                                      <option value="0">-</option>
+                                      <option value="0" selected>-</option>
                                     </select></td>
 		                         </tr>';
 		                

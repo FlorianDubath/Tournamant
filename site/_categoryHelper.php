@@ -1498,8 +1498,8 @@ function cancel_Category($ActualCategoryId, $force){
 }
 
 
-close_manual_category($ActualCategoryId, $fighters){
-	$mysqli= ConnectionFactory::GetConnection();
+function close_manual_category($ActualCategoryId, $fighters){
+    $mysqli= ConnectionFactory::GetConnection(); 
 	// Check the category is a manual category
 	$stmt = $mysqli->prepare("SELECT Id FROM  ActualCategory where Id=? AND Mannual=1");
 	$stmt->bind_param("i", $ActualCategoryId);  

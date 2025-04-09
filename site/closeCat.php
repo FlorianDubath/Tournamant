@@ -16,9 +16,9 @@ $keys = explode(",", $keys_st);
 $fighter=array();
 foreach($keys as $key){
    if (strlen($key)>0){
-      $fid = int($key);
-      $r = int($_POST['r_'.$key]);
-      $m = int($_POST['m_'.$key]);
+      $fid = intval($key);
+      $r = intval($_POST['r_'.$key]);
+      $m = intval($_POST['m_'.$key]);
       $fighter[$fid]=array("Rank"=>$r, "Medal"=>$m);
    }
 }
