@@ -1,80 +1,120 @@
 Changé et testé:
 ----------------
 
-- Liste des catégorie catégorie avec 1 participant promu 1er: affichage double
+- [BUG] Liste des catégorie catégorie avec 1 participant promu 1er: affichage double
 	modified + Tested:   site/listingcat.php
 	
-- affichage multiple des vaincoeurs	
+- [BUG]  affichage multiple des vainqueurs	
     modified + Tested:   site/listingresult.php
 	modified + Tested:   site/results.php
 	modified + Tested:   site/resultsclub.php
-   
-- enregistrement carte : n° liscence pas obligatoire
-	modified + Tested:   site/reg.php
 
-- "combatants" =>  "combattants"
+- [BUG] "combatants" =>  "combattants"
     modified + Tested:   site/ScoreBoard.html
 	modified + Tested:   site/card.php
 	modified + Tested:   site/cards.php
 	modified:   site/cat.php
 	
-- affichage c@tegori (mettre l'encoding dans le Scoreboard.html)
+- [BUG] affichage "c@tegorie" (mettre l'encoding dans le Scoreboard.html)
 	modified + Tested:   site/MirorScoreBoard.html
 	modified + Tested:   site/ScoreBoard.html	
 	
-- carte afficher pour les arbitre 2 15/1
-   modified + Tested:   site/css/test.css
-   modified + Tested:   site/card.php
-   
- - bug vs quand il y a un ' espace dans le nom 
+- [BUG] le bouton "vs" ne fonctionne pas quand il y a un ' espace dans le nom 
     modified + Tested:   site/cat.php
     
- - limit au Golden Score 
+- [BUG] nom des combattants pour le prochain combat pas juste
+    modified + Tested: cat.php  
+    
+- [BUG] rang des participants au dela de 1,2,3  - corrigé
+   
+- [Changement] enregistrement modification d'une carte : n° liscence pas obligatoire
+	modified + Tested:   site/reg.php
+	
+- [Changement] carte afficher pour les arbitre le format "<nb combats> <pv>/<nb ipon>"
+   modified + Tested:   site/css/test.css
+   modified + Tested:   site/card.php 
+      
+- [Changement] Ajouter une limit au Golden Score dans les catégories d'age
     modified + Tested: DB
     modified + Tested: cat_config.php
     modified + Tested: ScoreBoard_test.html
     modified + Tested: cat.php
     
-    
- - Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
+- [Changement] Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
    - Plus gras / plus lisible 
    - durée et osaekomi sur la même ligne
    - sonomama => reprise sans clearer le timer oseakomi
    - configurer + afficher un Numéro tatamis
    - timer pour les pause
    - Zoom différentiel (pour les TV HDready et FullHD)
+
+
+- [Changement] Exporter liste des point valeurs (nom prénom grade club liscence #combat pv #ipon) => pdf
+
+- [Changement] Scoreboard indépendant (ScoreBoard.html) remonter le prochain combat dans combat à la fin du combat.
+
+- [Changement] Ajouter les forfait + ne pas tenir compte du combat pour les points
+
+- [Changement] Ajouter la règle des 30" + forfait automatique
+
+- [Changement] Modifier le système de combat (cf feuille). + changer display (_categoryHelper.php, _visualizationHelper.php)
+
+- [Changement] hansekoumate directe (avec confirmation => élimination du tournois)
+
+- [Changement] 2 forfaits après le début des combats  ! (petit problème dans le classement avec pool + tableau)
+
+- [Changement] annuler un HMD depuis la carte pour un utilisateur table centrale
+
+- [Changement] édition manuelle des classements 
+
+- [Changement] catégorie manuelle (flag dans la DB): ajouter les combats (nouveau type de steps)+ fermer la catégorie + ajouter classement 
+
+- [Changement] affichages des catégories (écran supplémentaire) (liste catégorie + liste combats de chaque catégorie en cours)
+
+Testé:
+---------
+
+En particulier:
+   * DB ajout d'un flag sur le compétiteur pour le hansokumake, de flag forfait pour chaque combattant et d'un pas de vaincoeur sur les combats  -ok
+   * Adapter le score bord pour:
+      - ajouter les boutons "Compétiteur appelé en retard", "forfaits" et  "Hansokumake directe"  -ok
+      - en retard=> décompte de 30" puis forfait automatique  -ok
+      - possibilité de marquer les 2 en forfait /Hansokumake directe / HansokuMake -ok
+      - validation supplémentaire pour le hansokumake directe  -ok
+      - affichage count-down dans le miror -ok
+   * enregistrement du forfait / hansokumake directe dans la base -ok
+   * Adaptation des combats de la catégories pour le hansokumake directe  -ok
+   * Adaptation du calcul des vaicoeurs -ok
    
+   * tenir compte du flag forfait pour le calcul des point valeurs individuels -ok
    
-- nom des combattant pour Prochain combats pas juste
-    modified + Tested: cat.php
+   * exports des points valeurs du tournois -ok
    
-Changé (à tester):
-------------------
-- Permettre la pesée en avance
-    c'est déjà le cas
-    
+   * check dans les autres catégorie au chargement + indicateur dans la page des catégories pour la table centrale -ok
 
 
 A faire :
 ---------
+- ajouter les pesées en train de finir à la page des catégories
 
-- rang des participants au dela de 1,2,3  (cat +res +pdf)
+- exporter un pdf de la catégorie
+
+- delais entre l'heure annoncée de fin de la pesée et la fin effective (10 min)
 
 - Scoreboard (ScoreBoard.html, MirorScoreBoard.html et cat.php):
   - resset du temps
   - (10 yuko affichage venant devant le ippon)
 
-- exporter un pdf de la catégorie
 - intégrer plusieurs systèmes (open)
 
-A évaluer /discuter:
---------------------
-- Revoir et Modifier les systèmes de combats. 
 
-- delais entre l'heure annoncée de fin de la pesée et la fin effective
 
-- affichages des catégories (écran supplémentaire) (liste catégorie + liste combats de chaque catégorie en cours)
 
-- 2 forfaits après le début des combats
+
+
+
+
+
+
 
 

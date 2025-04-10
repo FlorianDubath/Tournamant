@@ -20,10 +20,16 @@ if (!empty($_POST['ccid'])){
     if (!empty($_POST['pcid'])){
         $ocid=$_POST['pcid'];
     }
-    
-    open_Category($_POST['ccid'],$ocid,$_POST['name']);
+    if (empty($_POST['man'])){
+        open_Category($_POST['ccid'],$ocid,$_POST['name']);
+        header('Location: ./listingcat.php');
+    } else {
+       $acat_id = open_manual_Category($_POST['ccid'],$ocid,$_POST['name']);  
+       header('Location: ./cat.php?cid='.$cid);
+      
+    }
 
-    header('Location: ./listingcat.php');
+    
 }
 
 $curr_cat_id = $_GET['cid'];
@@ -106,19 +112,19 @@ if (! empty($curr_cat_id) ) {
        // Problem! go out
        header('Location: ./index.php');
     } else {
-     echo'<span class="h_title">
+     echo' <span class="h_title">
                VALIDATION DE LA CATEGORIE
            </span>
            <span class="btnBar"> 
                    <a class="pgeBtn" href="listingcat.php" title="Annuler" >Annuler</a>
-               </span>';
+           </span>';
                
          
 if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}      
                
-   echo '            
-           <span class="f_info">(Selectionner une autre catégorie pour les grouper)</span>
-	      <form action="./acat.php" method="post" Id="F1"> ';
+   echo '  <span style="display:block;border:black 1px solid;padding:15px;">          
+               <span class="f_info">(Selectionner une autre catégorie pour les grouper)</span>
+	           <form action="./acat.php" method="post" Id="F1"> ';
         // get other category not taken
         $stmt = $mysqli->prepare("SELECT
                                       TC1.Id,
@@ -181,11 +187,15 @@ if ($message!='') {echo'<span class="fmessage">'.$message.'</span>';}
     
     }
         $stmt->close(); 
-        echo $choice.' <span class="btnBar"> 
-	               <input class="pgeBtn" type="submit" value="Créer les feuilles de combats" >
+        echo $choice.'
+        
+	        </form>
+        </span> <br/>
+        Cas particulier: catégorie avec combats gérés manuellement <input type="checkbox" form="F1" name="man" value="1" ><br/><br/>
+        <span class="btnBar"> 
+	               <input class="pgeBtn" type="submit" form="F1" value="Créer les feuilles de combats" >
 	               <a class="pgeBtn" href="listingcat.php">Annuler</a>
 	       </span>
-	        </form>
 	      ';
 }
 }     

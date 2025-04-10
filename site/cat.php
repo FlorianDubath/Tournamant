@@ -356,6 +356,7 @@ $mysqli= ConnectionFactory::GetConnection();
                                  CategoryId,
                                  Category2Id,
                                  IsCompleted,
+                                 Mannual,
                                  max(pv1) IS NOT NULL 
                              from ActualCategory
                              LEFT OUTER JOIN Fight ON Fight.ActualCategoryId = ActualCategory.Id
@@ -364,7 +365,7 @@ $mysqli= ConnectionFactory::GetConnection();
                            ");
                              
      $stmt->bind_param("ii", $curr_c_id,$curr_c_id );
-     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $started);
+     $stmt->bind_result( $actual_cat_Id, $ac_name, $cccid_1, $cccid_2, $cat_completed, $catMannual, $started);
      $stmt->execute();
      $stmt->fetch();
      $stmt->close();  
@@ -419,6 +420,7 @@ echo'
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
       $query="select
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
@@ -427,7 +429,8 @@ echo'
                                  TournamentGrade.Name,
                                  TournamentCompetitor.LicenceNumber,
                                  TournamentRegistration.WeightChecked,
-                                 TournamentCompetitor.CheckedIn
+                                 TournamentCompetitor.CheckedIn,
+                                 TournamentCompetitor.Hansokumake
                              FROM TournamentCompetitor
                              INNER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id
                                INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
@@ -441,10 +444,13 @@ echo'
       
       $stmt = $mysqli->prepare($query);
      $stmt->bind_param("i", $curr_c_id );
-     $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin);
+     $stmt->bind_result( $id, $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence, $chw, $chin,$hmd);
      $stmt->execute();
      
+    
+     
      while ($stmt->fetch()){
+   
      $date='';
       if (isset($Birth)){
        $d1=new DateTime($Birth);
@@ -463,7 +469,7 @@ echo'
       </tr>';
 
      }
-     
+
      $stmt->close();
      echo '</table>
               </span>
@@ -528,6 +534,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       <th>Classement</th>
       <th>Nom Prénom</th>
       <th>Club</th>
+      <th></th>
       </tr>';
       $mysqli= ConnectionFactory::GetConnection(); 
       
@@ -535,22 +542,32 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       $stmt = $mysqli->prepare("select distinct
                                  RankId,
                                  Medal,
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
                                  TournamentClub.Name
                              FROM ActualCategoryResult
                              INNER JOIN TournamentCompetitor on TournamentCompetitor.Id =  Competitor1Id
                              INNER JOIN TournamentClub ON ClubId=TournamentClub.Id
-                             WHERE  ActualCategoryId=?");
+                             WHERE  ActualCategoryId=?
+                             order by RankId ASC");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $rk, $Medal, $Surname, $Name, $Club);
+     $stmt->bind_result( $rk, $Medal, $cid, $Surname, $Name, $Club);
      $stmt->execute();
      
      while ($stmt->fetch()){
           echo ' <tr class="result_'.$Medal.'">
           <td>'.$medal_char[$Medal].$rk.'</td>
       <td>'.$Surname.' '.$Name.'</td>
-      <td>'. $Club.'</td>
+      <td>'. $Club.'</td>';
+      
+      if ($_SESSION['_IsMainTable']==1){
+          echo'
+           <td><a class="btn_sos" href="./changeRes.php?acatid='.$actual_cat_Id.'&cid='.$cid.'&catid='.$curr_c_id.'" ></a></td>';
+			    
+      }
+      
+      echo'
       </tr>';
 
      }
@@ -579,13 +596,16 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       </tr>';
 
       $stmt = $mysqli->prepare("select
+                                 TournamentCompetitor.Id,
                                  TournamentCompetitor.StrId,
                                  TournamentCompetitor.Surname,
                                  TournamentCompetitor.Name,  
-                                 TournamentCompetitor.Birth, 
+                                 TournamentCompetitor.Birth,  
+                                 TournamentCompetitor.Hansokumake,
                                  TournamentClub.Name, 
                                  TournamentGrade.Name,
-                                 TournamentCompetitor.LicenceNumber
+                                 TournamentCompetitor.LicenceNumber,
+                                 TournamentCompetitor.Hansokumake
                              FROM TournamentCompetitor
                              INNER JOIN TournamentRegistration ON TournamentRegistration.CompetitorId = TournamentCompetitor.Id and WeightChecked=1
                              INNER JOIN TournamentGrade ON GradeId=TournamentGrade.Id
@@ -594,10 +614,15 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                              WHERE  ActualCategory.Id=?
                              ORDER BY TournamentCompetitor.Surname, TournamentCompetitor.Name");
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $strId, $Surname, $Name, $Birth,  $Club, $Grade, $licence);
+     $stmt->bind_result( $id, $strId, $Surname, $Name, $Birth, $hmd, $Club, $Grade, $licence, $hmd);
      $stmt->execute();
      
+     $fighters=array();
+
      while ($stmt->fetch()){
+     if ($hmd!=1){
+         $fighters[$id] = $Surname.' '.$Name;
+     }
      $date='';
       if (isset($Birth)){
        $d1=new DateTime($Birth);
@@ -609,21 +634,90 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
       <td>'. $Club.'</td>
       <td>'.$Grade.'</td>
       <td>'. $licence.'</td>
-      <td><a href="card.php?sid='.$strId.'" target="_blancK">Carte</a></td>
+      <td>';
+      if ($hmd>0){
+               echo '<span title="Hansoku-Make Direct">&#x26A0;</span>&nbsp;';
+      }
+      echo '<a href="card.php?sid='.$strId.'" target="_blancK">Carte</a></td>
       </tr>';
 
      }
      
      $stmt->close();
      echo '</table></span>';
-     
 
+     echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>';
+     if ($catMannual==1 && $cat_completed!=1){
+          
      
-
      
-     echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>
-     
-          <table class="wt t4">
+         echo '
+           <span class="btnBar"> 
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Clôturer la Catégorie" >Clôturer la Catégorie</a> <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Ajouter un Combat" >Ajouter un Combat</a>
+           </span>
+           <span class="pop_back pop_hide" Id="pop_addCombat">
+		        <span class="popcont">
+		           <span class="pop_tt">Ajouter un Combat:</span> <br/>
+		           <form action="addFight.php" method="post">
+		               <input   type="hidden" name="actid" value="'.$actual_cat_Id.'">
+		               <input   type="hidden" name="cid" value="'.$curr_c_id.'">
+		               <select name="c1" >';
+		               
+		               foreach ($fighters as $key=>$val) {
+		                   echo '<option value="'.$key.'">'.$val.'</option>';
+		               }
+                       echo '</select>   V.S.  <select name="c2" >';
+                       foreach ($fighters as $key=>$val) {
+		                   echo '<option value="'.$key.'">'.$val.'</option>';
+		               }
+  echo'
+</select> <br/> <br/>
+ <span class="btnBar"> 
+                       <input class="pgeBtn"  type="submit" value="Ajouter">
+		               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Annuler" >Annuler</a>
+           </span>
+		          </form>
+		        </span>
+		   </span>
+		    <span class="pop_back pop_hide" Id="pop_closeCat">
+		        <span class="popcont">
+		           <span class="pop_tt">Clôturer la Catégorie:</span> <br/>
+		           <form action="closeCat.php" method="post">
+		               <input   type="hidden" name="actid" value="'.$actual_cat_Id.'">
+		               <input   type="hidden" name="cid" value="'.$curr_c_id.'">
+		                <table class="wt t4">
+                          <tr class="tblHeader">  <th>Nom</th>  <th>Rang</th> <th>Médaille</th></tr>';
+                          $list_key='';
+		                foreach ($fighters as $key=>$val) {
+		                   $list_key=$list_key.','.$key;
+		                   echo '<tr>
+		                            <td>'.$val.'</td>
+		                            <td><input type="number" min="1" max="100" name="r_'.$key.'" value=""></td>
+		                            <td> <select name="m_'.$key.'" >
+                                      <option value="1">Or</option>
+                                      <option value="2">Argent</option>
+                                      <option value="3">Bronze</option>
+                                      <option value="0" selected>-</option>
+                                    </select></td>
+		                         </tr>';
+		                
+		                }
+		    
+		               echo'
+		                </table><br/>
+ <span class="btnBar"> 
+                       <input   type="hidden" name="kl" value="'.$list_key.'">
+                       <input class="pgeBtn"  type="submit" value="Enregistrer">
+		               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Annuler" >Annuler</a>
+           </span>
+		          </form>
+		        </span>
+		   </span>
+           
+           ';
+     }
+     echo'
+      <table class="wt t4">
       <tr class="tblHeader">
       <th>Type</th>
       <th>PV</th>
@@ -638,7 +732,10 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  Fight.Id,
                                  CategoryStep.Name,
                                  Fight.pv1,
+                                 Fight.forfeit1,
                                  Fight.pv2,
+                                 Fight.forfeit2,
+                                 Fight.noWinner,
                                  TC1.Surname,
                                  TC1.Name, 
                                  TC2.Surname,
@@ -654,7 +751,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                              
                              
      $stmt->bind_param("i", $actual_cat_Id );
-     $stmt->bind_result( $f_id, $step_name, $pv1, $pv2, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
+     $stmt->bind_result( $f_id, $step_name, $pv1, $ff1, $pv2, $ff2, $nowin, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
      $stmt->execute();
      
     
@@ -666,16 +763,21 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
          }
      
          $row_value='';
-         if (empty($Surname1) || empty($Surname2)) {
+         if (empty($Surname1) && empty($Surname2)) {
            $row_value =' <tr >
                   <td>'. $step_name.' '.$tb_s.'</td>
                   <td></td>
                   <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
-         } else if (empty($pv1) && empty($pv2)){
+         } else if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin)){
            $row_value = ' <tr >
-                  <td>'. $step_name.' '.$tb_s.'</td>
+                  <td>';
+                   if ($is_table && $catMannual==1){
+                     $row_value = $row_value.'<a class="pgeBtn" href="addFight.php?actid='.$actual_cat_Id.'&fid='.$f_id.'&cid='.$catId.'" >-</a>';            
+                  }
+                  
+                  $row_value = $row_value.$step_name.' '.$tb_s.'</td>
                   <td>';
                   if($is_table){
                        $row_value = $row_value.'
@@ -687,6 +789,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="10" />
                                  <input type="hidden" name="pv2" value="0" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Ippon">
                        </form>
@@ -697,6 +802,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="7" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
                        
@@ -706,6 +814,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="5" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input  class="resbtn" type="submit" value="Yuko">
                        </form>
                        
@@ -715,6 +826,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="pv1" value="1" />
                                  <input type="hidden" name="pv2" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input  class="resbtn" type="submit" value="Décision">
                        </form>
                       
@@ -740,6 +854,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="10" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Ippon">
                        </form>
@@ -749,6 +866,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="7" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Waza-ari ">
                        </form>
@@ -758,6 +878,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="5" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Yuko ">
                        </form>
@@ -767,6 +890,9 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" value="'.$f_id.'" />
                                  <input type="hidden" name="pv1" value="0" />
                                  <input type="hidden" name="pv2" value="1" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="resbtn" type="submit" value="Décision">
                        </form>
@@ -782,13 +908,24 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
          } else { 
            $cl_1="VIC";
            $cl_2="LOS";
-           if ($pv2>0){
+           if ($pv2>0 || $ff1>0){
               $cl_1="LOS";
               $cl_2="VIC";
            }
+           if ($nowin){
+              $cl_1="LOS";
+              $cl_2="LOS";
+           }
            $row_value = ' <tr > 
                   <td>'. $step_name.' '.$tb_s;   
-           if($is_table){   
+           if($is_table){ 
+           
+           
+
+           
+           
+           
+             
    $row_value=$row_value.'    
       <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_canc_fgt_'.$f_id.'\'),\'pop_hide\');"></a>
 			    <span class="pop_back pop_hide" Id="pop_canc_fgt_'.$f_id.'">
@@ -1045,13 +1182,19 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 <span class="pop_back pop_hide" Id="pop_other">
 		<span class="popcont">
 		      <span class="pop_tt">Autres situations </span>  <br/><br/>
-		       <a class="bbtn" onclick="close_pop(\'pop_other\');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');start_break();" >Pause entre deux combats</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_Late();" >Combattant(s) en retard</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_forfeit(0);" >Combattant(s) forfait(s)</a></div> <br/><br/>
+		      
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');open_pop(\'pop_hmi\')" >Double Hansoku-Make</a></div> <br/><br/>
+		       
+		      <a class="bbtn" onclick="close_pop(\'pop_other\');configure_hmd();" >Hansoku-Make(s) direct(s)</a></div> <br/><br/>
+		       
               <a class="bbtn" onclick="close_pop(\'pop_other\');yoshi();" >"Yoshi" après un "Sono-mama" avec Osaekomi</a></div> <br/><br/><br/>
-              <a class="bbtn" onclick="window.location.reload();" >Annuler le combat et retourner à la catégorie</a></div> <br/><br/><br/>
-              
-              
 		     
-              <a class="bbtn" onclick="close_pop(\'pop_other\');" >Fermer la popup</a></div>
+              <a class="bbtn" onclick="close_pop(\'pop_other\');" >Annuler/Fermer</a></div>
 		</span>
 </span>
 
@@ -1065,10 +1208,53 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                                  <input type="hidden" name="fid" id="fid" value="-1" />
                                  <input type="hidden" name="pv1" id="pv1" value="0" />
                                  <input type="hidden" name="pv2" id="pv2" value="0" />
+                                 <input type="hidden" name="ff1" value="0" />
+                                 <input type="hidden" name="ff2" value="0" />
+                                 <input type="hidden" name="noWin" value="0" />
                                  <input type="hidden" name="cid" value="'.$catId.'" />
                                  <input class="bbtn" type="submit" value="Enregistrer "/>
       <a class="bbtn" onclick="close_pop(\'pop_victory\');" >Annuler</a></div>
                </form>
+		</span>
+</span>
+
+
+<span class="pop_back pop_hide" Id="pop_late_conf">
+		<span class="popcont">
+		    <span class="pop_tt">COMBATTANT(S) ABSENT(S) AU DEUXIEME APPEL</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_late_2" onchange="cb_late_changed();"/><span id="late_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_late_1" onchange="cb_late_changed();"/><span id="late_name_1"></span> (Bleu)</span><br/><br/>
+		    <span class="pop_tt"><span id="late_time"></span> </span><br/><br/>
+		    <a class="bbtn" id="btn_late_start" onclick="start_Late();" >Lancer le décompte</a></div><br/><br/>
+            <a class="bbtn" onclick="end_late();" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_forfeit">
+		<span class="popcont">
+		    <span class="pop_tt">COMBATANT(S) FORFAIT(S)</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_ff_2" "/><span id="ff_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_ff_1" "/><span id="ff_name_1"></span> (Bleu)</span><br/><br/>
+		    <a class="bbtn" onclick="forfeit();" >Enregistrer le(s) forfait(s)</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_forfeit\');" >Annuler</a></div>
+		</span>
+</span>
+
+<span class="pop_back pop_hide" Id="pop_hmi">
+		<span class="popcont" >
+		    <span class="pop_tt">DOUBLE HANSOKU-MAKE (INDIRECT)</span> <br/><br/>
+		    <a class="bbtn" onclick="hmi();" >Enregistrer le double Hansoku-Make indirect</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_hmi\');" >Annuler</a></div>
+		</span>
+</span> 
+
+<span class="pop_back pop_hide" Id="pop_hmd">
+		<span class="popcont" style="background-color:red">
+		    <span class="pop_tt">HANSOKU-MAKE(s) DIRECT(S)</span> <br/><br/>
+		     <span class="pop_tt"><input type="checkbox" id="cb_hmd_2" "/><span id="hmd_name_2"></span> (Blanc)</span><br/><br/> 
+		     <span class="pop_tt"><input type="checkbox" id="cb_hmd_1" "/><span id="hmd_name_1"></span> (Bleu)</span><br/><br/>
+		    <a class="bbtn" onclick="hmd();" >Enregistrer le(s) Hansoku-Make(s) direct(s)</a></div><br/><br/>
+            <a class="bbtn" onclick="close_pop(\'pop_hmd\');" >Annuler</a></div>
 		</span>
 </span>
 
@@ -1080,6 +1266,21 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
              <a class="bbtn" onclick="end_break();" >Terminer</a></div>
 		</span>
 </span>
+
+
+<form action="figtRes.php" method="post">
+	 <input type="hidden" name="acid" value="'.$actual_cat_Id.'" />
+	 <input type="hidden" name="fid" id="hidden_fid" value="-1" />
+	 <input type="hidden" name="pv1" id="hidden_pv1" value="0" />
+	 <input type="hidden" name="pv2" id="hidden_pv2" value="0" />
+	 <input type="hidden" name="ff1" id="hidden_ff1" value="0" />
+	 <input type="hidden" name="ff2" id="hidden_ff2" value="0" />
+	 <input type="hidden" name="hmd1" id="hidden_hmd1" value="0" />
+	 <input type="hidden" name="hmd2" id="hidden_hmd2" value="0" />
+	 <input type="hidden" name="noWin" id="hidden_nw" value="0" />
+	 <input type="hidden" name="cid" value="'.$catId.'" />
+	 <input type="submit" style="display:none" id="hidden_btn"/>
+</form>
 
  <audio controls src="gong-92707.mp3" id="gong" style="display:none;"></audio>     
      
@@ -1135,15 +1336,131 @@ var char_dc_2="v";
 var char_gong="1";
 
 
-var break_start = Date.now();
-var break_running=false;
-localStorage.setItem("break_running", false);
-var breakTime=0;
+
 
 function setf_id(new_f_id){
     f_id=new_f_id;
 }
 
+
+
+var late_start = Date.now();
+var late_running=false;
+localStorage.setItem("late_running", false);
+localStorage.setItem("late_comp", 0);
+var lateTime=0;
+
+function configure_Late() {
+    lateTime = 30000;
+    document.getElementById("late_time").innerHTML =  displayTime(lateTime/1000);
+    localStorage.setItem("lateTime", displayTime(lateTime/1000));
+    document.getElementById("cb_late_1").checked=false;
+    document.getElementById("cb_late_2").checked=false;
+    document.getElementById("btn_late_start").style.display="inline-block";
+    document.getElementById("late_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("late_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_late_conf");
+}
+
+function cb_late_changed(){
+    if (late_running){
+       var missing=0 + 1*document.getElementById("cb_late_1").checked + 2*document.getElementById("cb_late_2").checked;
+       localStorage.setItem("late_comp", missing);
+       if (missing==0){
+           end_late();
+       } 
+    }
+}
+
+function start_Late() {
+    var missing=0 + 1*document.getElementById("cb_late_1").checked + 2*document.getElementById("cb_late_2").checked;
+    if (missing>0){
+        document.getElementById("btn_late_start").style.display="none";
+        late_start = Date.now();
+        late_running=true;
+        localStorage.setItem("late_running", true);
+        localStorage.setItem("late_comp", missing);
+    }
+}
+function end_late() {
+    late_running=false;
+    localStorage.setItem("late_running", false);
+    localStorage.setItem("late_comp", 0);
+    close_pop("pop_late_conf")
+}
+
+function configure_forfeit(missing){
+    const two = Math.floor(missing/2);
+    const one = missing % 2;
+    document.getElementById("cb_ff_1").checked=one;
+    document.getElementById("cb_ff_2").checked=two;
+    document.getElementById("ff_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("ff_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_forfeit");
+}
+
+function forfeit() {
+    const one_forfeit = document.getElementById("cb_ff_1").checked;
+    const two_forfeit = document.getElementById("cb_ff_2").checked;
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=one_forfeit?1:0;
+    document.getElementById("hidden_ff2").value=two_forfeit?1:0;
+    document.getElementById("hidden_pv1").value=0;
+    document.getElementById("hidden_pv2").value=0;
+    document.getElementById("hidden_hmd1").value=0;
+    document.getElementById("hidden_hmd2").value=0;
+    document.getElementById("hidden_nw").value=(one_forfeit && two_forfeit)?1:0;
+    document.getElementById("hidden_btn").click();
+    close_pop("pop_forfeit");
+}
+
+function configure_hmd(){
+    document.getElementById("cb_hmd_1").checked=false;
+    document.getElementById("cb_hmd_2").checked=false;
+    document.getElementById("hmd_name_1").innerHTML= document.getElementById("name_1").innerHTML;
+    document.getElementById("hmd_name_2").innerHTML= document.getElementById("name_2").innerHTML;
+    open_pop("pop_hmd");
+}
+
+function hmd() {
+    const one_hmd = document.getElementById("cb_hmd_1").checked;
+    const two_hmd = document.getElementById("cb_hmd_2").checked;
+    
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=0;
+    document.getElementById("hidden_ff2").value=0;
+    
+    document.getElementById("hidden_pv1").value=(two_hmd && !one_hmd)?10:0;
+    document.getElementById("hidden_pv2").value=(one_hmd && !two_hmd)?10:0;
+    document.getElementById("hidden_hmd1").value=one_hmd?1:0;
+    document.getElementById("hidden_hmd2").value=two_hmd?1:0;
+    document.getElementById("hidden_nw").value = (one_hmd && two_hmd)?1:0;
+    document.getElementById("hidden_btn").click();
+    
+    close_pop("pop_hmd");
+}
+
+function hmi() {
+    document.getElementById("hidden_fid").value=f_id;
+    document.getElementById("hidden_ff1").value=0;
+    document.getElementById("hidden_ff2").value=0;
+    document.getElementById("hidden_pv1").value=0;
+    document.getElementById("hidden_pv2").value=0;
+    document.getElementById("hidden_hmd1").value=0;
+    document.getElementById("hidden_hmd2").value=0;
+    document.getElementById("noWin").value=1;
+    document.getElementById("hidden_btn").click();
+    close_pop("pop_hmi");
+}
+
+
+
+
+
+var break_start = Date.now();
+var break_running=false;
+localStorage.setItem("break_running", false);
+var breakTime=0;
 
 function start_break() {
     break_start = Date.now();
@@ -1708,6 +2025,20 @@ setInterval(function() {
         document.getElementById("break_time").innerHTML= dd_bt;
         if (break_sisplay<0){
             end_break();
+        }
+    } else if (late_running){
+        let late_delta = Date.now() - late_start;
+        let late_sisplay = lateTime - late_delta;
+        const dd_bt = displayTime(Math.ceil(late_sisplay/1000));
+        localStorage.setItem("lateTime", dd_bt);
+        document.getElementById("late_time").innerHTML= dd_bt;
+        if (late_sisplay<0){
+            const missing =  parseInt(localStorage.getItem("late_comp"));
+            if (missing>0){
+                configure_forfeit(missing);
+            }
+            
+            end_late();
         }
     }
 }, 100); 
