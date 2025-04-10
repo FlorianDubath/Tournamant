@@ -64,7 +64,11 @@ function writeBand($open=False) {
                  </span>
                  <span class="btnBar"> 
 	               <input class="pgeBtn" type="submit" value="Se connecter">
+	             </span><br/><br/>
+	             <span class="btnBar"> 
+	               <a class="pgeBtn" href="./categories.php" >Suivit</a>
 	             </span>
+	             
 	            ';
 	             
 	             if (array_key_exists("CR",$_GET) &&  $_GET["CR"]) {

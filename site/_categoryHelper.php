@@ -1126,15 +1126,15 @@ function isCatCompleted($ActualCategoryId){
     
     // look for linking and more specifically for the step which is only in the output never in the inputs
     $stmt = $mysqli->prepare("SELECT count(Fight.Id),  ActualCategory.Mannual
-                              FROM Fight 
-                              INNER JOIN ActualCategory on ActualCategoryId=ActualCategory.Id
-                              WHERE ActualCategoryId =? AND pv1 IS NULL");
+                              FROM ActualCategory  
+                              LEFT OUTER JOIN Fight on ActualCategoryId=ActualCategory.Id AND pv1 IS NULL
+                              WHERE ActualCategory.Id =?  ");
     $stmt->bind_param("i", $ActualCategoryId);         
     $stmt->bind_result($missing_fight,$man);     
     $stmt->execute();  
     $stmt->fetch();
     $stmt->close();
-    return $missing_fight==0 && (isset($man) && $man!=1);
+    return $missing_fight==0 && $man==0;
 }
 
 function get_full_result($ActualCategoryId){
@@ -1538,7 +1538,7 @@ function close_category($ActualCategoryId){
     $mysqli= ConnectionFactory::GetConnection(); 
     $result = get_full_result($ActualCategoryId);
 
-    
+   
     if (! empty($result)){
  
         $skip_nominal=False;
@@ -1618,11 +1618,11 @@ function close_category($ActualCategoryId){
                 }
             }
        }
-        
          $stmt = $mysqli->prepare("UPDATE ActualCategory SET IsCompleted=1 WHERE Id=?");
          $stmt->bind_param("i", $ActualCategoryId);         
          $stmt->execute();
          $stmt->close();
+        
          
     } else {
        echo 'Cannot close a category which is not completed';
@@ -1644,8 +1644,13 @@ function order_fight($f_keys){
         return $f_keys;
     } else {
         $max =0;
+        $step_id_0=-1;
         foreach ($steps as $s_id=>$s_fgt){
+         
             if ($s_id>0) {
+               if ($step_id_0==-1){
+                $step_id_0=$s_id;
+               }
                $max=max($max, count($s_fgt));
             }
         }
@@ -1662,9 +1667,11 @@ function order_fight($f_keys){
             }
         }
         
-        foreach ($steps[0] as $fgt){
-             array_push($new_list,$fgt);
-        } 
+        if (isset($steps[0])){
+            foreach ($steps[0] as $fgt){
+                 array_push($new_list,$fgt);
+            } 
+        }
         
        return  $new_list;  
         

@@ -692,7 +692,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
 		                   $list_key=$list_key.','.$key;
 		                   echo '<tr>
 		                            <td>'.$val.'</td>
-		                            <td><input type="number" min="1" max="100" name="r_'.$key.'" value="'.$rk.'"></td>
+		                            <td><input type="number" min="1" max="100" name="r_'.$key.'" value=""></td>
 		                            <td> <select name="m_'.$key.'" >
                                       <option value="1">Or</option>
                                       <option value="2">Argent</option>

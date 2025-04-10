@@ -4,6 +4,8 @@ ob_start();
 session_name("Tournament");	
 session_start();
 
+$shift=intval($_GET['shift']);
+
 include 'connectionFactory.php';
 
 include '_commonBlock.php';
@@ -85,7 +87,7 @@ echo '
      
      $stmt->close();
      echo '</table></div></div>';
-     
+     $cat_table=array();
      foreach ($cat_ids as $acatId=>$acatName) {
           $stmt = $mysqli->prepare("select
                                      Fight.Id,
@@ -111,12 +113,11 @@ echo '
          $stmt->bind_param("i", $acatId );
          $stmt->bind_result( $f_id, $step_name, $pv1, $ff1, $pv2, $ff2, $nowin, $Surname1, $Name1, $Surname2, $Name2, $tbf, $order);
          $stmt->execute();
-         
-          echo '
-             <div class="wgt_tm_cat" ><span>'.$acatName.'</span>
+         $tbl= '
+             <div class="wgt_tm_cat" style="background-color:#CCCCCC;" ><span>'.$acatName.'</span>
              <table class="wt t4">
                <tr class="tblHeader">
-                 <th></th>
+                 <th>Status</th>
                  <th>Type</th>
                  <th>Rouge</th>
                  <th>Blanc</th>
@@ -150,31 +151,56 @@ echo '
          $index=0;
          foreach($k_order as $key){
              if ($index==0){
-                echo '<tr><td>Combatent:</td>';
+                $tbl=$tbl.  '<tr><td>Prochains / Combatent:</td>';
              } else if ($index==1){
-                echo '<tr><td>Se préparent:</td>';
+                $tbl=$tbl.  '<tr><td>Se préparent:</td>';
              } else{
-                echo '<tr><td></td>';
+                $tbl=$tbl.  '<tr><td></td>';
              }
-             echo   $rows[$key];
+             $tbl=$tbl.   $rows[$key];
              $index+=1;
              if ($index>=3){
                  break;
              }  
          }
          if (count($k_order)>3){
-            echo '<tr ><td>...</td><td colspan="3"></td></tr>';
+            $tbl=$tbl.  '<tr ><td>...</td><td colspan="3"></td></tr>';
          }
-         echo '</table></div>';
+         $tbl=$tbl.  '</table></div>';
          
+         $cat_table[]=$tbl;
      }
-     
+     if (count($cat_table)>0) {
+         for ($index=0; $index<$shift; $index++){
+            $tmp = $cat_table[0];
+            array_splice($cat_table, 0, 1);
+            $cat_table[]=$tmp;
+         }
+         
+         foreach($cat_table as $tbl){
+             echo $tbl;
+         }
+     }
      
      echo '
               </span> 
            </div>     
         </div>   
      </div>
+     
+<script>
+setTimeout(function(){
+   location.assign("./categories.php?shift=';
+   
+   if (count($cat_table)>0){
+    echo ($shift+1)%count($cat_table);
+    } else {
+       echo 0;
+    }
+   
+   echo'");
+}, 10000);
+</script>
 </body>
 </html>';
 ?>
