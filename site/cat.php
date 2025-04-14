@@ -647,13 +647,22 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
      echo '</table></span>';
 
      echo ' <span class="h_title">  Combats (Durée :'.$cat_dur.'min)</span>';
-     if ($catMannual==1 && $cat_completed!=1){
+     if (($catMannual==1 || $_SESSION['_IsMainTable'] ==1 ) && $cat_completed!=1){
           
      
      
          echo '
            <span class="btnBar"> 
-                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Clôturer la Catégorie" >Clôturer la Catégorie</a> <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Ajouter un Combat" >Ajouter un Combat</a>
+                       <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_closeCat\'),\'pop_hide\');" title="Clôturer la Catégorie" >Clôturer la Catégorie';
+         if ($catMannual!=1) {                        
+            echo'&nbsp;<span class="btn_sos"></span>';
+        }              
+         echo '</a> ';
+         if ($catMannual==1) {                        
+            echo'               <a class="pgeBtn" onclick="toggleClass(document.getElementById(\'pop_addCombat\'),\'pop_hide\');" title="Ajouter un Combat" >Ajouter un Combat</a>';
+        }
+        
+        echo'
            </span>
            <span class="pop_back pop_hide" Id="pop_addCombat">
 		        <span class="popcont">
@@ -770,7 +779,7 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
                   <td colspan="3">A venir...</td>
                   <td></td>
                   </tr>';
-         } else if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin)){
+         } else if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin) && $cat_completed!=1){
            $row_value = ' <tr >
                   <td>';
                    if ($is_table && $catMannual==1){
@@ -916,16 +925,14 @@ if ($_SESSION['_IsMainTable']==1 && !empty($actual_cat_Id)) {
               $cl_1="LOS";
               $cl_2="LOS";
            }
+           
+           if (empty($pv1) && empty($pv2) && empty($ff1) && empty($ff2) && empty($nowin) && $cat_completed==1){
+              $cl_1="";
+              $cl_2="";
+           }
            $row_value = ' <tr > 
                   <td>'. $step_name.' '.$tb_s;   
            if($is_table){ 
-           
-           
-
-           
-           
-           
-             
    $row_value=$row_value.'    
       <a class="btn_sos" onclick="toggleClass(document.getElementById(\'pop_canc_fgt_'.$f_id.'\'),\'pop_hide\');"></a>
 			    <span class="pop_back pop_hide" Id="pop_canc_fgt_'.$f_id.'">

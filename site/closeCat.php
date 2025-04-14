@@ -29,7 +29,7 @@ include 'connectionFactory.php';
 include '_categoryHelper.php';
 
 
-close_manual_category($acid, $fighter);
+close_manual_category($acid, $fighter, $_SESSION['_IsMainTable']==1);
 
 
 header('Location: ./cat.php?cid='.$cid);

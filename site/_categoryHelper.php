@@ -1498,10 +1498,14 @@ function cancel_Category($ActualCategoryId, $force){
 }
 
 
-function close_manual_category($ActualCategoryId, $fighters){
+function close_manual_category($ActualCategoryId, $fighters, $force){
     $mysqli= ConnectionFactory::GetConnection(); 
 	// Check the category is a manual category
-	$stmt = $mysqli->prepare("SELECT Id FROM  ActualCategory where Id=? AND Mannual=1");
+	$add='AND Mannual=1';
+	if ($force) {
+	   $add='';
+	}
+	$stmt = $mysqli->prepare("SELECT Id FROM  ActualCategory where Id=? ".$add);
 	$stmt->bind_param("i", $ActualCategoryId);  
 	$stmt->bind_result($id_cat);         
 	$stmt->execute();
@@ -1513,7 +1517,7 @@ function close_manual_category($ActualCategoryId, $fighters){
 	        $stmt = $mysqli->prepare(" SELECT TournamentRegistration.Id
 					   FROM TournamentRegistration 
 					   INNER JOIN ActualCategory ON ActualCategory.CategoryId=TournamentRegistration.CategoryId OR ActualCategory.Category2Id=TournamentRegistration.CategoryId
-					   WHERE WeightChecked=1 AND ActualCategory.Mannual=1 AND ActualCategory.Id=? AND CompetitorId=? ");
+					   WHERE WeightChecked=1 AND ActualCategory.Id=? AND CompetitorId=? ");
 		$stmt->bind_param("ii", $ActualCategoryId, $fid);  
 		$stmt->bind_result($id_reg);         
 		$stmt->execute();
