@@ -17,7 +17,9 @@ if (isset($_POST['cid'])){
     $stmt = $mysqli->prepare("UPDATE ActualCategoryResult SET  RankId=?, Medal=? WHERE ActualCategoryId=? AND Competitor1Id=?");
     $stmt->bind_param("iiii", $_POST['rank'], $_POST['med'], $_POST['acatid'], $_POST['cid'] );
     $stmt->execute();
-    $stmt->close();       
+    $stmt->close();   
+    header('Location: ./cat.php?cid='.$_REQUEST['catid']); 
+     
 }
 
 
@@ -55,7 +57,7 @@ echo '
                MODIFIER UN RESULTAT DE LA CATEGORIE '.$ac_name.'
             </span>
              <span class="btnBar"> 
-                   <a class="pgeBtn" href="cat.php?cid='.$_REQUEST['catid'].'" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" href="cat.php?cid='.$_REQUEST['catid'].'" title="Annuler" >Annuler</a>
                </span>
             <span class="h_txt">';
             
@@ -105,7 +107,7 @@ echo '
       </table> 
       <span class="btnBar"> 
                    <input class="pgeBtn" type="submit" title="Enregistrer" value="Enregistrer">
-                   <a class="pgeBtn" href="cat.php?cid='.$_REQUEST['catid'].'" title="Fermer" >Fermer</a>
+                   <a class="pgeBtn" href="cat.php?cid='.$_REQUEST['catid'].'" title="Annuler" >Annuler</a>
                </span>
       </form>
     </span>
